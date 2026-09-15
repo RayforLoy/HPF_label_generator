@@ -1,5 +1,5 @@
 import type opentype from 'opentype.js'
-import { buildScaleMarks, circumferenceMm } from './core'
+import { buildScaleMarks, circumferenceMm, generatedMaxAngle, layoutStepDeg } from './core'
 import type { GeneratorConfig, ScaleMark } from './types'
 
 type PathCommand = { type: string; x?: number; y?: number; x1?: number; y1?: number; x2?: number; y2?: number }
@@ -14,7 +14,7 @@ export interface Artwork {
 const xml = (value: string) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[char]!)
 
 export function markPositionMm(index: number, config: GeneratorConfig): number {
-  const regularGapMm = circumferenceMm(config.ringDiameterMm) * 5 / 360
+  const regularGapMm = circumferenceMm(config.ringDiameterMm) * layoutStepDeg(config) / 360
   return config.infinityMarginMm + index * regularGapMm
 }
 
@@ -150,4 +150,97 @@ export function createDxf(config: GeneratorConfig, font: opentype.Font): string 
 export function safeFilename(name: string): string {
   const cleaned = name.trim().replace(/[<>:"/\\|?*\u0000-\u001f]+/g, '-').replace(/\s+/g, '_')
   return cleaned || 'focusing-ring'
+}
+
+function polar(cx: number, cy: number, radius: number, angleDeg: number): [number, number] {
+  const radians = (-angleDeg - 90) * Math.PI / 180
+  return [cx + radius * Math.cos(radians), cy + radius * Math.sin(radians)]
+}
+
+function svgLineAtAngle(cx: number, cy: number, innerRadius: number, outerRadius: number, angleDeg: number, color: string, width: number, extra = ''): string {
+  const start = polar(cx, cy, innerRadius, angleDeg)
+  const end = polar(cx, cy, outerRadius, angleDeg)
+  return `<line x1="${start[0].toFixed(4)}" y1="${start[1].toFixed(4)}" x2="${end[0].toFixed(4)}" y2="${end[1].toFixed(4)}" stroke="${color}" stroke-width="${width}" ${extra}/>`
+}
+
+function donutPath(cx: number, cy: number, outerRadius: number, innerRadius: number): string {
+  return `M ${cx - outerRadius} ${cy} A ${outerRadius} ${outerRadius} 0 1 0 ${cx + outerRadius} ${cy} A ${outerRadius} ${outerRadius} 0 1 0 ${cx - outerRadius} ${cy} Z M ${cx - innerRadius} ${cy} A ${innerRadius} ${innerRadius} 0 1 1 ${cx + innerRadius} ${cy} A ${innerRadius} ${innerRadius} 0 1 1 ${cx - innerRadius} ${cy} Z`
+}
+
+export function createFrontArtwork(config: GeneratorConfig, includeAlignmentGuide = false): Artwork {
+  const stickerDiameter = config.frontOuterDiameterMm
+  const guideMargin = includeAlignmentGuide ? Math.max(12, stickerDiameter * 0.12) : 0
+  const canvasDiameter = stickerDiameter + guideMargin * 2
+  const center = canvasDiameter / 2
+  const outerRadius = stickerDiameter / 2
+  const innerRadius = config.frontInnerDiameterMm / 2
+  const ringWidth = outerRadius - innerRadius
+  const frameWidthMm = config.frameWidthPx * 25.4 / 96
+  const frameColor = config.transparentBackground ? '#000000' : contrastColor(config.backgroundColor)
+  const marks = buildScaleMarks(config)
+  const maxGenerated = generatedMaxAngle(config)
+  const minorStep = Math.min(...config.scaleSegments.map((segment) => segment.stepDeg))
+  const nodes: string[] = []
+
+  if (!config.transparentBackground) nodes.push(`<path d="${donutPath(center, center, outerRadius, innerRadius)}" fill="${xml(config.backgroundColor)}" fill-rule="evenodd"/>`)
+  if (frameWidthMm > 0) {
+    nodes.push(`<circle cx="${center}" cy="${center}" r="${outerRadius - frameWidthMm / 2}" fill="none" stroke="${frameColor}" stroke-width="${frameWidthMm}"/>`)
+    nodes.push(`<circle cx="${center}" cy="${center}" r="${innerRadius + frameWidthMm / 2}" fill="none" stroke="${frameColor}" stroke-width="${frameWidthMm}"/>`)
+  }
+
+  for (let angle = 0; angle <= maxGenerated + 1e-8; angle += minorStep) {
+    nodes.push(svgLineAtAngle(center, center, innerRadius + frameWidthMm, innerRadius + Math.max(ringWidth * 0.2, 1), angle, xml(config.tickColor), Math.max(config.tickWidthMm * 0.45, 0.12)))
+  }
+  for (const mark of marks) {
+    const inner = innerRadius + frameWidthMm
+    const outer = outerRadius - frameWidthMm
+    nodes.push(svgLineAtAngle(center, center, inner, mark.major ? outer : inner + ringWidth * 0.72, mark.angleDeg, xml(config.tickColor), config.tickWidthMm))
+  }
+
+  if (includeAlignmentGuide) {
+    const guideInner = outerRadius + 2.5
+    const guideOuter = outerRadius + 5.2
+    const guideColor = '#2ee8ff'
+    for (let angle = 0; angle <= config.maxAngleDeg + 1e-8; angle += minorStep) {
+      const major = Math.abs(angle % Math.max(layoutStepDeg(config), minorStep)) < 1e-7
+      nodes.push(svgLineAtAngle(center, center, guideInner, major ? guideOuter : guideInner + 1.1, angle, guideColor, major ? 0.32 : 0.16, 'opacity="0.82"'))
+    }
+    for (const percent of [0, 25, 50, 75, 100]) {
+      const angle = config.maxAngleDeg * percent / 100
+      const [x, y] = polar(center, center, outerRadius + 8.4, angle)
+      nodes.push(`<text x="${x.toFixed(3)}" y="${(y + 1.1).toFixed(3)}" fill="${guideColor}" font-size="3" text-anchor="middle" font-family="ui-monospace,monospace">${percent}%</text>`)
+    }
+    const [usedX, usedY] = polar(center, center, outerRadius + 5.2, maxGenerated)
+    nodes.push(`<circle cx="${usedX.toFixed(3)}" cy="${usedY.toFixed(3)}" r="1" fill="#7af7bd"/>`)
+  }
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvasDiameter}mm" height="${canvasDiameter}mm" viewBox="0 0 ${canvasDiameter} ${canvasDiameter}" role="img" aria-label="${xml(config.lensName)} front focusing scale">${nodes.join('')}</svg>`
+  return { widthMm: stickerDiameter, heightMm: stickerDiameter, marks, svg }
+}
+
+function dxfLineAtAngle(cx: number, cy: number, innerRadius: number, outerRadius: number, angleDeg: number, widthMm: number, layer: string): string {
+  const start = polar(cx, cy, innerRadius, angleDeg)
+  const end = polar(cx, cy, outerRadius, angleDeg)
+  return `0\nLWPOLYLINE\n8\n${layer}\n90\n2\n70\n0\n43\n${widthMm.toFixed(4)}\n10\n${start[0].toFixed(4)}\n20\n${(cy * 2 - start[1]).toFixed(4)}\n10\n${end[0].toFixed(4)}\n20\n${(cy * 2 - end[1]).toFixed(4)}\n`
+}
+
+export function createFrontDxf(config: GeneratorConfig): string {
+  const diameter = config.frontOuterDiameterMm
+  const center = diameter / 2
+  const outerRadius = diameter / 2
+  const innerRadius = config.frontInnerDiameterMm / 2
+  const ringWidth = outerRadius - innerRadius
+  const minorStep = Math.min(...config.scaleSegments.map((segment) => segment.stepDeg))
+  const frameWidthMm = config.frameWidthPx * 25.4 / 96
+  const entities: string[] = [
+    `0\nCIRCLE\n8\nFRAME\n10\n${center}\n20\n${center}\n40\n${outerRadius}\n`,
+    `0\nCIRCLE\n8\nFRAME\n10\n${center}\n20\n${center}\n40\n${innerRadius}\n`,
+  ]
+  for (let angle = 0; angle <= generatedMaxAngle(config) + 1e-8; angle += minorStep) {
+    entities.push(dxfLineAtAngle(center, center, innerRadius + frameWidthMm, innerRadius + Math.max(ringWidth * 0.2, 1), angle, Math.max(config.tickWidthMm * 0.45, 0.12), 'ANGLE_TICKS'))
+  }
+  for (const mark of buildScaleMarks(config)) {
+    entities.push(dxfLineAtAngle(center, center, innerRadius + frameWidthMm, mark.major ? outerRadius - frameWidthMm : innerRadius + ringWidth * 0.72, mark.angleDeg, config.tickWidthMm, 'DISTANCE_TICKS'))
+  }
+  return `0\nSECTION\n2\nHEADER\n9\n$INSUNITS\n70\n4\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n${entities.join('')}0\nENDSEC\n0\nEOF\n`
 }

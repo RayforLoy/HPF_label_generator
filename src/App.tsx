@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Check, Download, FileCode2, Languages, Moon, RotateCcw, Search, Sun, Upload, Wrench } from 'lucide-react'
+import { Check, Download, FileCode2, Languages, Moon, Plus, RotateCcw, Search, Sun, Trash2, Upload, Wrench } from 'lucide-react'
 import csvUrl from '../lensDB.csv?url'
 import type opentype from 'opentype.js'
-import { contrastColor, createArtwork, createDxf, safeFilename } from './artwork'
-import { DEFAULT_CONFIG, circumferenceMm, focalLengthFor, parseLensCsv, validateConfig } from './core'
+import { contrastColor, createArtwork, createDxf, createFrontArtwork, createFrontDxf, safeFilename } from './artwork'
+import { DEFAULT_CONFIG, circumferenceMm, focalLengthFor, generatedMaxAngle, parseLensCsv, validateConfig } from './core'
 import { downloadText, downloadBlob, svgToPng } from './download'
 import { BUILT_IN_FONTS, loadFont, loadUploadedFont } from './fonts'
 import { t } from './i18n'
-import type { FontChoice, GeneratorConfig, Language, Lens, Theme } from './types'
+import type { FontChoice, GeneratorConfig, Language, Lens, ScaleSegment, Theme } from './types'
 
-type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm' | 'fontSizeMm' | 'letterSpacingMm' | 'frameWidthPx' | 'infinityMarginMm'
+type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'frontInnerDiameterMm' | 'frontOuterDiameterMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm' | 'fontSizeMm' | 'letterSpacingMm' | 'frameWidthPx' | 'infinityMarginMm'
 
 function Field({ label, help, unit, value, min, max, step, invalid, onChange }: { label: string; help: string; unit?: string; value: number; min?: number; max?: number; step?: number; invalid?: boolean; onChange: (value: number) => void }) {
   return <label className={`field ${invalid ? 'field-invalid' : ''}`}>
@@ -69,6 +69,10 @@ export default function App() {
   const errors = useMemo(() => validateConfig(config), [config])
   const artwork = useMemo(() => font && errors.length === 0 ? createArtwork(config, font) : null, [config, font, errors])
   const preview = useMemo(() => font && errors.length === 0 ? createArtwork(config, font, true) : null, [config, font, errors])
+  const frontArtwork = useMemo(() => errors.length === 0 ? createFrontArtwork(config) : null, [config, errors])
+  const frontPreview = useMemo(() => errors.length === 0 ? createFrontArtwork(config, true) : null, [config, errors])
+  const generatedAngle = useMemo(() => generatedMaxAngle(config), [config])
+  const rotationUsage = config.maxAngleDeg > 0 ? generatedAngle / config.maxAngleDeg * 100 : 0
   const selectedLens = useMemo(() => lenses.find((lens) => lens.lensName === config.lensName), [lenses, config.lensName])
   const visibleLenses = useMemo(() => {
     const query = lensQuery.trim().toLocaleLowerCase()
@@ -78,6 +82,23 @@ export default function App() {
 
   const update = <K extends keyof GeneratorConfig>(key: K, value: GeneratorConfig[K]) => setConfig((current) => ({ ...current, [key]: value }))
   const updateNumber = (key: NumberKey, value: number) => update(key, value)
+
+  const updateSegment = (id: string, key: keyof Pick<ScaleSegment, 'count' | 'stepDeg'>, value: number) => {
+    setConfig((current) => ({ ...current, scaleSegments: current.scaleSegments.map((segment) => segment.id === id ? { ...segment, [key]: value } : segment) }))
+  }
+
+  const addSegment = () => {
+    const id = `segment-${Date.now()}`
+    setConfig((current) => ({ ...current, scaleSegments: [...current.scaleSegments, { id, count: 1, stepDeg: 5 }] }))
+  }
+
+  const removeSegment = (id: string) => {
+    setConfig((current) => {
+      if (current.scaleSegments.length <= 1) return current
+      const scaleSegments = current.scaleSegments.filter((segment) => segment.id !== id)
+      return { ...current, scaleSegments, layoutSegmentId: current.layoutSegmentId === id ? scaleSegments[0].id : current.layoutSegmentId }
+    })
+  }
 
   const chooseLens = (name: string) => {
     const lens = lenses.find((item) => item.lensName === name)
@@ -112,7 +133,10 @@ export default function App() {
   const exportSvg = () => artwork && downloadText(artwork.svg, `${baseName}.svg`, 'image/svg+xml')
   const exportDxf = () => font && downloadText(createDxf(config, font), `${baseName}.dxf`, 'application/dxf')
   const exportJson = () => downloadText(JSON.stringify({ format: 'HPF label generator', version: 1, config }, null, 2), `${baseName}.json`, 'application/json')
-  const exportPng = async () => artwork && downloadBlob(await svgToPng(artwork.svg, config), `${baseName}_${config.dpi}dpi.png`)
+  const exportPng = async () => artwork && downloadBlob(await svgToPng(artwork.svg, config.dpi, artwork.widthMm, artwork.heightMm), `${baseName}_${config.dpi}dpi.png`)
+  const exportFrontSvg = () => frontArtwork && downloadText(frontArtwork.svg, `${baseName}_front.svg`, 'image/svg+xml')
+  const exportFrontDxf = () => frontArtwork && downloadText(createFrontDxf(config), `${baseName}_front.dxf`, 'application/dxf')
+  const exportFrontPng = async () => frontArtwork && downloadBlob(await svgToPng(frontArtwork.svg, config.dpi, frontArtwork.widthMm, frontArtwork.heightMm), `${baseName}_front_${config.dpi}dpi.png`)
 
   return <div className="app-shell">
     <header className="topbar">
@@ -146,8 +170,30 @@ export default function App() {
           <div className="field-grid">
             <Field label={t(language, 'extension')} help={t(language, 'extensionHelp')} unit="mm/°" value={config.extensionMmPerDeg} min={0.001} step={0.001} invalid={errors.includes('extensionMmPerDeg')} onChange={(value) => updateNumber('extensionMmPerDeg', value)} />
             <Field label={t(language, 'maxAngle')} help={t(language, 'maxAngleHelp')} unit="°" value={config.maxAngleDeg} min={5} max={355} step={5} invalid={errors.includes('maxAngleDeg')} onChange={(value) => updateNumber('maxAngleDeg', value)} />
+          </div>
+          <div className={`segment-editor ${errors.includes('scaleSegments') ? 'segment-editor-invalid' : ''}`}>
+            <div className="segment-editor-heading">
+              <div><strong>{t(language, 'scalePlan')}</strong><small>{t(language, 'scalePlanHelp')}</small></div>
+              <button type="button" onClick={addSegment}><Plus size={14} />{t(language, 'addSegment')}</button>
+            </div>
+            {config.scaleSegments.map((segment, index) => <div className="segment-row" key={segment.id}>
+              <span className="segment-index">{index + 1}</span>
+              <label><span>{t(language, 'markCount')}</span><span className="input-shell"><input aria-label={`${t(language, 'segment')} ${index + 1} ${t(language, 'markCount')}`} type="number" min="1" max="360" step="1" value={segment.count} onChange={(event) => updateSegment(segment.id, 'count', Number(event.target.value))} /><span>×</span></span></label>
+              <label><span>{t(language, 'angleStep')}</span><span className="input-shell"><input aria-label={`${t(language, 'segment')} ${index + 1} ${t(language, 'angleStep')}`} type="number" min="0.1" max="90" step="0.1" value={segment.stepDeg} onChange={(event) => updateSegment(segment.id, 'stepDeg', Number(event.target.value))} /><span>°</span></span></label>
+              <button type="button" className="segment-delete" aria-label={`${t(language, 'removeSegment')} ${index + 1}`} title={t(language, 'removeSegment')} disabled={config.scaleSegments.length <= 1} onClick={() => removeSegment(segment.id)}><Trash2 size={15} /></button>
+            </div>)}
+            <div className="scale-summary"><span>{t(language, 'generatedAngle')}</span><strong>{generatedAngle.toFixed(1)}°</strong><span className={rotationUsage > 100 ? 'usage-over' : ''}>{rotationUsage.toFixed(1)}%</span></div>
+          </div>
+          <label className={`field ${errors.includes('layoutSegmentId') ? 'field-invalid' : ''}`}>
+            <span className="field-heading"><span>{t(language, 'layoutFollows')}</span></span>
+            <select value={config.layoutSegmentId} onChange={(event) => update('layoutSegmentId', event.target.value)}>{config.scaleSegments.map((segment, index) => <option value={segment.id} key={segment.id}>{t(language, 'segment')} {index + 1} · {segment.stepDeg}°</option>)}</select>
+            <small>{t(language, 'layoutFollowsHelp')}</small>
+          </label>
+          <div className="field-grid">
             <Field label={t(language, 'diameter')} help={t(language, 'diameterHelp')} unit="mm" value={config.ringDiameterMm} min={1} step={0.1} invalid={errors.includes('ringDiameterMm')} onChange={(value) => updateNumber('ringDiameterMm', value)} />
             <Field label={t(language, 'width')} help={t(language, 'widthHelp')} unit="mm" value={config.ringWidthMm} min={2} step={0.1} invalid={errors.includes('ringWidthMm')} onChange={(value) => updateNumber('ringWidthMm', value)} />
+            <Field label={t(language, 'frontInnerDiameter')} help={t(language, 'frontInnerDiameterHelp')} unit="mm" value={config.frontInnerDiameterMm} min={1} step={0.1} invalid={errors.includes('frontInnerDiameterMm')} onChange={(value) => updateNumber('frontInnerDiameterMm', value)} />
+            <Field label={t(language, 'frontOuterDiameter')} help={t(language, 'frontOuterDiameterHelp')} unit="mm" value={config.frontOuterDiameterMm} min={1} step={0.1} invalid={errors.includes('frontOuterDiameterMm')} onChange={(value) => updateNumber('frontOuterDiameterMm', value)} />
           </div>
           <ParameterDiagram language={language} />
         </section>
@@ -180,7 +226,7 @@ export default function App() {
       </aside>
 
       <section className="workspace">
-        <div className="preview-heading"><div><span className="eyebrow">OUTPUT PREVIEW</span><h2>{t(language, 'preview')}</h2></div>{artwork && <div className="metrics"><span>{t(language, 'dimensions')} <strong>{artwork.widthMm.toFixed(1)} × {artwork.heightMm.toFixed(1)} mm</strong></span><span><strong>{config.distanceUnit.toUpperCase()}</strong></span><span><strong>{artwork.marks.length}</strong> {t(language, 'marks')}</span></div>}</div>
+        <div className="preview-heading"><div><span className="eyebrow">OUTPUT PREVIEW</span><h2>{t(language, 'stripPreview')}</h2></div>{artwork && <div className="metrics"><span>{t(language, 'dimensions')} <strong>{artwork.widthMm.toFixed(1)} × {artwork.heightMm.toFixed(1)} mm</strong></span><span><strong>{config.distanceUnit.toUpperCase()}</strong></span><span><strong>{artwork.marks.length}</strong> {t(language, 'marks')}</span></div>}</div>
         <div className={`preview-stage ${config.transparentBackground ? 'checkerboard' : ''}`}>
           {status === 'loading' && <div className="loading"><span />{t(language, 'loading')}</div>}
           {status === 'error' && <div className="loading error">{t(language, 'error')}</div>}
@@ -188,12 +234,26 @@ export default function App() {
           <div className="dimension-line"><span>0</span><i /><span>{artwork?.heightMm.toFixed(1) ?? '—'} mm</span></div>
         </div>
         <div className="export-panel">
-          <div className="export-copy"><FileCode2 size={22} /><div><strong>{t(language, 'export')}</strong><small>{t(language, 'vectorNote')}</small></div></div>
+          <div className="export-copy"><FileCode2 size={22} /><div><strong>{t(language, 'stripExport')}</strong><small>{t(language, 'vectorNote')}</small></div></div>
           <div className="export-buttons">
             <button disabled={!artwork} onClick={exportJson}><Download size={15} />{t(language, 'exportJson')}</button>
             <button disabled={!artwork || !font} onClick={exportDxf}><Download size={15} />{t(language, 'exportDxf')}</button>
             <button disabled={!artwork} onClick={exportSvg}><Download size={15} />{t(language, 'exportSvg')}</button>
             <button className="primary" disabled={!artwork} onClick={exportPng}><Download size={15} />{t(language, 'exportPng')}</button>
+          </div>
+        </div>
+        <div className="front-preview-block">
+          <div className="preview-heading"><div><span className="eyebrow">ACTUAL ANGLE PREVIEW</span><h2>{t(language, 'frontPreview')}</h2><p>{t(language, 'frontPreviewHelp')}</p></div>{frontArtwork && <div className="metrics"><span>{t(language, 'frontDimensions')} <strong>Ø {frontArtwork.widthMm.toFixed(1)} / Ø {config.frontInnerDiameterMm.toFixed(1)} mm</strong></span><span className={rotationUsage > 100 ? 'usage-over' : ''}><strong>{generatedAngle.toFixed(1)}° / {config.maxAngleDeg.toFixed(1)}°</strong> · {rotationUsage.toFixed(1)}%</span></div>}</div>
+          <div className={`front-preview-stage ${config.transparentBackground ? 'checkerboard' : ''}`}>
+            {frontPreview && <div className="front-scale-preview" dangerouslySetInnerHTML={{ __html: frontPreview.svg }} />}
+          </div>
+          <div className="export-panel">
+            <div className="export-copy"><FileCode2 size={22} /><div><strong>{t(language, 'frontExport')}</strong><small>{t(language, 'frontExportNote')}</small></div></div>
+            <div className="export-buttons">
+              <button disabled={!frontArtwork} onClick={exportFrontDxf}><Download size={15} />{t(language, 'exportDxf')}</button>
+              <button disabled={!frontArtwork} onClick={exportFrontSvg}><Download size={15} />{t(language, 'exportSvg')}</button>
+              <button className="primary" disabled={!frontArtwork} onClick={exportFrontPng}><Download size={15} />{t(language, 'exportPng')}</button>
+            </div>
           </div>
         </div>
         <div className="formula-strip"><Wrench size={16} /><span>{t(language, 'formula')}</span><i /><span>{t(language, 'footer')}</span></div>

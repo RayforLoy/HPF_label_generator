@@ -1,6 +1,12 @@
 export type Language = 'zh' | 'en'
 export type Theme = 'dark' | 'light'
 
+export interface ScaleSegment {
+  id: string
+  count: number
+  stepDeg: number
+}
+
 export interface Lens {
   lensName: string
   vender: string
@@ -16,8 +22,12 @@ export interface GeneratorConfig {
   focalSource: 'efl' | 'nominal' | 'manual'
   extensionMmPerDeg: number
   maxAngleDeg: number
+  scaleSegments: ScaleSegment[]
+  layoutSegmentId: string
   ringDiameterMm: number
   ringWidthMm: number
+  frontInnerDiameterMm: number
+  frontOuterDiameterMm: number
   significantDigits: number
   distanceUnit: 'm' | 'ft'
   dpi: number

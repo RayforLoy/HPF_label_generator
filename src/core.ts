@@ -2,7 +2,10 @@ import type { GeneratorConfig, Lens, ScaleMark } from './types'
 
 export const DEFAULT_CONFIG: GeneratorConfig = {
   lensName: 'Makro-Symmar 180 HM', focalLengthMm: 179.9, focalSource: 'manual',
-  extensionMmPerDeg: 4 / 45, maxAngleDeg: 165, ringDiameterMm: 86.7, ringWidthMm: 9.5,
+  extensionMmPerDeg: 4 / 45, maxAngleDeg: 165,
+  scaleSegments: [{ id: 'fine', count: 5, stepDeg: 1 }, { id: 'coarse', count: 32, stepDeg: 5 }],
+  layoutSegmentId: 'coarse', ringDiameterMm: 86.7, ringWidthMm: 9.5,
+  frontInnerDiameterMm: 75, frontOuterDiameterMm: 100,
   significantDigits: 4, distanceUnit: 'm', dpi: 300, tickLengthMm: 1, tickWidthMm: 0.5,
   fontSizeMm: 2.6, letterSpacingMm: 0, frameWidthPx: 2, infinityMarginMm: 2,
   showFocalLength: true, transparentBackground: false, backgroundColor: '#050505',
@@ -70,13 +73,31 @@ export function distanceAtAngle(focalLengthMm: number, extensionMmPerDeg: number
 }
 
 export function buildScaleMarks(config: GeneratorConfig): ScaleMark[] {
-  const angles = [0]
-  for (let angle = 1; angle <= Math.min(4, config.maxAngleDeg); angle += 1) angles.push(angle)
-  for (let angle = 5; angle <= config.maxAngleDeg; angle += 5) angles.push(angle)
+  const angles = buildScaleAngles(config)
   return angles.map((angleDeg) => {
     const distanceM = distanceAtAngle(config.focalLengthMm, config.extensionMmPerDeg, angleDeg)
     return { angleDeg, distanceM, label: formatDistance(distanceM, config.significantDigits, config.distanceUnit), major: angleDeg === 0 || angleDeg % 10 === 0 }
   })
+}
+
+export function buildScaleAngles(config: Pick<GeneratorConfig, 'scaleSegments'>): number[] {
+  const angles = [0]
+  let angle = 0
+  for (const segment of config.scaleSegments) {
+    for (let index = 0; index < segment.count; index += 1) {
+      angle += segment.stepDeg
+      angles.push(angle)
+    }
+  }
+  return angles
+}
+
+export function generatedMaxAngle(config: Pick<GeneratorConfig, 'scaleSegments'>): number {
+  return config.scaleSegments.reduce((total, segment) => total + segment.count * segment.stepDeg, 0)
+}
+
+export function layoutStepDeg(config: Pick<GeneratorConfig, 'scaleSegments' | 'layoutSegmentId'>): number {
+  return config.scaleSegments.find((segment) => segment.id === config.layoutSegmentId)?.stepDeg ?? config.scaleSegments[0]?.stepDeg ?? 5
 }
 
 export const circumferenceMm = (diameterMm: number) => Math.PI * diameterMm
@@ -86,8 +107,15 @@ export function validateConfig(config: GeneratorConfig): string[] {
   if (!(config.focalLengthMm > 0)) errors.push('focalLengthMm')
   if (!(config.extensionMmPerDeg > 0)) errors.push('extensionMmPerDeg')
   if (!(config.maxAngleDeg >= 5 && config.maxAngleDeg <= 355)) errors.push('maxAngleDeg')
+  if (!config.scaleSegments.length || config.scaleSegments.some((segment) => !Number.isInteger(segment.count) || segment.count < 1 || segment.count > 360 || !(segment.stepDeg > 0 && segment.stepDeg <= 90))) errors.push('scaleSegments')
+  if (generatedMaxAngle(config) > 360) errors.push('scaleSegments')
+  if (!config.scaleSegments.some((segment) => segment.id === config.layoutSegmentId)) errors.push('layoutSegmentId')
+  const unfoldedSpanMm = config.scaleSegments.reduce((total, segment) => total + segment.count, 0) * circumferenceMm(config.ringDiameterMm) * layoutStepDeg(config) / 360
+  if (unfoldedSpanMm + config.infinityMarginMm >= circumferenceMm(config.ringDiameterMm)) errors.push('layoutSegmentId')
   if (!(config.ringDiameterMm > 0)) errors.push('ringDiameterMm')
   if (!(config.ringWidthMm > 0)) errors.push('ringWidthMm')
+  if (!(config.frontInnerDiameterMm > 0)) errors.push('frontInnerDiameterMm')
+  if (!(config.frontOuterDiameterMm > config.frontInnerDiameterMm)) errors.push('frontOuterDiameterMm')
   if (!(config.tickLengthMm > 0 && config.tickLengthMm < config.ringWidthMm)) errors.push('tickLengthMm')
   if (!(config.tickWidthMm > 0)) errors.push('tickWidthMm')
   if (!(config.fontSizeMm > 0 && config.fontSizeMm < config.ringWidthMm)) errors.push('fontSizeMm')

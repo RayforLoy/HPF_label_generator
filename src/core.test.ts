@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULT_CONFIG, buildScaleMarks, circumferenceMm, distanceAtAngle, focalLengthFor, formatDistance, parseLensCsv, validateConfig } from './core'
-import { contrastColor, markPositionMm } from './artwork'
+import { DEFAULT_CONFIG, buildScaleMarks, circumferenceMm, distanceAtAngle, focalLengthFor, formatDistance, generatedMaxAngle, parseLensCsv, validateConfig } from './core'
+import { contrastColor, createFrontArtwork, markPositionMm } from './artwork'
 
 describe('lens database', () => {
   it('skips the metadata preamble and parses numeric fields', () => {
@@ -25,7 +25,7 @@ describe('scale calculation', () => {
   })
 
   it('creates the fine 1–4° marks followed by 5° increments', () => {
-    const marks = buildScaleMarks({ ...DEFAULT_CONFIG, maxAngleDeg: 20 })
+    const marks = buildScaleMarks({ ...DEFAULT_CONFIG, scaleSegments: [{ id: 'fine', count: 5, stepDeg: 1 }, { id: 'coarse', count: 3, stepDeg: 5 }] })
     expect(marks.map((mark) => mark.angleDeg)).toEqual([0, 1, 2, 3, 4, 5, 10, 15, 20])
     expect(marks[0].label).toBe('INF')
     expect(formatDistance(12.3456, 4)).toBe('12.35')
@@ -38,7 +38,8 @@ describe('scale calculation', () => {
   })
 
   it('uses the requested production defaults', () => {
-    expect(DEFAULT_CONFIG).toEqual(expect.objectContaining({ fontSizeMm: 2.6, letterSpacingMm: 0, frameWidthPx: 2, infinityMarginMm: 2 }))
+    expect(DEFAULT_CONFIG).toEqual(expect.objectContaining({ fontSizeMm: 2.6, letterSpacingMm: 0, frameWidthPx: 2, infinityMarginMm: 2, frontInnerDiameterMm: 75, frontOuterDiameterMm: 100 }))
+    expect(generatedMaxAngle(DEFAULT_CONFIG)).toBe(165)
   })
 
   it('chooses an inverse frame colour from the background', () => {
@@ -60,5 +61,24 @@ describe('scale calculation', () => {
     expect(gaps[0]).toBeCloseTo(gaps[1], 8)
     expect(gaps[1]).toBeCloseTo(gaps[2], 8)
     expect(positions[0]).toBe(DEFAULT_CONFIG.infinityMarginMm)
+  })
+
+  it('lets unfolded spacing follow any selected segment', () => {
+    const fineGap = markPositionMm(1, { ...DEFAULT_CONFIG, layoutSegmentId: 'fine' }) - DEFAULT_CONFIG.infinityMarginMm
+    const coarseGap = markPositionMm(1, { ...DEFAULT_CONFIG, layoutSegmentId: 'coarse' }) - DEFAULT_CONFIG.infinityMarginMm
+    expect(coarseGap / fineGap).toBeCloseTo(5, 8)
+  })
+
+  it('creates a production front sticker without preview annotations', () => {
+    const production = createFrontArtwork(DEFAULT_CONFIG)
+    const guided = createFrontArtwork(DEFAULT_CONFIG, true)
+    expect(production.widthMm).toBe(100)
+    expect(production.svg).not.toContain('<text')
+    expect(guided.svg).toContain('100%')
+  })
+
+  it('rejects invalid front diameters and angle segments', () => {
+    expect(validateConfig({ ...DEFAULT_CONFIG, frontOuterDiameterMm: 70 })).toContain('frontOuterDiameterMm')
+    expect(validateConfig({ ...DEFAULT_CONFIG, scaleSegments: [{ id: 'bad', count: 0, stepDeg: 5 }], layoutSegmentId: 'bad' })).toContain('scaleSegments')
   })
 })

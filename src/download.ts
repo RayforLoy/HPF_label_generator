@@ -1,5 +1,3 @@
-import type { GeneratorConfig } from './types'
-
 export function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
@@ -44,9 +42,9 @@ async function addPngResolution(blob: Blob, dpi: number): Promise<Blob> {
   return new Blob([output], { type: 'image/png' })
 }
 
-export async function svgToPng(svg: string, config: GeneratorConfig): Promise<Blob> {
-  const width = Math.max(1, Math.round(config.ringWidthMm / 25.4 * config.dpi))
-  const height = Math.max(1, Math.round(Math.PI * config.ringDiameterMm / 25.4 * config.dpi))
+export async function svgToPng(svg: string, dpi: number, widthMm: number, heightMm: number): Promise<Blob> {
+  const width = Math.max(1, Math.round(widthMm / 25.4 * dpi))
+  const height = Math.max(1, Math.round(heightMm / 25.4 * dpi))
   const canvas = document.createElement('canvas')
   canvas.width = width; canvas.height = height
   const context = canvas.getContext('2d')
@@ -58,6 +56,6 @@ export async function svgToPng(svg: string, config: GeneratorConfig): Promise<Bl
     await new Promise<void>((resolve, reject) => { image.onload = () => resolve(); image.onerror = () => reject(new Error('SVG rendering failed')); image.src = url })
     context.drawImage(image, 0, 0, width, height)
     const png = await new Promise<Blob>((resolve, reject) => canvas.toBlob((value) => value ? resolve(value) : reject(new Error('PNG encoding failed')), 'image/png'))
-    return addPngResolution(png, config.dpi)
+    return addPngResolution(png, dpi)
   } finally { URL.revokeObjectURL(url) }
 }
