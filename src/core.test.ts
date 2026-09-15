@@ -38,6 +38,13 @@ describe('scale calculation', () => {
     expect(formatDistance(0.2545, 4)).toBe('0.255')
   })
 
+  it('pads distance labels with zeroes to the requested digit count', () => {
+    expect(formatDistance(12.3, 4)).toBe('12.30')
+    expect(formatDistance(2, 4)).toBe('2.000')
+    expect(formatDistance(0.25, 4)).toBe('0.250')
+    expect(formatDistance(1200, 4)).toBe('1.20k')
+  })
+
   it('uses physical circumference and rejects unsafe dimensions', () => {
     expect(circumferenceMm(86.7)).toBeCloseTo(272.376, 3)
     expect(validateConfig({ ...DEFAULT_CONFIG, tickLengthMm: 12 })).toContain('tickLengthMm')
