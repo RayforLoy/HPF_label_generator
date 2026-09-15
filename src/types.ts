@@ -1,7 +1,7 @@
 export type Language = 'zh' | 'en'
 export type Theme = 'dark' | 'light'
 export type ScaleDirection = 'clockwise' | 'counterclockwise'
-export type CocMode = 'film135' | 'kodak35' | 'fullFrame24mp' | 'customSensor'
+export type CocMode = 'film135' | 'film6x9' | 'film4x5' | 'kodak35' | 'fullFrame24mp' | 'customSensor'
 export type DofStyle = 'nested' | 'compact'
 export type StickerShape = 'annular' | 'strip'
 export type TextDirection = 'normal' | 'reverse'

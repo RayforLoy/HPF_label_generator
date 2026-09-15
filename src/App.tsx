@@ -213,6 +213,8 @@ export default function App() {
             <span className="field-heading"><span>{t(language, 'cocPreset')}</span></span>
             <select value={config.cocMode} onChange={(event) => update('cocMode', event.target.value as CocMode)}>
               <option value="film135">{t(language, 'cocFilm135')}</option>
+              <option value="film6x9">{t(language, 'cocFilm6x9')}</option>
+              <option value="film4x5">{t(language, 'cocFilm4x5')}</option>
               <option value="kodak35">{t(language, 'cocKodak35')}</option>
               <option value="fullFrame24mp">{t(language, 'cocFullFrame24')}</option>
               <option value="customSensor">{t(language, 'cocCustom')}</option>

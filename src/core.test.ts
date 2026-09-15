@@ -120,6 +120,7 @@ describe('scale calculation', () => {
     expect(shown.widthMm).toBe(DEFAULT_CONFIG.dofOuterDiameterMm)
     expect(shown.svg).toContain('rotate(180')
     expect(shown.svg).toContain('stroke-width="0.35"')
+    expect(shown.svg.match(/<path/g)).toHaveLength(19)
     expect(hidden.svg.match(/<path/g)).toHaveLength(7)
     expect(createDofDxf({ ...DEFAULT_CONFIG, dofShowLabels: false }, mockFont)).not.toContain('TEXT_OUTLINES')
   })
@@ -135,6 +136,8 @@ describe('scale calculation', () => {
 
   it('calculates film and pixel-pitch circles of confusion', () => {
     expect(circleOfConfusionMm(DEFAULT_CONFIG)).toBeCloseTo(Math.hypot(36, 24) / 1500, 8)
+    expect(circleOfConfusionMm({ ...DEFAULT_CONFIG, cocMode: 'film6x9' })).toBeCloseTo(Math.hypot(56, 84) / 1500, 8)
+    expect(circleOfConfusionMm({ ...DEFAULT_CONFIG, cocMode: 'film4x5' })).toBeCloseTo(Math.hypot(96, 120) / 1500, 8)
     expect(circleOfConfusionMm({ ...DEFAULT_CONFIG, cocMode: 'fullFrame24mp' })).toBeCloseTo(0.006, 3)
     expect(circleOfConfusionMm({ ...DEFAULT_CONFIG, cocMode: 'customSensor', sensorWidthMm: 36, sensorHeightMm: 24, sensorMegapixels: 24 })).toBeCloseTo(0.006, 3)
   })

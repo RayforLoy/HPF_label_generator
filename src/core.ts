@@ -117,6 +117,8 @@ export function layoutAngleForMark(index: number, config: Pick<GeneratorConfig, 
 
 export const COC_PRESETS: Record<Exclude<CocMode, 'customSensor'>, number> = {
   film135: Math.hypot(36, 24) / 1500,
+  film6x9: Math.hypot(56, 84) / 1500,
+  film4x5: Math.hypot(96, 120) / 1500,
   kodak35: 0.0254,
   fullFrame24mp: Math.sqrt(36 * 24 / 24_000_000),
 }

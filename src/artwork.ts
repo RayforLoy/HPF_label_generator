@@ -431,10 +431,14 @@ export function createDofArtwork(config: GeneratorConfig, font: opentype.Font): 
       const sweep = config.scaleDirection === 'clockwise' ? 1 : 0
       nodes.push(`<path d="M ${leftOuter[0].toFixed(4)} ${leftOuter[1].toFixed(4)} L ${leftInner[0].toFixed(4)} ${leftInner[1].toFixed(4)} A ${levelRadius.toFixed(4)} ${levelRadius.toFixed(4)} 0 0 ${sweep} ${rightInner[0].toFixed(4)} ${rightInner[1].toFixed(4)} L ${rightOuter[0].toFixed(4)} ${rightOuter[1].toFixed(4)}" fill="none" stroke="${xml(config.tickColor)}" stroke-width="${config.dofTickWidthMm}"/>`)
       if (config.dofShowLabels) {
-        const labelCenterY = center - levelRadius
-        const path = makeTextPath(font, label, center - labelWidth / 2, labelCenterY + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
-        const labelNode = `<path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/>`
-        nodes.push(config.dofTextDirection === 'reverse' ? `<g transform="rotate(180 ${center} ${labelCenterY})">${labelNode}</g>` : labelNode)
+        const labelRadius = Math.min(outerRadius - frameWidthMm - config.dofFontSizeMm * 0.62, levelRadius + config.dofFontSizeMm * 0.9)
+        for (const angle of [leftAngle, rightAngle]) {
+          const labelCenterY = center - labelRadius
+          const path = makeTextPath(font, label, center - labelWidth / 2, labelCenterY + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+          const labelNode = `<path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/>`
+          const oriented = config.dofTextDirection === 'reverse' ? `<g transform="rotate(180 ${center} ${labelCenterY})">${labelNode}</g>` : labelNode
+          nodes.push(`<g transform="rotate(${angle.toFixed(4)} ${center} ${center})">${oriented}</g>`)
+        }
       }
     }
   })
@@ -475,9 +479,12 @@ function createDofStripArtwork(config: GeneratorConfig, font: opentype.Font): Ar
       const levelY = heightMm * (0.74 - 0.48 * index / Math.max(1, stops.length - 1))
       nodes.push(`<path d="M ${xs[0].toFixed(4)} ${frameWidthMm.toFixed(4)} L ${xs[0].toFixed(4)} ${levelY.toFixed(4)} L ${xs[1].toFixed(4)} ${levelY.toFixed(4)} L ${xs[1].toFixed(4)} ${frameWidthMm.toFixed(4)}" fill="none" stroke="${xml(config.tickColor)}" stroke-width="${config.dofTickWidthMm}"/>`)
       if (config.dofShowLabels) {
-        const path = makeTextPath(font, label, centerX - labelWidth / 2, levelY + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
-        const labelNode = `<path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/>`
-        nodes.push(config.dofTextDirection === 'reverse' ? `<g transform="rotate(180 ${centerX} ${levelY})">${labelNode}</g>` : labelNode)
+        const labelCenterY = Math.min(heightMm - frameWidthMm - config.dofFontSizeMm * 0.58, levelY + config.dofFontSizeMm * 0.85)
+        xs.forEach((x) => {
+          const path = makeTextPath(font, label, x - labelWidth / 2, labelCenterY + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+          const labelNode = `<path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/>`
+          nodes.push(config.dofTextDirection === 'reverse' ? `<g transform="rotate(180 ${x} ${labelCenterY})">${labelNode}</g>` : labelNode)
+        })
       }
     }
   })
@@ -525,12 +532,15 @@ export function createDofDxf(config: GeneratorConfig, font: opentype.Font): stri
       const points = [polar(center, center, outerRadius, leftAngle), ...dofArcPoints(center, center, levelRadius, leftAngle, rightAngle), polar(center, center, outerRadius, rightAngle)]
       entities.push(polylineDxf(points, 'DOF_MARKS', diameter, false, config.dofTickWidthMm))
       if (config.dofShowLabels) {
-        const labelCenter: [number, number] = [center, center - levelRadius]
-        const path = makeTextPath(font, label, center - labelWidth / 2, labelCenter[1] + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
-        flatten(path.commands as PathCommand[]).forEach((contour) => {
-          const oriented = config.dofTextDirection === 'reverse' ? contour.map((point) => rotatePoint(point, labelCenter, 180)) : contour
-          entities.push(polylineDxf(oriented, 'TEXT_OUTLINES', diameter, true))
-        })
+        const labelRadius = Math.min(outerRadius - config.dofFontSizeMm * 0.62, levelRadius + config.dofFontSizeMm * 0.9)
+        for (const angle of [leftAngle, rightAngle]) {
+          const labelCenter: [number, number] = [center, center - labelRadius]
+          const path = makeTextPath(font, label, center - labelWidth / 2, labelCenter[1] + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+          flatten(path.commands as PathCommand[]).forEach((contour) => {
+            const oriented = config.dofTextDirection === 'reverse' ? contour.map((point) => rotatePoint(point, labelCenter, 180)) : contour
+            entities.push(polylineDxf(oriented.map((point) => rotatePoint(point, [center, center], angle)), 'TEXT_OUTLINES', diameter, true))
+          })
+        }
       }
     }
   })
@@ -566,10 +576,13 @@ function createDofStripDxf(config: GeneratorConfig, font: opentype.Font): string
       const levelY = heightMm * (0.74 - 0.48 * index / Math.max(1, stops.length - 1))
       entities.push(polylineDxf([[xs[0], 0], [xs[0], levelY], [xs[1], levelY], [xs[1], 0]], 'DOF_MARKS', heightMm, false, config.dofTickWidthMm))
       if (config.dofShowLabels) {
-        const path = makeTextPath(font, label, centerX - labelWidth / 2, levelY + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
-        flatten(path.commands as PathCommand[]).forEach((contour) => {
-          const oriented = config.dofTextDirection === 'reverse' ? contour.map((point) => rotatePoint(point, [centerX, levelY], 180)) : contour
-          entities.push(polylineDxf(oriented, 'TEXT_OUTLINES', heightMm, true))
+        const labelCenterY = Math.min(heightMm - config.dofFontSizeMm * 0.58, levelY + config.dofFontSizeMm * 0.85)
+        xs.forEach((x) => {
+          const path = makeTextPath(font, label, x - labelWidth / 2, labelCenterY + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+          flatten(path.commands as PathCommand[]).forEach((contour) => {
+            const oriented = config.dofTextDirection === 'reverse' ? contour.map((point) => rotatePoint(point, [x, labelCenterY], 180)) : contour
+            entities.push(polylineDxf(oriented, 'TEXT_OUTLINES', heightMm, true))
+          })
         })
       }
     }
