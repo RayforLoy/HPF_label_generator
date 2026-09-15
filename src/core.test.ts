@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
+import type opentype from 'opentype.js'
 import { DEFAULT_CONFIG, apertureStops, buildScaleMarks, circleOfConfusionMm, circumferenceMm, depthOfFieldAngleDeg, distanceAtAngle, focalLengthFor, formatDistance, generatedMaxAngle, layoutAngleForMark, parseLensCsv, validateConfig } from './core'
-import { contrastColor, createFrontArtwork, createFrontDxf, markPositionMm } from './artwork'
+import { contrastColor, createDofArtwork, createDofDxf, createFrontArtwork, createFrontDxf, markPositionMm } from './artwork'
+
+const mockFont = {
+  getAdvanceWidth: (text: string) => text.length,
+  getPath: () => ({ commands: [{ type: 'M', x: 0, y: 0 }, { type: 'L', x: 1, y: 0 }, { type: 'L', x: 1, y: 1 }, { type: 'Z' }], toPathData: () => 'M0 0L1 0L1 1Z' }),
+} as unknown as opentype.Font
 
 describe('lens database', () => {
   it('skips the metadata preamble and parses numeric fields', () => {
@@ -95,6 +101,36 @@ describe('scale calculation', () => {
     expect(layoutAngleForMark(6, DEFAULT_CONFIG)).toBe(10)
     const actual = buildScaleMarks(DEFAULT_CONFIG).map((mark) => mark.angleDeg)
     for (let index = 5; index < actual.length; index += 1) expect(layoutAngleForMark(index, DEFAULT_CONFIG)).toBe(actual[index])
+  })
+
+  it('unfolds the connected focusing scale around its own barrel diameter', () => {
+    const config = { ...DEFAULT_CONFIG, frontShape: 'strip' as const, frontBarrelDiameterMm: 90 }
+    const artwork = createFrontArtwork(config)
+    expect(artwork.widthMm).toBeCloseTo(Math.PI * 90, 8)
+    expect(artwork.heightMm).toBe(DEFAULT_CONFIG.ringWidthMm)
+    expect(artwork.svg).toContain('side focusing scale')
+    expect(artwork.svg).not.toContain('100%')
+    expect(createFrontArtwork(config, true).svg).toContain('100%')
+    expect(createFrontDxf(config)).not.toContain('\nCIRCLE\n')
+  })
+
+  it('supports DOF label visibility, direction, line width, and annular diameters', () => {
+    const shown = createDofArtwork({ ...DEFAULT_CONFIG, dofTextDirection: 'reverse', dofTickWidthMm: 0.35 }, mockFont)
+    const hidden = createDofArtwork({ ...DEFAULT_CONFIG, dofShowLabels: false }, mockFont)
+    expect(shown.widthMm).toBe(DEFAULT_CONFIG.dofOuterDiameterMm)
+    expect(shown.svg).toContain('rotate(180')
+    expect(shown.svg).toContain('stroke-width="0.35"')
+    expect(hidden.svg.match(/<path/g)).toHaveLength(7)
+    expect(createDofDxf({ ...DEFAULT_CONFIG, dofShowLabels: false }, mockFont)).not.toContain('TEXT_OUTLINES')
+  })
+
+  it('creates compact or nested rectangular DOF stickers from barrel diameter', () => {
+    const nested = { ...DEFAULT_CONFIG, dofShape: 'strip' as const, dofRingDiameterMm: 92 }
+    const compact = { ...nested, dofStyle: 'compact' as const }
+    expect(createDofArtwork(nested, mockFont).widthMm).toBeCloseTo(Math.PI * 92, 8)
+    expect(createDofArtwork(nested, mockFont).svg).toContain('side depth of field scale')
+    expect(createDofArtwork(compact, mockFont).svg).toContain('<line')
+    expect(createDofDxf(compact, mockFont)).not.toContain('\nCIRCLE\n')
   })
 
   it('calculates film and pixel-pitch circles of confusion', () => {

@@ -5,11 +5,13 @@ export const DEFAULT_CONFIG: GeneratorConfig = {
   extensionMmPerDeg: 4 / 45, maxAngleDeg: 165,
   scaleSegments: [{ id: 'fine', count: 5, stepDeg: 1 }, { id: 'coarse', count: 32, stepDeg: 5 }],
   layoutSegmentId: 'coarse', scaleDirection: 'counterclockwise', ringDiameterMm: 86.7, ringWidthMm: 9.5,
-  frontInnerDiameterMm: 75, frontOuterDiameterMm: 100,
+  frontShape: 'annular', frontBarrelDiameterMm: 86.7, frontInnerDiameterMm: 75, frontOuterDiameterMm: 100,
   frontInnerTickLengthMm: 1.5, frontInnerTickWidthMm: 0.25,
   frontOuterTickLengthMm: 3, frontOuterTickWidthMm: 0.5, frontConnectorWidthMm: 0.3,
   cocMode: 'film135', sensorWidthMm: 36, sensorHeightMm: 24, sensorMegapixels: 24,
-  maxApertureFNumber: 5.6, dofStops: 5, dofFontSizeMm: 1.25, dofRingDiameterMm: 86.7, dofStyle: 'nested',
+  maxApertureFNumber: 5.6, dofStops: 5, dofFontSizeMm: 1.25,
+  dofRingDiameterMm: 86.7, dofInnerDiameterMm: 77.2, dofOuterDiameterMm: 96.2,
+  dofStyle: 'nested', dofShape: 'annular', dofShowLabels: true, dofTextDirection: 'normal', dofTickWidthMm: 0.5,
   significantDigits: 4, distanceUnit: 'm', dpi: 300, tickLengthMm: 1, tickWidthMm: 0.5,
   fontSizeMm: 2.6, letterSpacingMm: 0, frameWidthPx: 2, infinityMarginMm: 2,
   showFocalLength: true, transparentBackground: false, backgroundColor: '#050505',
@@ -155,9 +157,10 @@ export function validateConfig(config: GeneratorConfig): string[] {
   if (unfoldedSpanMm + config.infinityMarginMm >= circumferenceMm(config.ringDiameterMm)) errors.push('layoutSegmentId')
   if (!(config.ringDiameterMm > 0)) errors.push('ringDiameterMm')
   if (!(config.ringWidthMm > 0)) errors.push('ringWidthMm')
-  if (!(config.frontInnerDiameterMm > 0)) errors.push('frontInnerDiameterMm')
-  if (!(config.frontOuterDiameterMm > config.frontInnerDiameterMm)) errors.push('frontOuterDiameterMm')
-  const frontBandWidth = (config.frontOuterDiameterMm - config.frontInnerDiameterMm) / 2
+  if (config.frontShape === 'strip' && !(config.frontBarrelDiameterMm > 0)) errors.push('frontBarrelDiameterMm')
+  if (config.frontShape === 'annular' && !(config.frontInnerDiameterMm > 0)) errors.push('frontInnerDiameterMm')
+  if (config.frontShape === 'annular' && !(config.frontOuterDiameterMm > config.frontInnerDiameterMm)) errors.push('frontOuterDiameterMm')
+  const frontBandWidth = config.frontShape === 'annular' ? (config.frontOuterDiameterMm - config.frontInnerDiameterMm) / 2 : config.ringWidthMm
   if (!(config.frontInnerTickLengthMm > 0 && config.frontInnerTickLengthMm < frontBandWidth)) errors.push('frontInnerTickLengthMm')
   if (!(config.frontInnerTickWidthMm > 0 && config.frontInnerTickWidthMm <= 3)) errors.push('frontInnerTickWidthMm')
   if (!(config.frontOuterTickLengthMm > 0 && config.frontOuterTickLengthMm < frontBandWidth)) errors.push('frontOuterTickLengthMm')
@@ -172,8 +175,12 @@ export function validateConfig(config: GeneratorConfig): string[] {
   if (!Number.isInteger(config.dofStops) || config.dofStops < 1 || config.dofStops > 10) errors.push('dofStops')
   const widestDofAngle = depthOfFieldAngleDeg(apertureStops(config).at(-1) ?? config.maxApertureFNumber, cocMm, config.extensionMmPerDeg)
   if (!(Number.isFinite(widestDofAngle) && widestDofAngle < 90)) errors.push('dofStops')
-  if (!(config.dofFontSizeMm > 0 && config.dofFontSizeMm < config.ringWidthMm / 2)) errors.push('dofFontSizeMm')
-  if (!(config.dofRingDiameterMm > config.ringWidthMm)) errors.push('dofRingDiameterMm')
+  const dofBandWidth = config.dofShape === 'annular' ? (config.dofOuterDiameterMm - config.dofInnerDiameterMm) / 2 : config.ringWidthMm
+  if (!(config.dofFontSizeMm > 0 && config.dofFontSizeMm < dofBandWidth / 2)) errors.push('dofFontSizeMm')
+  if (config.dofShape === 'strip' && !(config.dofRingDiameterMm > 0)) errors.push('dofRingDiameterMm')
+  if (config.dofShape === 'annular' && !(config.dofInnerDiameterMm > 0)) errors.push('dofInnerDiameterMm')
+  if (config.dofShape === 'annular' && !(config.dofOuterDiameterMm > config.dofInnerDiameterMm)) errors.push('dofOuterDiameterMm')
+  if (!(config.dofTickWidthMm > 0 && config.dofTickWidthMm <= 3)) errors.push('dofTickWidthMm')
   if (!(config.tickLengthMm > 0 && config.tickLengthMm < config.ringWidthMm)) errors.push('tickLengthMm')
   if (!(config.tickWidthMm > 0)) errors.push('tickWidthMm')
   if (!(config.fontSizeMm > 0 && config.fontSizeMm < config.ringWidthMm)) errors.push('fontSizeMm')

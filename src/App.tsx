@@ -9,7 +9,7 @@ import { BUILT_IN_FONTS, loadFont, loadUploadedFont } from './fonts'
 import { t } from './i18n'
 import type { CocMode, FontChoice, GeneratorConfig, Language, Lens, ScaleSegment, Theme } from './types'
 
-type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'frontInnerDiameterMm' | 'frontOuterDiameterMm' | 'frontInnerTickLengthMm' | 'frontInnerTickWidthMm' | 'frontOuterTickLengthMm' | 'frontOuterTickWidthMm' | 'frontConnectorWidthMm' | 'sensorWidthMm' | 'sensorHeightMm' | 'sensorMegapixels' | 'maxApertureFNumber' | 'dofStops' | 'dofFontSizeMm' | 'dofRingDiameterMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm' | 'fontSizeMm' | 'letterSpacingMm' | 'frameWidthPx' | 'infinityMarginMm'
+type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'frontBarrelDiameterMm' | 'frontInnerDiameterMm' | 'frontOuterDiameterMm' | 'frontInnerTickLengthMm' | 'frontInnerTickWidthMm' | 'frontOuterTickLengthMm' | 'frontOuterTickWidthMm' | 'frontConnectorWidthMm' | 'sensorWidthMm' | 'sensorHeightMm' | 'sensorMegapixels' | 'maxApertureFNumber' | 'dofStops' | 'dofFontSizeMm' | 'dofRingDiameterMm' | 'dofInnerDiameterMm' | 'dofOuterDiameterMm' | 'dofTickWidthMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm' | 'fontSizeMm' | 'letterSpacingMm' | 'frameWidthPx' | 'infinityMarginMm'
 
 function Field({ label, help, unit, value, min, max, step, invalid, onChange }: { label: string; help: string; unit?: string; value: number; min?: number; max?: number; step?: number; invalid?: boolean; onChange: (value: number) => void }) {
   return <label className={`field ${invalid ? 'field-invalid' : ''}`}>
@@ -203,16 +203,6 @@ export default function App() {
           <div className="field-grid">
             <Field label={t(language, 'diameter')} help={t(language, 'diameterHelp')} unit="mm" value={config.ringDiameterMm} min={1} step={0.1} invalid={errors.includes('ringDiameterMm')} onChange={(value) => updateNumber('ringDiameterMm', value)} />
             <Field label={t(language, 'width')} help={t(language, 'widthHelp')} unit="mm" value={config.ringWidthMm} min={2} step={0.1} invalid={errors.includes('ringWidthMm')} onChange={(value) => updateNumber('ringWidthMm', value)} />
-            <Field label={t(language, 'frontInnerDiameter')} help={t(language, 'frontInnerDiameterHelp')} unit="mm" value={config.frontInnerDiameterMm} min={1} step={0.1} invalid={errors.includes('frontInnerDiameterMm')} onChange={(value) => updateNumber('frontInnerDiameterMm', value)} />
-            <Field label={t(language, 'frontOuterDiameter')} help={t(language, 'frontOuterDiameterHelp')} unit="mm" value={config.frontOuterDiameterMm} min={1} step={0.1} invalid={errors.includes('frontOuterDiameterMm')} onChange={(value) => updateNumber('frontOuterDiameterMm', value)} />
-          </div>
-          <div className="subsection-label">{t(language, 'frontTickGeometry')}</div>
-          <div className="field-grid">
-            <Field label={t(language, 'innerRayLength')} help={t(language, 'innerRayLengthHelp')} unit="mm" value={config.frontInnerTickLengthMm} min={0.1} step={0.1} invalid={errors.includes('frontInnerTickLengthMm')} onChange={(value) => updateNumber('frontInnerTickLengthMm', value)} />
-            <Field label={t(language, 'innerRayWidth')} help={t(language, 'rayWidthHelp')} unit="mm" value={config.frontInnerTickWidthMm} min={0.05} step={0.05} invalid={errors.includes('frontInnerTickWidthMm')} onChange={(value) => updateNumber('frontInnerTickWidthMm', value)} />
-            <Field label={t(language, 'outerRayLength')} help={t(language, 'outerRayLengthHelp')} unit="mm" value={config.frontOuterTickLengthMm} min={0.1} step={0.1} invalid={errors.includes('frontOuterTickLengthMm')} onChange={(value) => updateNumber('frontOuterTickLengthMm', value)} />
-            <Field label={t(language, 'outerRayWidth')} help={t(language, 'rayWidthHelp')} unit="mm" value={config.frontOuterTickWidthMm} min={0.05} step={0.05} invalid={errors.includes('frontOuterTickWidthMm')} onChange={(value) => updateNumber('frontOuterTickWidthMm', value)} />
-            <Field label={t(language, 'connectorWidth')} help={t(language, 'connectorWidthHelp')} unit="mm" value={config.frontConnectorWidthMm} min={0.05} step={0.05} invalid={errors.includes('frontConnectorWidthMm')} onChange={(value) => updateNumber('frontConnectorWidthMm', value)} />
           </div>
           <ParameterDiagram language={language} />
         </section>
@@ -234,6 +224,11 @@ export default function App() {
             <select value={config.dofStyle} onChange={(event) => update('dofStyle', event.target.value as GeneratorConfig['dofStyle'])}><option value="nested">{t(language, 'dofStyleNested')}</option><option value="compact">{t(language, 'dofStyleCompact')}</option></select>
             <small>{t(language, 'dofStyleHelp')}</small>
           </label>
+          <div className="field-grid">
+            <label className="field"><span className="field-heading"><span>{t(language, 'stickerShape')}</span></span><select value={config.dofShape} onChange={(event) => update('dofShape', event.target.value as GeneratorConfig['dofShape'])}><option value="annular">{t(language, 'annularShape')}</option><option value="strip">{t(language, 'stripShape')}</option></select><small>{t(language, 'dofShapeHelp')}</small></label>
+            <label className="field"><span className="field-heading"><span>{t(language, 'textDirection')}</span></span><select value={config.dofTextDirection} onChange={(event) => update('dofTextDirection', event.target.value as GeneratorConfig['dofTextDirection'])}><option value="normal">{t(language, 'textNormal')}</option><option value="reverse">{t(language, 'textReverse')}</option></select><small>{t(language, 'textDirectionHelp')}</small></label>
+          </div>
+          <Toggle checked={config.dofShowLabels} label={t(language, 'showDofLabels')} help={t(language, 'showDofLabelsHelp')} onChange={(value) => update('dofShowLabels', value)} />
           {config.cocMode === 'customSensor' && <div className="field-grid sensor-fields">
             <Field label={t(language, 'sensorWidth')} help={t(language, 'sensorSizeHelp')} unit="mm" value={config.sensorWidthMm} min={1} step={0.1} invalid={errors.includes('sensorWidthMm')} onChange={(value) => updateNumber('sensorWidthMm', value)} />
             <Field label={t(language, 'sensorHeight')} help={t(language, 'sensorSizeHelp')} unit="mm" value={config.sensorHeightMm} min={1} step={0.1} invalid={errors.includes('sensorHeightMm')} onChange={(value) => updateNumber('sensorHeightMm', value)} />
@@ -244,13 +239,34 @@ export default function App() {
             <Field label={t(language, 'maxAperture')} help={t(language, 'maxApertureHelp')} unit="f/" value={config.maxApertureFNumber} min={0.5} max={128} step={0.1} invalid={errors.includes('maxApertureFNumber')} onChange={(value) => updateNumber('maxApertureFNumber', value)} />
             <Field label={t(language, 'dofStops')} help={t(language, 'dofStopsHelp')} unit={t(language, 'stopsUnit')} value={config.dofStops} min={1} max={10} step={1} invalid={errors.includes('dofStops')} onChange={(value) => updateNumber('dofStops', value)} />
             <Field label={t(language, 'dofFontSize')} help={t(language, 'dofFontSizeHelp')} unit="mm" value={config.dofFontSizeMm} min={0.3} step={0.05} invalid={errors.includes('dofFontSizeMm')} onChange={(value) => updateNumber('dofFontSizeMm', value)} />
-            <Field label={t(language, 'dofRingDiameter')} help={t(language, 'dofRingDiameterHelp')} unit="mm" value={config.dofRingDiameterMm} min={1} step={0.1} invalid={errors.includes('dofRingDiameterMm')} onChange={(value) => updateNumber('dofRingDiameterMm', value)} />
+            <Field label={t(language, 'dofTickWidth')} help={t(language, 'dofTickWidthHelp')} unit="mm" value={config.dofTickWidthMm} min={0.05} max={3} step={0.05} invalid={errors.includes('dofTickWidthMm')} onChange={(value) => updateNumber('dofTickWidthMm', value)} />
           </div>
+          {config.dofShape === 'annular' ? <div className="field-grid">
+            <Field label={t(language, 'dofInnerDiameter')} help={t(language, 'dofInnerDiameterHelp')} unit="mm" value={config.dofInnerDiameterMm} min={1} step={0.1} invalid={errors.includes('dofInnerDiameterMm')} onChange={(value) => updateNumber('dofInnerDiameterMm', value)} />
+            <Field label={t(language, 'dofOuterDiameter')} help={t(language, 'dofOuterDiameterHelp')} unit="mm" value={config.dofOuterDiameterMm} min={1} step={0.1} invalid={errors.includes('dofOuterDiameterMm')} onChange={(value) => updateNumber('dofOuterDiameterMm', value)} />
+          </div> : <Field label={t(language, 'dofRingDiameter')} help={t(language, 'dofRingDiameterHelp')} unit="mm" value={config.dofRingDiameterMm} min={1} step={0.1} invalid={errors.includes('dofRingDiameterMm')} onChange={(value) => updateNumber('dofRingDiameterMm', value)} />}
           <div className="aperture-summary"><span>{t(language, 'apertureRange')}</span><strong>f/{formatFNumber(fStops[0])} → f/{formatFNumber(fStops[fStops.length - 1])}</strong><small>{fStops.map((value) => `f/${formatFNumber(value)}`).join(' · ')}</small></div>
         </section>
 
         <section>
-          <div className="section-title"><span>04</span><h2>{t(language, 'appearance')}</h2></div>
+          <div className="section-title"><span>04</span><h2>{t(language, 'focusSticker')}</h2></div>
+          <label className="field"><span className="field-heading"><span>{t(language, 'stickerShape')}</span></span><select value={config.frontShape} onChange={(event) => update('frontShape', event.target.value as GeneratorConfig['frontShape'])}><option value="annular">{t(language, 'annularShape')}</option><option value="strip">{t(language, 'stripShape')}</option></select><small>{t(language, 'frontShapeHelp')}</small></label>
+          {config.frontShape === 'annular' ? <div className="field-grid">
+            <Field label={t(language, 'frontInnerDiameter')} help={t(language, 'frontInnerDiameterHelp')} unit="mm" value={config.frontInnerDiameterMm} min={1} step={0.1} invalid={errors.includes('frontInnerDiameterMm')} onChange={(value) => updateNumber('frontInnerDiameterMm', value)} />
+            <Field label={t(language, 'frontOuterDiameter')} help={t(language, 'frontOuterDiameterHelp')} unit="mm" value={config.frontOuterDiameterMm} min={1} step={0.1} invalid={errors.includes('frontOuterDiameterMm')} onChange={(value) => updateNumber('frontOuterDiameterMm', value)} />
+          </div> : <Field label={t(language, 'frontBarrelDiameter')} help={t(language, 'frontBarrelDiameterHelp')} unit="mm" value={config.frontBarrelDiameterMm} min={1} step={0.1} invalid={errors.includes('frontBarrelDiameterMm')} onChange={(value) => updateNumber('frontBarrelDiameterMm', value)} />}
+          <div className="subsection-label">{t(language, 'frontTickGeometry')}</div>
+          <div className="field-grid">
+            <Field label={t(language, 'innerRayLength')} help={t(language, 'innerRayLengthHelp')} unit="mm" value={config.frontInnerTickLengthMm} min={0.1} step={0.1} invalid={errors.includes('frontInnerTickLengthMm')} onChange={(value) => updateNumber('frontInnerTickLengthMm', value)} />
+            <Field label={t(language, 'innerRayWidth')} help={t(language, 'rayWidthHelp')} unit="mm" value={config.frontInnerTickWidthMm} min={0.05} step={0.05} invalid={errors.includes('frontInnerTickWidthMm')} onChange={(value) => updateNumber('frontInnerTickWidthMm', value)} />
+            <Field label={t(language, 'outerRayLength')} help={t(language, 'outerRayLengthHelp')} unit="mm" value={config.frontOuterTickLengthMm} min={0.1} step={0.1} invalid={errors.includes('frontOuterTickLengthMm')} onChange={(value) => updateNumber('frontOuterTickLengthMm', value)} />
+            <Field label={t(language, 'outerRayWidth')} help={t(language, 'rayWidthHelp')} unit="mm" value={config.frontOuterTickWidthMm} min={0.05} step={0.05} invalid={errors.includes('frontOuterTickWidthMm')} onChange={(value) => updateNumber('frontOuterTickWidthMm', value)} />
+            <Field label={t(language, 'connectorWidth')} help={t(language, 'connectorWidthHelp')} unit="mm" value={config.frontConnectorWidthMm} min={0.05} step={0.05} invalid={errors.includes('frontConnectorWidthMm')} onChange={(value) => updateNumber('frontConnectorWidthMm', value)} />
+          </div>
+        </section>
+
+        <section>
+          <div className="section-title"><span>05</span><h2>{t(language, 'appearance')}</h2></div>
           <div className="field-grid">
             <Field label={t(language, 'precision')} help={t(language, 'precisionHelp')} value={config.significantDigits} min={2} max={6} step={1} onChange={(value) => updateNumber('significantDigits', value)} />
             <label className="field"><span className="field-heading"><span>{t(language, 'distanceUnit')}</span></span><select value={config.distanceUnit} onChange={(event) => update('distanceUnit', event.target.value as GeneratorConfig['distanceUnit'])}><option value="m">{t(language, 'metres')}</option><option value="ft">{t(language, 'feet')}</option></select><small>{t(language, 'distanceUnitHelp')}</small></label>
@@ -294,23 +310,9 @@ export default function App() {
           </div>
         </div>
         <div className="front-preview-block">
-          <div className="preview-heading"><div><span className="eyebrow">ACTUAL ANGLE PREVIEW</span><h2>{t(language, 'frontPreview')}</h2><p>{t(language, 'frontPreviewHelp')}</p></div>{frontArtwork && <div className="metrics"><span>{t(language, 'frontDimensions')} <strong>Ø {frontArtwork.widthMm.toFixed(1)} / Ø {config.frontInnerDiameterMm.toFixed(1)} mm</strong></span><span className={rotationUsage > 100 ? 'usage-over' : ''}><strong>{generatedAngle.toFixed(1)}° / {config.maxAngleDeg.toFixed(1)}°</strong> · {rotationUsage.toFixed(1)}%</span></div>}</div>
-          <div className={`front-preview-stage ${config.transparentBackground ? 'checkerboard' : ''}`}>
-            {frontPreview && <div className="front-scale-preview" dangerouslySetInnerHTML={{ __html: frontPreview.svg }} />}
-          </div>
-          <div className="export-panel">
-            <div className="export-copy"><FileCode2 size={22} /><div><strong>{t(language, 'frontExport')}</strong><small>{t(language, 'frontExportNote')}</small></div></div>
-            <div className="export-buttons">
-              <button disabled={!frontArtwork} onClick={exportFrontDxf}><Download size={15} />{t(language, 'exportDxf')}</button>
-              <button disabled={!frontArtwork} onClick={exportFrontSvg}><Download size={15} />{t(language, 'exportSvg')}</button>
-              <button className="primary" disabled={!frontArtwork} onClick={exportFrontPng}><Download size={15} />{t(language, 'exportPng')}</button>
-            </div>
-          </div>
-        </div>
-        <div className="front-preview-block">
-          <div className="preview-heading"><div><span className="eyebrow">DEPTH OF FIELD SCALE</span><h2>{t(language, 'dofPreview')}</h2><p>{t(language, 'dofPreviewHelp')}</p></div>{dofArtwork && <div className="metrics"><span>{t(language, 'dofRingDiameter')} <strong>Ø {config.dofRingDiameterMm.toFixed(1)} mm</strong></span><span>{t(language, 'calculatedCoc')} <strong>{cocMm.toFixed(4)} mm</strong></span><span><strong>f/{formatFNumber(fStops[0])}–f/{formatFNumber(fStops[fStops.length - 1])}</strong></span></div>}</div>
+          <div className="preview-heading"><div><span className="eyebrow">DEPTH OF FIELD SCALE</span><h2>{t(language, 'dofPreview')}</h2><p>{t(language, 'dofPreviewHelp')}</p></div>{dofArtwork && <div className="metrics"><span>{t(language, 'dimensions')} <strong>{config.dofShape === 'annular' ? `Ø ${config.dofOuterDiameterMm.toFixed(1)} / Ø ${config.dofInnerDiameterMm.toFixed(1)} mm` : `${dofArtwork.widthMm.toFixed(1)} × ${dofArtwork.heightMm.toFixed(1)} mm · Ø ${config.dofRingDiameterMm.toFixed(1)}`}</strong></span><span>{t(language, 'calculatedCoc')} <strong>{cocMm.toFixed(4)} mm</strong></span><span><strong>f/{formatFNumber(fStops[0])}–f/{formatFNumber(fStops[fStops.length - 1])}</strong></span></div>}</div>
           <div className={`dof-preview-stage ${config.transparentBackground ? 'checkerboard' : ''}`}>
-            {dofArtwork && <div className="front-scale-preview" dangerouslySetInnerHTML={{ __html: dofArtwork.svg }} />}
+            {dofArtwork && <div className={`front-scale-preview ${config.dofShape === 'strip' ? 'strip-artwork-preview' : ''}`} dangerouslySetInnerHTML={{ __html: dofArtwork.svg }} />}
           </div>
           <div className="export-panel">
             <div className="export-copy"><FileCode2 size={22} /><div><strong>{t(language, 'dofExport')}</strong><small>{t(language, 'dofExportNote')}</small></div></div>
@@ -318,6 +320,20 @@ export default function App() {
               <button disabled={!dofArtwork || !font} onClick={exportDofDxf}><Download size={15} />{t(language, 'exportDxf')}</button>
               <button disabled={!dofArtwork} onClick={exportDofSvg}><Download size={15} />{t(language, 'exportSvg')}</button>
               <button className="primary" disabled={!dofArtwork} onClick={exportDofPng}><Download size={15} />{t(language, 'exportPng')}</button>
+            </div>
+          </div>
+        </div>
+        <div className="front-preview-block">
+          <div className="preview-heading"><div><span className="eyebrow">ACTUAL ANGLE PREVIEW</span><h2>{t(language, 'frontPreview')}</h2><p>{t(language, 'frontPreviewHelp')}</p></div>{frontArtwork && <div className="metrics"><span>{t(language, 'dimensions')} <strong>{config.frontShape === 'annular' ? `Ø ${config.frontOuterDiameterMm.toFixed(1)} / Ø ${config.frontInnerDiameterMm.toFixed(1)} mm` : `${frontArtwork.widthMm.toFixed(1)} × ${frontArtwork.heightMm.toFixed(1)} mm · Ø ${config.frontBarrelDiameterMm.toFixed(1)}`}</strong></span><span className={rotationUsage > 100 ? 'usage-over' : ''}><strong>{generatedAngle.toFixed(1)}° / {config.maxAngleDeg.toFixed(1)}°</strong> · {rotationUsage.toFixed(1)}%</span></div>}</div>
+          <div className={`front-preview-stage ${config.transparentBackground ? 'checkerboard' : ''}`}>
+            {frontPreview && <div className={`front-scale-preview ${config.frontShape === 'strip' ? 'strip-artwork-preview' : ''}`} dangerouslySetInnerHTML={{ __html: frontPreview.svg }} />}
+          </div>
+          <div className="export-panel">
+            <div className="export-copy"><FileCode2 size={22} /><div><strong>{t(language, 'frontExport')}</strong><small>{t(language, 'frontExportNote')}</small></div></div>
+            <div className="export-buttons">
+              <button disabled={!frontArtwork} onClick={exportFrontDxf}><Download size={15} />{t(language, 'exportDxf')}</button>
+              <button disabled={!frontArtwork} onClick={exportFrontSvg}><Download size={15} />{t(language, 'exportSvg')}</button>
+              <button className="primary" disabled={!frontArtwork} onClick={exportFrontPng}><Download size={15} />{t(language, 'exportPng')}</button>
             </div>
           </div>
         </div>

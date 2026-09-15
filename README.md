@@ -9,9 +9,9 @@ An entirely browser-based distance-scale generator for high-precision focusing r
 - 391-entry lens database; EFL is preferred and nominal focal length is used as a fallback.
 - Live, physically dimensioned preview using the thin-lens equation, with selectable metre or foot distance labels.
 - Manual multi-segment scale plans: every segment has its own mark count and angular interval, while the unfolded label can follow any selected segment for even physical spacing.
-- Automatically generated annular front sticker from inner/outer diameters: the inner ring follows the minimum angular subdivision, the outer ring follows the selected HPF interval, and configurable rays/connectors join each label to its actual angle from a shared main-mark anchor.
-- Separate, angularly aligned depth-of-field ring artwork with D/1500, Kodak 35 mm, 24 MP full-frame, and custom sensor pixel-pitch circle-of-confusion modes.
-- Lens-database maximum-aperture lookup, configurable stop range, shared HPF typeface, independent DOF type size/ring diameter, nested or compact tick-and-text DOF styles, and synchronized clockwise/counterclockwise output.
+- Focusing-scale stickers in concentric-ring or side-mount rectangular form: the minimum-angle ticks and selected-interval HPF marks are joined from a shared main-mark anchor, with independently configurable ray and connector geometry.
+- Separate, angularly aligned depth-of-field artwork in concentric-ring or side-mount rectangular form, with D/1500, Kodak 35 mm, 24 MP full-frame, and custom sensor pixel-pitch circle-of-confusion modes.
+- Lens-database maximum-aperture lookup, configurable stop range, shared HPF typeface, independent DOF line/type sizing, nested or compact styles, optional aperture labels, reversible label orientation, and synchronized clockwise/counterclockwise output.
 - Chinese/English interface that follows the browser language, with manual switching.
 - Dark/light themes, defaulting to dark and using the LensboardGenerator navy/cyan visual palette.
 - Bundled Square721 Cn BT Bold, three web-safe bundled alternatives, and local TTF/OTF upload.

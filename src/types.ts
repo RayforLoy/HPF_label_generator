@@ -3,6 +3,8 @@ export type Theme = 'dark' | 'light'
 export type ScaleDirection = 'clockwise' | 'counterclockwise'
 export type CocMode = 'film135' | 'kodak35' | 'fullFrame24mp' | 'customSensor'
 export type DofStyle = 'nested' | 'compact'
+export type StickerShape = 'annular' | 'strip'
+export type TextDirection = 'normal' | 'reverse'
 
 export interface ScaleSegment {
   id: string
@@ -31,6 +33,8 @@ export interface GeneratorConfig {
   scaleDirection: ScaleDirection
   ringDiameterMm: number
   ringWidthMm: number
+  frontShape: StickerShape
+  frontBarrelDiameterMm: number
   frontInnerDiameterMm: number
   frontOuterDiameterMm: number
   frontInnerTickLengthMm: number
@@ -46,7 +50,13 @@ export interface GeneratorConfig {
   dofStops: number
   dofFontSizeMm: number
   dofRingDiameterMm: number
+  dofInnerDiameterMm: number
+  dofOuterDiameterMm: number
   dofStyle: DofStyle
+  dofShape: StickerShape
+  dofShowLabels: boolean
+  dofTextDirection: TextDirection
+  dofTickWidthMm: number
   significantDigits: number
   distanceUnit: 'm' | 'ft'
   dpi: number
