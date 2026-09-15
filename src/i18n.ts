@@ -1,0 +1,53 @@
+import type { Language } from './types'
+
+const messages = {
+  zh: {
+    title: '对焦环刻度生成器', subtitle: '为高精度对焦环生成可直接制作的距离标尺',
+    lens: '镜头', searchLens: '搜索 391 条镜头记录…', manualLens: '手动参数', focal: '计算焦距',
+    focalHelp: '优先使用镜头数据库中的实际有效焦距 EFL；缺失时自动采用标称焦距。也可手动修改。',
+    mechanics: '对焦机构', extension: '每度伸长量', extensionHelp: '对焦环每旋转 1°，镜头板向外移动的距离。可用丝杆导程 ÷ 每圈角度计算。',
+    maxAngle: '最大转角', maxAngleHelp: '从无穷远到最近对焦位置可用的总旋转角度。',
+    diameter: '对焦环直径', diameterHelp: '贴纸所在圆柱面的外径；决定展开标签的总长度（π × 直径）。',
+    width: '标签宽度', widthHelp: '沿镜头光轴方向的标签宽度。',
+    appearance: '外观与输出', precision: '有效数字', precisionHelp: '距离标签保留的有效数字数量。',
+    dpi: 'PNG 分辨率', dpiHelp: '只影响 PNG 像素尺寸；SVG 与 DXF 始终保持毫米尺寸。',
+    tickLength: '刻度长度', tickLengthHelp: '从标签左边缘向内延伸的线段长度。',
+    tickWidth: '刻度线宽', tickWidthHelp: '打印刻度的物理宽度。',
+    font: '字体', fontHelp: 'SVG、DXF 中的文字会转换为路径，接收方无需安装字体。',
+    uploadFont: '上传 TTF / OTF', uploadHelp: '字体只在当前浏览器中处理，不会上传到服务器。',
+    colors: '颜色', background: '背景', ticks: '刻度', text: '文字', transparent: '透明背景',
+    transparentHelp: '透明时仍保留黑色外侧框线，便于定位和裁切。', showFocal: '显示焦距信息',
+    preview: '实时预览', dimensions: '展开尺寸', marks: '刻度数', sourceEfl: 'EFL', sourceNominal: '标称焦距', sourceManual: '手动',
+    diagramTitle: '参数示意', diagramDiameter: '直径 Ø', diagramWidth: '标签宽度', diagramRotation: '旋转 → 镜头伸长',
+    export: '导出', exportJson: 'JSON 配置', exportDxf: 'DXF 轮廓', exportSvg: 'SVG 轮廓', exportPng: 'PNG 图像',
+    vectorNote: 'SVG / DXF 文字已转曲', loading: '正在加载镜头数据库与字体…', error: '加载失败',
+    lang: 'EN', theme: '切换明暗主题', reset: '恢复默认值', customFont: '自定义字体', fontLoaded: '字体已加载',
+    invalidFont: '无法读取该字体，请选择有效的 TTF 或 OTF 文件。', footer: '所有计算均在浏览器本地完成', formula: '薄透镜公式 1/f = 1/u + 1/v',
+  },
+  en: {
+    title: 'Focusing Ring Scale Generator', subtitle: 'Create production-ready distance scales for high-precision focusing rings',
+    lens: 'Lens', searchLens: 'Search 391 lens records…', manualLens: 'Manual parameters', focal: 'Calculation focal length',
+    focalHelp: 'Uses the actual effective focal length (EFL) from the database first, then falls back to nominal focal length. You can also edit it manually.',
+    mechanics: 'Focusing mechanism', extension: 'Extension per degree', extensionHelp: 'How far the lens board moves for each 1° of ring rotation. Calculate as screw lead ÷ degrees per turn.',
+    maxAngle: 'Maximum rotation', maxAngleHelp: 'Usable rotation from infinity to the closest focusing position.',
+    diameter: 'Ring diameter', diameterHelp: 'Outside diameter of the surface carrying the label; its circumference sets the unfolded label length.',
+    width: 'Label width', widthHelp: 'Label width along the optical axis.',
+    appearance: 'Appearance & output', precision: 'Significant digits', precisionHelp: 'Number of significant digits shown on distance labels.',
+    dpi: 'PNG resolution', dpiHelp: 'Only affects PNG pixel dimensions; SVG and DXF remain physically sized in millimetres.',
+    tickLength: 'Tick length', tickLengthHelp: 'Length of each mark measured inward from the label edge.',
+    tickWidth: 'Tick width', tickWidthHelp: 'Physical stroke width of printed marks.',
+    font: 'Typeface', fontHelp: 'Text is converted to paths in SVG and DXF, so recipients do not need the font installed.',
+    uploadFont: 'Upload TTF / OTF', uploadHelp: 'The font is processed only in this browser and is never uploaded.',
+    colors: 'Colours', background: 'Background', ticks: 'Ticks', text: 'Text', transparent: 'Transparent background',
+    transparentHelp: 'A black outer cutting frame is retained when the background is transparent.', showFocal: 'Show focal-length note',
+    preview: 'Live preview', dimensions: 'Unfolded size', marks: 'marks', sourceEfl: 'EFL', sourceNominal: 'Nominal', sourceManual: 'Manual',
+    diagramTitle: 'Parameter guide', diagramDiameter: 'Diameter Ø', diagramWidth: 'Label width', diagramRotation: 'Rotation → lens extension',
+    export: 'Export', exportJson: 'JSON settings', exportDxf: 'DXF outlines', exportSvg: 'SVG outlines', exportPng: 'PNG image',
+    vectorNote: 'Text is outlined in SVG / DXF', loading: 'Loading lens database and typeface…', error: 'Could not load',
+    lang: '中文', theme: 'Toggle light/dark theme', reset: 'Reset defaults', customFont: 'Custom font', fontLoaded: 'Font loaded',
+    invalidFont: 'This font could not be read. Choose a valid TTF or OTF file.', footer: 'All calculations happen locally in your browser', formula: 'Thin-lens formula 1/f = 1/u + 1/v',
+  },
+} as const
+
+export type MessageKey = keyof typeof messages.en
+export const t = (language: Language, key: MessageKey) => messages[language][key]

@@ -1,0 +1,395 @@
+lensDB by rayfor,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+lensName,vender,version,nominalFocalLength,nominalFNumber,efl,bfl,flangeDistance,totalLength,rearLength,filterThread,frontDiameter,rearDiameter,nominalImageCircleFull,nominalAngleOfViewFull,nominalImageCircleMax,nominalAngleOfViewMax
+APO-SYMMAR_100_5.6,Schneider Kreuznach,1995_Compur_0,100,5.6,99.8,82.9,95.9,38,14.4,M40.5x0.5,42,34,120,62,145,72
+APO-SYMMAR_100_5.6,Schneider Kreuznach,1995_ProntorProf_01S,100,5.6,99.8,82.9,93.4,38,11.9,M40.5x0.5,42,34,120,62,145,72
+APO-SYMMAR_100_5.6,Schneider Kreuznach,1995_Copal_0,100,5.6,99.8,82.9,95.5,38,14,M40.5x0.5,42,34,120,62,145,72
+APO-SYMMAR_100_5.6,Schneider Kreuznach,1995_BK_0,100,5.6,99.8,82.9,95.9,38,14.4,M40.5x0.5,42,34,120,62,145,72
+APO-SYMMAR_120_5.6,Schneider Kreuznach,1995_Compur_0,120,5.6,123.4,102.1,118.3,45,16.6,M49x0.75,51,38,148,62,179,72
+APO-SYMMAR_120_5.6,Schneider Kreuznach,1995_ProntorProf_01S,120,5.6,123.4,102.1,115.8,45,14.1,M49x0.75,51,38,148,62,179,72
+APO-SYMMAR_120_5.6,Schneider Kreuznach,1995_Copal_0,120,5.6,123.4,102.1,117.9,45,16.2,M49x0.75,51,38,148,62,179,72
+APO-SYMMAR_120_5.6,Schneider Kreuznach,1995_BK_0,120,5.6,123.4,102.1,118.3,45,16.6,M49x0.75,51,38,148,62,179,72
+APO-SYMMAR_135_5.6,Schneider Kreuznach,1995_Compur_0,135,5.6,134.4,111.1,128.6,46.8,18.5,M49x0.75,51,43,162,62,195,72
+APO-SYMMAR_135_5.6,Schneider Kreuznach,1995_ProntorProf_01S,135,5.6,134.4,111.1,126.1,46.8,16,M49x0.75,51,43,162,62,195,72
+APO-SYMMAR_135_5.6,Schneider Kreuznach,1995_Copal_0,135,5.6,134.4,111.1,128.2,46.8,18.1,M49x0.75,51,43,162,62,195,72
+APO-SYMMAR_135_5.6,Schneider Kreuznach,1995_BK_0,135,5.6,134.4,111.1,128.6,46.8,18.5,M49x0.75,51,43,162,62,195,72
+APO-SYMMAR_150_5.6,Schneider Kreuznach,1995_Compur_0,150,5.6,151.5,124.8,144.6,53.7,20.5,M58x0.75,60,46,182,62,220,72
+APO-SYMMAR_150_5.6,Schneider Kreuznach,1995_ProntorProf_01S,150,5.6,151.5,124.8,142.1,53.7,18,M58x0.75,60,46,182,62,220,72
+APO-SYMMAR_150_5.6,Schneider Kreuznach,1995_Copal_0,150,5.6,151.5,124.8,144.2,53.7,20.1,M58x0.75,60,46,182,62,220,72
+APO-SYMMAR_150_5.6,Schneider Kreuznach,1995_BK_0,150,5.6,151.5,124.8,144.6,53.7,20.5,M58x0.75,60,46,182,62,220,72
+APO-SYMMAR_180_5.6,Schneider Kreuznach,1995_Compur_1,180,5.6,180.8,149.7,176.5,61.6,27.9,M58x0.75,60,57,217,62,263,72
+APO-SYMMAR_180_5.6,Schneider Kreuznach,1995_ProntorProf_1S,180,5.6,180.8,149.7,175.7,61.6,27.1,M58x0.75,60,57,217,62,263,72
+APO-SYMMAR_180_5.6,Schneider Kreuznach,1995_Copal_1,180,5.6,180.8,149.7,177.2,61.6,28.6,M58x0.75,60,57,217,62,263,72
+APO-SYMMAR_180_5.6,Schneider Kreuznach,1995_BK_1,180,5.6,180.8,149.7,177.1,61.6,28.5,M58x0.75,60,57,217,62,263,72
+APO-SYMMAR_210_5.6,Schneider Kreuznach,1995_Compur_1,210,5.6,209.6,170.8,202.4,73.4,33.1,M72x0.75,75,70,252,62,305,72
+APO-SYMMAR_210_5.6,Schneider Kreuznach,1995_ProntorProf_1S,210,5.6,209.6,170.8,201.6,73.4,32.3,M72x0.75,75,70,252,62,305,72
+APO-SYMMAR_210_5.6,Schneider Kreuznach,1995_Copal_1,210,5.6,209.6,170.8,203.1,73.4,33.8,M72x0.75,75,70,252,62,305,72
+APO-SYMMAR_210_5.6,Schneider Kreuznach,1995_BK_1,210,5.6,209.6,170.8,203,73.4,33.7,M72x0.75,75,70,252,62,305,72
+APO-SYMMAR_240_5.6,Schneider Kreuznach,1995_Compur_3,240,5.6,242.1,203.1,238.5,79.7,36.6,M77x0.75,80,75,291,62,352,72
+APO-SYMMAR_240_5.6,Schneider Kreuznach,1995_ProntorProf_3,240,5.6,242.1,203.1,237.4,79.7,35.5,M77x0.75,80,75,291,62,352,72
+APO-SYMMAR_240_5.6,Schneider Kreuznach,1995_Copal_3,240,5.6,242.1,203.1,238.5,79.7,36.6,M77x0.75,80,75,291,62,352,72
+APO-SYMMAR_240_5.6,Schneider Kreuznach,1995_BK_3,240,5.6,242.1,203.1,238.5,79.7,36.6,M77x0.75,80,75,291,62,352,72
+APO-SYMMAR_300_5.6,Schneider Kreuznach,1995_Compur_3,300,5.6,292.4,246.1,281.4,98.3,37.2,M105x1.0,110,80,351,62,425,72
+APO-SYMMAR_300_5.6,Schneider Kreuznach,1995_ProntorProf_3,300,5.6,292.4,246.1,280.3,98.3,36.1,M105x1.0,110,80,351,62,425,72
+APO-SYMMAR_300_5.6,Schneider Kreuznach,1995_Copal_3,300,5.6,292.4,246.1,281.4,98.3,37.2,M105x1.0,110,80,351,62,425,72
+APO-SYMMAR_300_5.6,Schneider Kreuznach,1995_BK_3,300,5.6,292.4,246.1,281.4,98.3,37.2,M105x1.0,110,80,351,62,425,72
+APO-SYMMAR_360_6.8,Schneider Kreuznach,1995_Compur_3,360,6.8,350.4,299,339.9,111,41.8,M112x1.5,115,90,405,60,491,70
+APO-SYMMAR_360_6.8,Schneider Kreuznach,1995_ProntorProf_3,360,6.8,350.4,299,338.8,111,40.7,M112x1.5,115,90,405,60,491,70
+APO-SYMMAR_360_6.8,Schneider Kreuznach,1995_Copal_3,360,6.8,350.4,299,339.9,111,41.8,M112x1.5,115,90,405,60,491,70
+APO-SYMMAR_360_6.8,Schneider Kreuznach,1995_BK_3,360,6.8,350.4,299,339.9,111,41.8,M112x1.5,115,90,405,60,491,70
+APO-SYMMAR_480_8.4,Schneider Kreuznach,1995_Copal_3,480,8.4,470.4,400.8,455.2,128.1,54.9,M105x1.0,110,92,370,43,500,56
+APO-SYMMAR_480_9.4,Schneider Kreuznach,1995_Compur_3,480,9.4,470.4,400.8,455.2,128.1,54.9,M105x1.0,110,92,370,43,500,56
+APO-SYMMAR_480_9.4,Schneider Kreuznach,1995_ProntorProf_3,480,9.4,470.4,400.8,454.1,128.1,53.8,M105x1.0,110,92,370,43,500,56
+APO-SYMMAR_480_9.4,Schneider Kreuznach,1995_BK_3,480,9.4,470.4,400.8,455.2,128.1,54.9,M105x1.0,110,92,370,43,500,56
+SUPER-ANGULON_XL_47_5.6,Schneider Kreuznach,1995_Compur_0,47,5.6,47.9,29.5,58.9,60.8,30.1,M67x0.75,70,63.5,110,98,166,120
+SUPER-ANGULON_XL_47_5.6,Schneider Kreuznach,1995_ProntorProf_01S,47,5.6,47.9,29.5,57,60.8,30.1,M67x0.75,70,63.5,110,98,166,120
+SUPER-ANGULON_XL_47_5.6,Schneider Kreuznach,1995_Copal_0,47,5.6,47.9,29.5,59.1,60.8,30.1,M67x0.75,70,63.5,110,98,166,120
+SUPER-ANGULON_XL_58_5.6,Schneider Kreuznach,1995_Compur_0,58,5.6,58.1,38.5,69.8,66,31.4,M67x0.75,70,60,129,96,166,110
+SUPER-ANGULON_XL_58_5.6,Schneider Kreuznach,1995_ProntorProf_01S,58,5.6,58.1,38.5,67.9,66,28.9,M67x0.75,70,60,129,96,166,110
+SUPER-ANGULON_XL_58_5.6,Schneider Kreuznach,1995_Copal_0,58,5.6,58.1,38.5,70.1,66,31,M67x0.75,70,60,129,96,166,110
+SUPER-ANGULON_XL_72_5.6,Schneider Kreuznach,1995_Compur_0,72,5.6,71.9,47.3,85.3,81.5,35.6,M95x1,100,75,166,98,226,115
+SUPER-ANGULON_XL_72_5.6,Schneider Kreuznach,1995_ProntorProf_01S,72,5.6,71.9,47.3,82.9,81.5,35.6,M95x1,100,75,166,98,226,115
+SUPER-ANGULON_XL_72_5.6,Schneider Kreuznach,1995_Copal_0,72,5.6,71.9,47.3,84.9,81.5,35.6,M95x1,100,75,166,98,226,115
+SUPER-ANGULON_XL_90_5.6,Schneider Kreuznach,1995_Compur_0,90,5.6,90.7,59.7,103.3,95.9,44,M95x1,100,86,201,96,259,110
+SUPER-ANGULON_XL_90_5.6,Schneider Kreuznach,1995_ProntorProf_01S,90,5.6,90.7,59.7,101.4,95.9,41.5,M95x1,100,86,201,96,259,110
+SUPER-ANGULON_XL_90_5.6,Schneider Kreuznach,1995_Copal_0,90,5.6,90.7,59.7,103.5,95.9,43.6,M95x1,100,86,201,96,259,110
+SUPER-ANGULON_47_5.6,Schneider Kreuznach,1995_Compur_0,47,5.6,47.5,30.8,52.6,54.7,22.3,M52x0.75,54,43,98,92,123,105
+SUPER-ANGULON_47_5.6,Schneider Kreuznach,1995_ProntorProf_01S,47,5.6,47.5,30.8,50.1,54.7,19.8,M52x0.75,54,43,98,92,123,105
+SUPER-ANGULON_47_5.6,Schneider Kreuznach,1995_Copal_0,47,5.6,47.5,30.8,52.2,54.7,21.9,M52x0.75,54,43,98,92,123,105
+SUPER-ANGULON_65_5.6,Schneider Kreuznach,1995_Compur_0,65,5.6,65.3,43.4,72.9,72,30.1,M67x0.75,70,57,135,92,170,105
+SUPER-ANGULON_65_5.6,Schneider Kreuznach,1995_ProntorProf_01S,65,5.6,65.3,43.4,72.8,72,30,M67x0.75,70,57,135,92,170,105
+SUPER-ANGULON_65_5.6,Schneider Kreuznach,1995_Copal_0,65,5.6,65.3,43.4,72.5,72,29.7,M67x0.75,70,57,135,92,170,105
+SUPER-ANGULON_75_5.6,Schneider Kreuznach,1995_Compur_0,75,5.6,75.7,50.7,83.5,78,35,M67x0.75,70,65,156,92,198,105
+SUPER-ANGULON_75_5.6,Schneider Kreuznach,1995_ProntorProf_01S,75,5.6,75.7,50.7,83.4,78,34.9,M67x0.75,70,65,156,92,198,105
+SUPER-ANGULON_75_5.6,Schneider Kreuznach,1995_Copal_0,75,5.6,75.7,50.7,83.1,78,34.6,M67x0.75,70,65,156,92,198,105
+SUPER-ANGULON_90_5.6,Schneider Kreuznach,1995_Compur_0,90,5.6,90.5,61.2,103.1,93.5,42.5,M82x0.75,85,77,187,92,235,105
+SUPER-ANGULON_90_5.6,Schneider Kreuznach,1995_ProntorProf_01S,90,5.6,90.5,61.2,103,93.5,42.4,M82x0.75,85,77,187,92,235,105
+SUPER-ANGULON_90_5.6,Schneider Kreuznach,1995_Copal_0,90,5.6,90.5,61.2,102.7,93.5,42.1,M82x0.75,85,77,187,92,235,105
+SUPER-ANGULON_90_8,Schneider Kreuznach,1995_Compur_0,90,8,90.4,67,99.2,74.9,32.7,M67x0.75,70,57,187,92,216,100
+SUPER-ANGULON_90_8,Schneider Kreuznach,1995_ProntorProf_01S,90,8,90.4,67,99.1,74.9,32.6,M67x0.75,70,57,187,92,216,100
+SUPER-ANGULON_90_8,Schneider Kreuznach,1995_Copal_0,90,8,90.4,67,98.8,74.9,32.3,M67x0.75,70,57,187,92,216,100
+SUPER-ANGULON_120_8,Schneider Kreuznach,1995_Compur_0,120,8,121.4,90.2,133.5,96.1,43.7,M82x0.75,85,75,250,92,288,100
+SUPER-ANGULON_120_8,Schneider Kreuznach,1995_ProntorProf_01S,120,8,121.4,90.2,133.4,96.1,43.6,M82x0.75,85,75,250,92,288,100
+SUPER-ANGULON_120_8,Schneider Kreuznach,1995_Copal_0,120,8,121.4,90.2,133.1,96.1,43.3,M82x0.75,85,75,250,92,288,100
+SUPER-ANGULON_165_8,Schneider Kreuznach,1995_Compur_3,165,8,165.7,123.2,179.2,135.5,60.6,M110x1,115,100,342,92,395,100
+SUPER-ANGULON_165_8,Schneider Kreuznach,1995_ProntorProf_3,165,8,165.7,123.2,178.1,135.5,59.5,M110x1,115,100,342,92,395,100
+SUPER-ANGULON_165_8,Schneider Kreuznach,1995_Copal_3,165,8,165.7,123.2,179.2,135.5,60.6,M110x1,115,100,342,92,395,100
+SUPER-ANGULON_210_8,Schneider Kreuznach,1995_Compur_3,210,8,210.2,156.6,229.4,169.5,76.7,M135x1,140,125,435,92,500,100
+SUPER-ANGULON_210_8,Schneider Kreuznach,1995_ProntorProf_3,210,8,210.2,156.6,228.3,169.5,75.6,M135x1,140,125,435,92,500,100
+SUPER-ANGULON_210_8,Schneider Kreuznach,1995_Copal_3,210,8,210.2,156.6,229.4,169.5,76.7,M135x1,140,125,435,92,500,100
+SUPER-ANGULON_XL_38_5.6,Schneider Kreuznach,Brochure_Copal_0,38,5.6,39.4,,52.1,59.5,30.4,M72x0.75,75,60,96,101,139,120
+SUPER-ANGULON_90_6.8,Schneider Kreuznach,Brochure_Copal_0,90,6.8,90.6,,103.4,97.7,45.4,M82x0.75,90,80,188,92,216,100
+SUPER-SYMMAR-ASPHERIC_XL_80_4.5,Schneider Kreuznach,Brochure_Copal_0,80,4.5,81,,84.7,51.3,14.8,M67x0.75,70,43,150,86,211,105
+SUPER-SYMMAR-ASPHERIC_XL_110_5.6,Schneider Kreuznach,Brochure_Copal_1,110,5.6,109.9,,117.2,60,18.9,M67x0.75,70,54,186,80,288,105
+SUPER-SYMMAR-ASPHERIC_XL_150_5.6,Schneider Kreuznach,Brochure_Copal_1,150,5.6,147.7,,157.9,80,24.2,M95x1,100,65,248,80,386,105
+SUPER-SYMMAR-ASPHERIC_XL_210_5.6,Schneider Kreuznach,Brochure_Copal_3,210,5.6,209.2,,216.3,120,35.6,M135x1,140,75,357,81,500,100
+APO-SYMMAR_L_120_5.6,Schneider Kreuznach,Brochure_Copal_0,120,5.6,123.2,,116.3,42.4,16.5,M52x0.75,54,54,148,62,189,75
+APO-SYMMAR_L_150_5.6,Schneider Kreuznach,Brochure_Copal_0,150,5.6,151.5,,142.2,53.1,21.1,M58x0.75,60,60,182,62,233,75
+APO-SYMMAR_L_180_5.6,Schneider Kreuznach,Brochure_Copal_1,180,5.6,180.4,,177.7,62.8,28.1,M72x0.75,75,75,217,62,277,75
+APO-SYMMAR_L_210_5.6,Schneider Kreuznach,Brochure_Copal_1,210,5.6,209,,208.1,73.5,35.8,M77x0.75,80,80,251,62,321,75
+APO-SYMMAR_L_300_5.6,Schneider Kreuznach,Brochure_Copal_3,300,5.6,296.3,,283.1,96.1,35.3,M105x1,110,80,356,62,430,72
+APO-SYMMAR_L_480_8.4,Schneider Kreuznach,Brochure_Copal_3,480,8.4,469.4,,454,129.4,55.7,M105x1,110,110,384,44,500,56
+APO-TELE-XENAR_250_5.6,Schneider Kreuznach,Brochure_Copal_1,250,5.6,250.3,,195.1,105,36.6,M82x0.75,86,58,171,38,190,42
+APO-TELE-XENAR_400_5.6,Schneider Kreuznach,Brochure_Copal_3,400,5.6,387.4,,285.1,107,28.3,M82x0.75,85,60,250,36,250,36
+APO-TELE-XENAR_600_9,Schneider Kreuznach,Brochure_Copal_3,600,9,598.5,,461.3,168.5,65.9,M105x1,112,90,312,29,400,37
+APO-TELE-XENAR_800_12,Schneider Kreuznach,Brochure_Copal_3,800,12,796.6,,628.2,169.9,67.3,M105x1,112,90,400,28,480,34
+MAKRO-SYMMAR_HM_80_5.6,Schneider Kreuznach,Brochure_Copal_0,80,5.6,81.5,,159.4,47.9,19.6,M40.5x0.5,42,31.5,,,,
+MAKRO-SYMMAR_HM_120_5.6,Schneider Kreuznach,Brochure_Copal_0,120,5.6,119.9,,235,55.1,23.2,M40.5x0.5,42,37.5,,,,
+MAKRO-SYMMAR_HM_180_5.6,Schneider Kreuznach,Brochure_Copal_1,180,5.6,179.9,,354.3,80.4,35.7,M58x0.75,60,57,,,,
+SYMMAR-S_100_5.6,Schneider Kreuznach,Brochure_Compur_0,100,5.6,102.1,84.6,96.6,38.5,13.1,M40.5x0.5,42,31.5,118,60,143,70
+SYMMAR-S_100_5.6,Schneider Kreuznach,Brochure_ProntorProf_01S,100,5.6,102.1,84.6,94.1,38.5,10.6,M40.5x0.5,42,31.5,118,60,143,70
+SYMMAR-S_100_5.6,Schneider Kreuznach,Brochure_Copal_0,100,5.6,102.1,84.6,96.2,38.5,12.7,M40.5x0.5,42,31.5,118,60,143,70
+SYMMAR-S_100_5.6,Schneider Kreuznach,Brochure_BK_0,100,5.6,102.1,84.6,96.6,38.5,13.1,M40.5x0.5,42,31.5,118,60,143,70
+SYMMAR-S_120_5.6,Schneider Kreuznach,Brochure_Compur_0,120,5.6,123.4,102.1,118.3,45,16.6,M49x0.75,51,38,142,60,173,70
+SYMMAR-S_120_5.6,Schneider Kreuznach,Brochure_ProntorProf_01S,120,5.6,123.4,102.1,115.8,45,14.1,M49x0.75,51,38,142,60,173,70
+SYMMAR-S_120_5.6,Schneider Kreuznach,Brochure_Copal_0,120,5.6,123.4,102.1,117.9,45,16.2,M49x0.75,51,38,142,60,173,70
+SYMMAR-S_120_5.6,Schneider Kreuznach,Brochure_BK_0,120,5.6,123.4,102.1,118.3,45,16.6,M49x0.75,51,38,142,60,173,70
+SYMMAR-S_135_5.6,Schneider Kreuznach,Brochure_Compur_0,135,5.6,135.4,112.3,128.9,47.6,17.6,M49x0.75,51,40.5,156,60,190,70
+SYMMAR-S_135_5.6,Schneider Kreuznach,Brochure_ProntorProf_01S,135,5.6,135.4,112.3,126.4,47.6,15.1,M49x0.75,51,40.5,156,60,190,70
+SYMMAR-S_135_5.6,Schneider Kreuznach,Brochure_Copal_0,135,5.6,135.4,112.3,128.5,47.6,17.2,M49x0.75,51,40.5,156,60,190,70
+SYMMAR-S_135_5.6,Schneider Kreuznach,Brochure_BK_0,135,5.6,135.4,112.3,128.9,47.6,17.6,M49x0.75,51,40.5,156,60,190,70
+SYMMAR-S_150_5.6,Schneider Kreuznach,Brochure_Compur_0,150,5.6,150.3,125,143.5,55,19.1,M58x0.75,60,40.5,174,60,210,70
+SYMMAR-S_150_5.6,Schneider Kreuznach,Brochure_Compur_1,150,5.6,150.3,125,142.2,55,17.8,M58x0.75,60,40.5,174,60,210,70
+SYMMAR-S_150_5.6,Schneider Kreuznach,Brochure_ProntorProf_1S,150,5.6,150.3,125,141,55,16.6,M58x0.75,60,40.5,174,60,210,70
+SYMMAR-S_150_5.6,Schneider Kreuznach,Brochure_Copal_0,150,5.6,150.3,125,143.1,55,18.7,M58x0.75,60,40.5,174,60,210,70
+SYMMAR-S_150_5.6,Schneider Kreuznach,Brochure_BK_0,150,5.6,150.3,125,143.5,55,19.1,M58x0.75,60,40.5,174,60,210,70
+SYMMAR-S_180_5.6,Schneider Kreuznach,Brochure_Compur_1,180,5.6,180,149.5,171.2,64,22.8,M67x0.75,70,50,208,60,252,70
+SYMMAR-S_180_5.6,Schneider Kreuznach,Brochure_ProntorProf_1S,180,5.6,180,149.5,169.8,64,21.5,M67x0.75,70,50,208,60,252,70
+SYMMAR-S_180_5.6,Schneider Kreuznach,Brochure_Copal_1,180,5.6,180,149.5,171.3,64,22.8,M67x0.75,70,50,208,60,252,70
+SYMMAR-S_180_5.6,Schneider Kreuznach,Brochure_BK_1,180,5.6,180,149.5,171.2,64,22.8,M67x0.75,70,50,208,60,252,70
+SYMMAR-S_210_5.6,Schneider Kreuznach,Brochure_Compur_1,210,5.6,209.9,174.7,200.9,73,27,M77x0.75,80,57,242,60,294,70
+SYMMAR-S_210_5.6,Schneider Kreuznach,Brochure_ProntorProf_1S,210,5.6,209.9,174.7,199.5,73,25.7,M77x0.75,80,57,242,60,294,70
+SYMMAR-S_210_5.6,Schneider Kreuznach,Brochure_Copal_1,210,5.6,209.9,174.7,201,73,27.1,M77x0.75,80,57,242,60,294,70
+SYMMAR-S_210_5.6,Schneider Kreuznach,Brochure_BK_1,210,5.6,209.9,174.7,200.9,73,27,M77x0.75,80,57,242,60,294,70
+SYMMAR-S_240_5.6,Schneider Kreuznach,Brochure_Compur_3,240,5.6,240.8,200.4,229,83.5,29.6,M86x1,90,65,278,60,337,70
+SYMMAR-S_240_5.6,Schneider Kreuznach,Brochure_ProntorProf_3,240,5.6,240.8,200.4,227.9,83.5,28.5,M86x1,90,65,278,60,337,70
+SYMMAR-S_240_5.6,Schneider Kreuznach,Brochure_Copal_3,240,5.6,240.8,200.4,229,83.5,29.6,M86x1,90,65,278,60,337,70
+SYMMAR-S_240_5.6,Schneider Kreuznach,Brochure_BK_3,240,5.6,240.8,200.4,229,83.5,29.6,M86x1,90,65,278,60,337,70
+SYMMAR-S_300_5.6,Schneider Kreuznach,Brochure_Compur_3,300,5.6,293.8,244.1,280,101.5,36.8,M105x1,110,80,339,60,411,70
+SYMMAR-S_300_5.6,Schneider Kreuznach,Brochure_ProntorProf_3,300,5.6,293.8,244.1,278.9,101.5,35.7,M105x1,110,80,339,60,411,70
+SYMMAR-S_300_5.6,Schneider Kreuznach,Brochure_Copal_3,300,5.6,293.8,244.1,280,101.5,36.8,M105x1,110,80,339,60,411,70
+SYMMAR-S_300_5.6,Schneider Kreuznach,Brochure_BK_3,300,5.6,293.8,244.1,280,101.5,36.8,M105x1,110,80,339,60,411,70
+SYMMAR-S_360_6.8,Schneider Kreuznach,Brochure_Compur_3,360,6.8,350.5,292.5,335.8,112,44.6,M120x1,125,92,405,60,491,70
+SYMMAR-S_360_6.8,Schneider Kreuznach,Brochure_ProntorProf_3,360,6.8,350.5,292.5,334.7,112,43.5,M120x1,125,92,405,60,491,70
+SYMMAR-S_360_6.8,Schneider Kreuznach,Brochure_Copal_3,360,6.8,350.5,292.5,335.8,112,44.6,M120x1,125,92,405,60,491,70
+SYMMAR-S_360_6.8,Schneider Kreuznach,Brochure_BK_3,360,6.8,350.5,292.5,335.8,112,44.6,M120x1,125,92,405,60,491,70
+SYMMAR-S_480_8.4,Schneider Kreuznach,Brochure_Copal_3,480,8.4,470.5,400.8,455.2,128.1,54.9,M105x1,110,92,370,43,500,56
+SYMMAR-S_480_9.4,Schneider Kreuznach,Brochure_Compur_3,480,9.4,470.5,400.8,455.2,128.1,54.9,M105x1,110,80,370,43,500,56
+SYMMAR-S_480_9.4,Schneider Kreuznach,Brochure_ProntorProf_3,480,9.4,470.5,400.8,454.1,128.1,53.8,M105x1,110,80,370,43,500,56
+SYMMAR-S_480_9.4,Schneider Kreuznach,Brochure_BK_3,480,9.4,470.5,400.8,455.2,128.1,54.9,M105x1,110,80,370,43,500,56
+SUPER-SYMMAR_HM_120_5.6,Schneider Kreuznach,Brochure_Compur_0,120,5.6,121.6,102.3,135.7,80.3,39.6,M67x0.75,70,54,180,73,211,82
+SUPER-SYMMAR_HM_120_5.6,Schneider Kreuznach,Brochure_ProntorProf_01S,120,5.6,121.6,102.3,133.2,80.3,37.1,M67x0.75,70,54,180,73,211,82
+SUPER-SYMMAR_HM_120_5.6,Schneider Kreuznach,Brochure_Copal_0,120,5.6,121.6,102.3,135.3,80.3,39.2,M67x0.75,70,54,180,73,211,82
+SUPER-SYMMAR_HM_150_5.6,Schneider Kreuznach,Brochure_Compur_1,150,5.6,151.3,121,168.2,101.2,53.7,M77x0.75,80,70,220,73,254,80
+SUPER-SYMMAR_HM_150_5.6,Schneider Kreuznach,Brochure_ProntorProf_1S,150,5.6,151.3,121,166.2,101.2,52.4,M77x0.75,80,70,220,73,254,80
+SUPER-SYMMAR_HM_150_5.6,Schneider Kreuznach,Brochure_Copal_1,150,5.6,151.3,121,168.3,101.2,53.7,M77x0.75,80,70,220,73,254,80
+SUPER-SYMMAR_HM_210_5.6,Schneider Kreuznach,Brochure_Compur_3,210,5.6,212.3,175.8,227.2,122.1,58.6,M100x1,105,80,300,70,356,80
+SUPER-SYMMAR_HM_210_5.6,Schneider Kreuznach,Brochure_ProntorProf_3,210,5.6,212.3,175.8,226.1,122.1,57.5,M100x1,105,80,300,70,356,80
+SUPER-SYMMAR_HM_210_5.6,Schneider Kreuznach,Brochure_Copal_3,210,5.6,212.3,175.8,227.2,122.1,58.6,M100x1,105,80,300,70,356,80
+APO-DIGITAR_XL_24_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,24,5.6,24.9,,26.4,37.8,14.4,M52x0.75,54,43,60,100,60,100
+APO-DIGITAR_XL_24_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,24,5.6,24.9,,24.2,37.8,12.2,M52x0.75,54,43,60,100,60,100
+DIGITAR_L_28_2.8,Schneider Kreuznach,Brochure_SchneiderElectronic_0,28,2.8,29.3,,69.9,81.1,20.6,M77x0.75,85,30,60,92,60,92
+DIGITAR_L_28_2.8,Schneider Kreuznach,Brochure_RolleiElectronic_0,28,2.8,29.3,,67.7,81.1,18.4,M77x0.75,85,30,60,92,60,92
+APO-DIGITAR_XL_35_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,35,5.6,36.4,,39.4,44,17.4,M52x0.75,54,43,70,88,90,102
+APO-DIGITAR_XL_35_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,35,5.6,36.4,,37.2,44,15.2,M52x0.75,54,43,70,88,90,102
+APO-DIGITAR_XL_47_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,47,5.6,47.6,,52.3,54.7,22,M52x0.75,54,43,98,92,113,100
+APO-DIGITAR_XL_47_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,47,5.6,47.6,,50.1,54.7,19.8,M52x0.75,54,43,98,92,113,100
+APO-DIGITAR_N_60_4.0,Schneider Kreuznach,Brochure_SchneiderElectronic_0,60,4,59.9,,55.1,42.5,15,M40.5x0.5,42,31,60,53,60,53
+APO-DIGITAR_N_60_4.0,Schneider Kreuznach,Brochure_RolleiElectronic_0,60,4,59.9,,52.9,42.5,12.8,M40.5x0.5,42,31,60,53,60,53
+APO-DIGITAR_L_72_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,72,5.6,74.8,,68.4,36.4,9.8,M40.5x0.5,43,35,90,62,90,62
+APO-DIGITAR_L_72_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,72,5.6,74.8,,66.2,36.4,7.7,M40.5x0.5,43,35,90,62,90,62
+APO-DIGITAR_L_80_4.0,Schneider Kreuznach,Brochure_SchneiderElectronic_0,80,4,80.3,,78.8,42.6,14.6,M40.5x0.5,42,31,80,53,90,59
+APO-DIGITAR_L_80_4.0,Schneider Kreuznach,Brochure_RolleiElectronic_0,80,4,80.3,,76.6,42.6,12.4,M40.5x0.5,42,31,80,53,90,59
+APO-DIGITAR_N_90_4.5,Schneider Kreuznach,Brochure_SchneiderElectronic_0,90,4.5,90.7,,86.8,48.7,20.7,M40.5x0.5,42,34,90,53,90,53
+APO-DIGITAR_N_90_4.5,Schneider Kreuznach,Brochure_RolleiElectronic_0,90,4.5,90.7,,84.6,48.7,18.5,M40.5x0.5,42,34,90,53,90,53
+APO-DIGITAR_N_100_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,100,5.6,101,,97,42.3,15.7,M40.5x0.5,42,36,100,53,100,53
+APO-DIGITAR_N_100_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,100,5.6,101,,94.8,42.3,13.5,M40.5x0.5,42,36,100,53,100,53
+APO-DIGITAR_N_120_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,120,5.6,124.9,,120.1,41.8,17.3,M40.5x0.5,42,42,110,48,110,48
+APO-DIGITAR_N_120_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,120,5.6,124.9,,117.9,41.8,15.1,M40.5x0.5,42,42,110,48,110,48
+APO-DIGITAR_N_150_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,150,5.6,151.3,,151.4,71.2,37.8,M40.5x0.5,42,45,110,40,110,40
+APO-DIGITAR_N_150_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,150,5.6,151.3,,149.2,71.2,35.6,M40.5x0.5,42,45,110,40,110,40
+APO-DIGITAR_T_180_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,180,5.6,180.1,,173.2,65,24.5,M55x0.75,58,42,120,37,120,37
+APO-DIGITAR_T_180_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,180,5.6,180.1,,171,65,22.3,M55x0.75,58,42,120,37,120,37
+APO-DIGITAR_T_210_6.8,Schneider Kreuznach,Brochure_SchneiderElectronic_0,210,6.8,210.1,,202.6,74.3,29,M72x0.75,75,52,120,32,120,32
+APO-DIGITAR_T_210_6.8,Schneider Kreuznach,Brochure_RolleiElectronic_1,210,6.8,210.1,,201,74.3,27.4,M72x0.75,75,52,120,32,120,32
+APO-DIGITAR_T_210_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,210,5.6,210.1,,202.6,74.3,29,M72x0.75,75,52,120,32,120,32
+APO-DIGITAR_T_210_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_1,210,5.6,210.1,,201,74.3,27.4,M72x0.75,75,52,120,32,120,32
+APO-DIGITAR_M_80_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,80,5.6,81.5,,159.7,47.9,19.9,M40.5x0.5,42,31,,,,
+APO-DIGITAR_M_80_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,80,5.6,81.5,,157.5,47.9,17.7,M40.5x0.5,42,31,,,,
+APO-DIGITAR_M_120_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,120,5.6,120.2,,236.1,55.1,23.2,M40.5x0.5,42,37.5,,,,
+APO-DIGITAR_M_120_5.6,Schneider Kreuznach,Brochure_RolleiElectronic_0,120,5.6,120.2,,233.9,55.1,21,M40.5x0.5,42,37.5,,,,
+SUPER-DIGITAR_XL_28_5.6,Schneider Kreuznach,Brochure_Copal_0,28,5.6,29.18,,35.2,68.4,20.5,M112.5x1.5,116,45,90,115,90,115
+SUPER-DIGITAR_XL_28_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,28,5.6,29.18,,35.5,68.4,20.8,M112.5x1.5,116,45,90,115,90,115
+APO-DIGITAR_XL_43_5.6,Schneider Kreuznach,Brochure_Copal_0,43,5.6,44.65,,48.9,54,21.9,M58x0.75,63,52,90,90,110,102
+APO-DIGITAR_XL_43_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,43,5.6,44.65,,49.2,54,22.2,M58x0.75,63,52,90,90,110,102
+APO-DIGITAR_XL_60_5.6,Schneider Kreuznach,Brochure_Copal_0,60,5.6,60.03,,67.3,68.6,29.3,M62x0.75,65,52,120,90,120,90
+APO-DIGITAR_XL_60_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,60,5.6,60.03,,67.6,68.6,31.5,M62x0.75,65,52,120,90,120,90
+APO-DIGITAR_ASPHERIC_100_5.6,Schneider Kreuznach,Brochure_Copal_0,100,5.6,99.98,,95.4,34.4,12.9,M40.5x0.5,42,31,100,60,120,60
+APO-DIGITAR_ASPHERIC_100_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,100,5.6,99.98,,95.7,34.4,13.2,M40.5x0.5,42,31,100,60,120,60
+APO-DIGITAR_ASPHERIC_120_5.6,Schneider Kreuznach,Brochure_Copal_0,120,5.6,125.01,,119.7,42.3,16.1,M46x0.75,48,37.5,150,60,150,60
+APO-DIGITAR_ASPHERIC_120_5.6,Schneider Kreuznach,Brochure_SchneiderElectronic_0,120,5.6,125.01,,120,42.3,16.4,M46x0.75,48,37.5,150,60,150,60
+G-CLARON_WA_210_11,Schneider Kreuznach,Brochure_BK,210,11,215.1,174,200.8,70.2,26.7,M102x1,105,75,,,800,86
+G-CLARON_WA_240_11,Schneider Kreuznach,Brochure_BK,240,11,234.6,190,219.8,76.3,29.8,M110x1,115,,,,787,80
+G-CLARON_WA_270_11,Schneider Kreuznach,Brochure_BK,270,11,274.1,222.6,257.9,90.1,35.3,M110x1,115,83,,,800,72
+G-CLARON_150_9,Schneider Kreuznach,Brochure_Compur_0,150,9,151.2,134.9,148.3,34.7,13.8,M35.5x0.50,37,32,189,64,378,
+G-CLARON_150_9,Schneider Kreuznach,Brochure_Copal_0,150,9,151.2,134.9,148.3,34.7,13.8,M35.5x0.50,37,32,189,64,378,
+G-CLARON_150_9,Schneider Kreuznach,Brochure_ProntorProf_01S,150,9,151.2,134.9,148.3,34.7,13.8,M35.5x0.50,37,32,189,64,378,
+G-CLARON_210_9,Schneider Kreuznach,Brochure_Compur_1,210,9,208.2,186.1,205,49,19.5,M49x0.75,51,45,260,64,520,
+G-CLARON_210_9,Schneider Kreuznach,Brochure_Copal_1,210,9,208.2,186.1,205,49,19.5,M49x0.75,51,45,260,64,520,
+G-CLARON_210_9,Schneider Kreuznach,Brochure_ProntorProf_1S,210,9,208.2,186.1,205,49,19.5,M49x0.75,51,45,260,64,520,
+G-CLARON_240_9,Schneider Kreuznach,Brochure_Compur_1,240,9,238.1,212.5,234.6,53.5,23.4,M52x0.75,54,51,298,64,598,
+G-CLARON_240_9,Schneider Kreuznach,Brochure_Copal_1,240,9,238.1,212.5,234.6,53.5,23.4,M52x0.75,54,51,298,64,598,
+G-CLARON_240_9,Schneider Kreuznach,Brochure_ProntorProf_1S,240,9,238.1,212.5,234.6,53.5,23.4,M52x0.75,54,51,298,64,598,
+G-CLARON_270_9,Schneider Kreuznach,Brochure_Compur_1,270,9,267.8,239.2,264.6,60.8,26.4,M58x0.75,60,57,335,64,669,
+G-CLARON_270_9,Schneider Kreuznach,Brochure_Copal_1,270,9,267.8,239.2,264.6,60.8,26.4,M58x0.75,60,57,335,64,669,
+G-CLARON_270_9,Schneider Kreuznach,Brochure_ProntorProf_1S,270,9,267.8,239.2,264.6,60.8,26.4,M58x0.75,60,57,335,64,669,
+G-CLARON_305_9,Schneider Kreuznach,Brochure_Compur_1,305,9,304.9,272.4,301.7,68.9,30.1,M67x0.75,70,65,381,64,762,
+G-CLARON_305_9,Schneider Kreuznach,Brochure_Copal_1,305,9,304.9,272.4,301.7,68.9,30.1,M67x0.75,70,65,381,64,762,
+G-CLARON_305_9,Schneider Kreuznach,Brochure_ProntorProf_1S,305,9,304.9,272.4,301.7,68.9,30.1,M67x0.75,70,65,381,64,762,
+G-CLARON_355_9,Schneider Kreuznach,Brochure_Compur_3,355,9,354.9,317.2,350,79.7,34.3,M77x0.75,80,75,444,64,887,
+G-CLARON_355_9,Schneider Kreuznach,Brochure_Copal_3,355,9,354.9,317.2,350,79.7,34.3,M77x0.75,80,75,444,64,887,
+G-CLARON_355_9,Schneider Kreuznach,Brochure_ProntorProf_3,355,9,354.9,317.2,350,79.7,34.3,M77x0.75,80,75,444,64,887,
+SUPER-ANGULON_47_5.6,Schneider Kreuznach,front labeled,47,5.6,47.5,32,51.6,51.3,20.2,M49x0.75,51,38,98,92,123,105
+SUPER-ANGULON_65_5.6,Schneider Kreuznach,front labeled,65,5.6,65.4,44.3,71.4,69,27.6,M67x0.75,70,50,135,92,170,105
+SUPER-ANGULON_75_5.6,Schneider Kreuznach,front labeled,75,5.6,75.4,51.2,82.8,77,32.1,M67x0.75,70,57.5,156,92,198,105
+SUPER-ANGULON_90_5.6,Schneider Kreuznach,front labeled,90,5.6,90.5,61.5,100.6,93.5,40.1,M82x0.75,85,70,187,92,235,105
+SUPER-ANGULON_65_8,Schneider Kreuznach,front labeled,65,8,64.4,47.2,69.7,56.8,22.9,M49x0.75,51,42,133.4,92,153.5,100
+SUPER-ANGULON_75_8,Schneider Kreuznach,front labeled,75,8,76.5,55.5,82.7,67,28.1,M49x0.75,51,42,156.4,92,180,100
+SUPER-ANGULON_90_8,Schneider Kreuznach,front labeled,90,8,90.3,66.3,99.4,78,33.5,M67x0.75,70,57,187,92,215.2,100
+SUPER-ANGULON_121_8,Schneider Kreuznach,front labeled,121,8,121,88.5,133.9,104.5,47.2,M77x0.75,80,75,250.6,92,288.4,100
+SUPER-ANGULON_165_8,Schneider Kreuznach,front labeled,165,8,165,120.4,180.6,144,63.3,M105x1,110,100,341.7,92,393.3,100
+SUPER-ANGULON_210_8,Schneider Kreuznach,front labeled,210,8,209,152.7,230.8,180,81.3,M127x1,132,125,418,92,498.2,100
+NIKKOR-SW_65_4,Nikon,Brochure_Copal_0,65,4,,,70.8,67,,M67x0.75,70,54,110,80,170,105
+NIKKOR-SW_75_4.5,Nikon,Brochure_Copal_0,75,4.5,,,81.3,73.5,,M67x0.75,70,60,126,80,200,106
+NIKKOR-SW_90_4.5,Nikon,Brochure_Copal_0,90,4.5,,,97.4,86.7,,M82x0.75,85,70,154,80,235,105
+NIKKOR-SW_90_8,Nikon,Brochure_Copal_0,90,8,,,97,71,,M67x0.75,70,60,154,80,235,105
+NIKKOR-SW_120_8,Nikon,Brochure_Copal_0,120,8,,,130.7,92.5,,M77x0.75,80,80,200,80,312,105
+NIKKOR-W_105_5.6,Nikon,Brochure_Copal_0,105,5.6,,,103.2,44,,M52x0.75,54,42,121,60,155,73
+NIKKOR-W_135_5.6,Nikon,Brochure_Copal_0,135,5.6,,,133.8,46,,M52x0.75,54,42,156,60,200,73
+NIKKOR-W_150_5.6,Nikon,Brochure_Copal_0,150,5.6,,,146.8,50,,M52x0.75,54,42,174,60,210,70
+NIKKOR-W_180_5.6,Nikon,Brochure_Copal_1,180,5.6,,,177,60.5,,M67x0.75,70,54,208,60,253,70
+NIKKOR-W_210_5.6,Nikon,Brochure_Copal_1,210,5.6,,,207,69,,M67x0.75,70,60,243,60,295,70
+NIKKOR-W_240_5.6,Nikon,Brochure_Copal_3,240,5.6,,,225.6,77,,M82x0.75,85,60,278,60,336,70
+NIKKOR-W_300_5.6,Nikon,Brochure_Copal_3,300,5.6,,,284.9,94.5,,M95x1,100,80,346,60,420,70
+NIKKOR-W_360_6.5,Nikon,Brochure_Copal_3,360,6.5,,,345.8,107.5,,M95x1,100,80,415,60,494,69
+NIKKOR-AM-ED_120_5.6,Nikon,Brochure_Copal_0_1to1,120,5.6,,,115.9,64,,M52x0.75,54,42,210,47,250,55
+NIKKOR-AM-ED_210_5.6,Nikon,Brochure_Copal_1_1to1,210,5.6,,,202.7,104.5,,M67x0.75,70,70,310,41,400,51
+NIKKOR-T-ED_270_6.3,Nikon,Brochure_Copal_1,270,6.3,,,187.6,98,,M67x0.75,70,54,114,24,160,33
+NIKKOR-T-ED_360_8,Nikon,Brochure_Copal_1,360,8,,,261,124,,M67x0.75,70,60,154,24,210,33
+NIKKOR-T-ED_500_11,Nikon,Brochure_Copal_1,500,11,,,349.9,129.5,,M67x0.75,70,54,154,17,210,24
+NIKKOR-T-ED_600_9,Nikon,Brochure_Copal_3,600,9,,,409.2,175.5,,M95x1,100,80,200,19,310,29
+NIKKOR-T-ED_720_16,Nikon,Brochure_Copal_1,720,16,,,469.2,124.1,,M67x0.75,70,54,154,12,210,17
+NIKKOR-T-ED_800_12,Nikon,Brochure_Copal_3,800,12,,,527.4,176.5,,M95x1,100,70,200,14,310,22
+NIKKOR-T-ED_1200_18,Nikon,Brochure_Copal_3,1200,18,,,755.7,179,,M95x1,100,60,200,10,310,15
+NIKKOR-M_200_8,Nikon,Brochure_Copal_0,200,8,,,193.7,43,,M52x0.75,54,31.5,166,45,210,55
+NIKKOR-M_300_9,Nikon,Brochure_Copal_1,300,9,,,290,43,,M52x0.75,54,42,312,55,325,57
+NIKKOR-M_450_9,Nikon,Brochure_Copal_3,450,9,,,428.4,55,,M67x0.75,70,60,420,50,440,52
+EBC-FUJINON-SWD_65_5.6,Fujifilm,ProfessionalLenses_Seiko_0,65,5.6,65,46.3,72.2,66,27,M62x0.75,65,54,,,172,106
+EBC-FUJINON-SWD_75_5.6,Fujifilm,ProfessionalLenses_Seiko_0,75,5.6,75.2,52.9,84.6,75,32.5,M67x0.75,70,70,,,200,106
+EBC-FUJINON-SWD_90_5.6,Fujifilm,ProfessionalLenses_Seiko_0,90,5.6,90,64.1,101.1,91,39,M82x0.75,85,75,,,238,106
+FUJINON-SW_65_8,Fujifilm,ProfessionalLenses_Seiko_0,65,8,64.9,44.1,71,59.4,29,M52x0.75,54,48,,,155,100
+FUJINON-SW_75_8,Fujifilm,ProfessionalLenses_Seiko_0,75,8,75,51.3,82.5,66.2,32.8,M58x0.75,60,54,,,181,100
+FUJINON-SW_90_8,Fujifilm,ProfessionalLenses_Seiko_0,90,8,89.9,61.4,99.4,78.2,39.5,M67x0.75,70,64,,,216,100
+FUJINON-SW_105_8,Fujifilm,ProfessionalLenses_Seiko_0,105,8,105.2,71.5,116.9,68.5,50.5,M77x0.75,80,70,,,250,100
+FUJINON-SW_120_8,Fujifilm,ProfessionalLenses_Seiko_0,120,8,119.8,81.8,133.5,100.5,52.5,M77x0.75,80,80,,,290,100
+FUJINON-SW_300_8,Fujifilm,ProfessionalLenses_Copal_3,300,8,298.5,229.4,325.3,215.5,95,M145x0.75,150,140,,,720,100
+FUJINON-W_150_6.3,Fujifilm,ProfessionalLenses_Seiko_0_Old,150,6.3,150.5,137.3,143.5,33.3,9.1,M40.5x0.5,42,31,,,198,67
+FUJINON-W_125_5.6,Fujifilm,ProfessionalLenses_Seiko_0,125,5.6,124.7,104.4,121.3,45.2,19,M46x0.75,48,39,,,210,80
+FUJINON-W_135_5.6,Fujifilm,ProfessionalLenses_Seiko_0,135,5.6,134.7,112.8,131.3,45.4,19.8,M46x0.75,48,39,,,228,80
+FUJINON-W_150_5.6,Fujifilm,ProfessionalLenses_Seiko_0,150,5.6,149.5,125.2,146,49.4,22.4,M46x0.75,48,45,,,245,80
+FUJINON-W_180_5.6,Fujifilm,ProfessionalLenses_Copal_1,180,5.6,180,150.8,175.7,59.3,27.6,M58x0.75,60,54,,,305,80
+FUJINON-W_210_5.6,Fujifilm,ProfessionalLenses_Copal_1,210,5.6,210.3,176.3,209.6,67,32,M58x0.75,60,60,,,352,80
+FUJINON-W_250_6.7,Fujifilm,ProfessionalLenses_Copal_1,250,6.7,250,209.5,246.1,78.5,38,M67x0.75,70,64,,,398,80
+FUJINON-W_300_5.6,Fujifilm,ProfessionalLenses_Copal_3,300,5.6,299.1,250.5,292.9,95,43.8,M77x0.75,80,70,,,420,80
+FUJINON-W_360_6.3,Fujifilm,ProfessionalLenses_Copal_3,360,6.3,359.2,300.8,352.7,113.5,53.8,M86x1,90,80,,,485,80
+FUJINON-L_210_5.6,Fujifilm,ProfessionalLenses_Copal_1,210,5.6,206.5,179.6,192.9,49,14.7,M49x0.75,51,37,,,240,59
+FUJINON-L_300_8,Fujifilm,ProfessionalLenses_Copal_3,300,8,301,261.8,280.7,74,22.8,M67x0.75,70,60,,,343,53
+FUJINON-L_420_8,Fujifilm,ProfessionalLenses_Copal_3,420,8,420.9,371.3,397.6,88.2,30,M67x0.75,70,60,,,480,53
+FUJINON-A_180_9,Fujifilm,ProfessionalLenses_Copal_0,180,9,180.3,163.3,178.2,45,16.7,M46x0.75,48,37,,,252,70
+FUJINON-A_240_9,Fujifilm,ProfessionalLenses_Copal_3,240,9,240.4,217.6,237.9,55,21.7,M52x0.75,54,45,,,336,70
+FUJINON-A_600_11,Fujifilm,ProfessionalLenses_Copal_3,600,11,603,546,603.3,131.1,59.5,M95x1,100,95,,,840,50
+FUJINON-A_1200_24,Fujifilm,ProfessionalLenses_Copal_3,1200,24,1200.5,1125.5,1202.3,177.5,82.3,M102x1,106,106,,,1120,50
+FUJINON-SF_180_5.6,Fujifilm,ProfessionalLenses_Copal_1,180,5.6,180.2,159.9,176.3,42.5,17.6,M46x0.75,48,42,,,200,58
+FUJINON-SF_250_5.6,Fujifilm,ProfessionalLenses_Copal_3,250,5.6,250.9,237.7,257.8,61,22.8,M67x0.75,70,60,,,300,58
+FUJINON-SF_420_5.6,Fujifilm,ProfessionalLenses_Barrel,420,5.6,419.1,397.1,413,77.5,18.5,M82x0.75,85,85,,,500,58
+FUJINON-T_400_8,Fujifilm,ProfessionalLenses_Copal_1,400,8,399.1,220.7,259.2,130.5,43.6,M67x0.75,70,65,,,240,33
+FUJINON_180_4.5,Fujifilm,ProfessionalLenses_Barrel,180,4.5,180.1,157.5,163.6,49,9.5,M49x0.75,51,51,,,205,59
+FUJINON_210_4.5,Fujifilm,ProfessionalLenses_Barrel,210,4.5,209.7,183.5,188.6,56.5,10,M58x0.75,60,57,,,240,59
+FUJINON_250_4.5,Fujifilm,ProfessionalLenses_Barrel,250,4.5,248,215.5,223.2,67,12,M67x0.75,70,70,,,286,59
+FUJINON_300_4.5,Fujifilm,ProfessionalLenses_Barrel,300,4.5,299.1,259.8,268.7,81,13,M82x0.75,85,85,,,343,59
+APO-SIRONAR-S_100_5.6,Rodenstock,Analog_Copal_0,100,5.6,,,99,42.6,,M49x0.75,51,31.5,,,155,75
+APO-SIRONAR-S_135_5.6,Rodenstock,Analog_Copal_0,135,5.6,,,132,47.5,,M49x0.75,51,48,,,208,75
+APO-SIRONAR-S_150_5.6,Rodenstock,Analog_Copal_0,150,5.6,,,147,51.5,,M49x0.75,51,51,,,231,75
+APO-SIRONAR-S_180_5.6,Rodenstock,Analog_Copal_1,180,5.6,,,177,60.5,,M67x0.75,70,60,,,276,75
+APO-SIRONAR-S_210_5.6,Rodenstock,Analog_Copal_1,210,5.6,,,202,69.5,,M72x0.75,75,65,,,316,75
+APO-SIRONAR-S_240_5.6,Rodenstock,Analog_Copal_3,240,5.6,,,230,82,,M86x1,90,80,,,372,75
+APO-SIRONAR-S_300_5.6,Rodenstock,Analog_Copal_3,300,5.6,,,277,98.5,,M100x1,105,80,,,448,75
+APO-SIRONAR-S_360_6.8,Rodenstock,Analog_Copal_3,360,6.8,,,330,120,,M112x1.5,117,80,,,468,68
+APO-MACRO-SIRONAR_120_5.6,Rodenstock,Analog_Copal_0_1to1,120,5.6,,,235.6,43.8,,M49x0.75,51,40.5,,,277,60
+APO-MACRO-SIRONAR_180_5.6,Rodenstock,Analog_Copal_1_1to1,180,5.6,,,356.6,61.2,,M67x0.75,70,54,,,415,60
+APO-GRANDAGON_35_4.5,Rodenstock,Analog_Copal_0,35,4.5,,,43.2,55.7,,M67x0.75,70,60,,,125,120
+APO-GRANDAGON_45_4.5,Rodenstock,Analog_Copal_0,45,4.5,,,55.5,65.3,,M67x0.75,70,60,,,131,110
+APO-GRANDAGON_55_4.5,Rodenstock,Analog_Copal_0,55,4.5,,,67.6,69.8,,M67x0.75,70,60,,,163,110
+GRANDAGON-N_65_4.5,Rodenstock,Analog_Copal_0,65,4.5,,,70,63.5,,M58x0.75,60,51,,,170,105
+GRANDAGON-N_75_4.5,Rodenstock,Analog_Copal_0,75,4.5,,,82,73.5,,M67x0.75,70,60,,,195,105
+GRANDAGON-N_90_4.5,Rodenstock,Analog_Copal_1,90,4.5,,,98,88.5,,M82x0.75,85,70,,,236,105
+GRANDAGON-N_90_6.8,Rodenstock,Analog_Copal_0,90,6.8,,,94,78.5,,M67x0.75,70,60,,,221,102
+GRANDAGON-N_115_6.8,Rodenstock,SourceBook_Copal_1,115,6.8,,,,,,M82,,,,,291,104
+GRANDAGON-N_155_6.8,Rodenstock,SourceBook_Copal_1,155,6.8,,,,,,M105,,,,,382,102
+GRANDAGON-N_200_6.8,Rodenstock,SourceBook_Copal_3,200,6.8,,,,,,M135,,,,,495,102
+APO-SIRONAR-N_100_5.6,Rodenstock,SourceBook_Copal_0,100,5.6,,,,,,M40.5,,,,,151,72
+APO-SIRONAR-N_135_5.6,Rodenstock,SourceBook_Copal_0,135,5.6,,,,,,M40.5,,,,,200,72
+APO-SIRONAR-N_150_5.6,Rodenstock,SourceBook_Copal_0,150,5.6,,,,,,M49,,,,,214,72
+APO-SIRONAR-N_180_5.6,Rodenstock,SourceBook_Copal_1,180,5.6,,,,,,M58,,,,,262,72
+APO-SIRONAR-N_210_5.6,Rodenstock,SourceBook_Copal_1,210,5.6,,,,,,M67,,,,,301,72
+APO-SIRONAR-N_240_5.6,Rodenstock,SourceBook_Copal_3,240,5.6,,,,,,M77,,,,,350,72
+APO-SIRONAR-N_300_5.6,Rodenstock,SourceBook_Copal_3,300,5.6,,,,,,M86,,,,,425,72
+APO-SIRONAR-N_360_6.8,Rodenstock,SourceBook_Copal_3,360,6.8,,,,,,M105,,,,,435,64
+APO-SIRONAR-N_480_8.4,Rodenstock,SourceBook_Copal_3,480,8.4,,,,,,M112,,,,,500,56
+APO-SIRONAR-W_150_5.6,Rodenstock,SourceBook_Copal_1,150,5.6,,,,,,M70,,,,,252,80
+APO-SIRONAR-W_210_5.6,Rodenstock,SourceBook_Copal_3,210,5.6,,,,,,M100,,,,,352,80
+APO-SIRONAR-W_300_5.6,Rodenstock,SourceBook_Copal_3,300,5.6,,,,,,M127,,,,,490,80
+APO-RONAR_150_9,Rodenstock,SourceBook_Copal_0,150,9,,,,,,M40.5,,,,,135,48
+APO-RONAR_240_9,Rodenstock,SourceBook_Copal_1,240,9,,,,,,M49,,,,,212,48
+APO-RONAR_300_9,Rodenstock,SourceBook_Copal_1,300,9,,,,,,M49,,,,,264,48
+APO-RONAR_360_9,Rodenstock,SourceBook_Copal_3,360,9,,,,,,M58,,,,,318,48
+APO-RONAR_480_9,Rodenstock,SourceBook_Copal_3,480,9,,,,,,M67,,,,,396,46
+IMAGON_200_5.8,Rodenstock,ViewCameraLenses_Copal_3,200,5.8,,,,,,,,,,,150,
+IMAGON_250_5.8,Rodenstock,ViewCameraLenses_Copal_3,250,5.8,,,,,,,,,,,180,
+IMAGON_300_6.8,Rodenstock,ViewCameraLenses_Copal_3,300,6.8,,,,,,,,,,,220,
+APO-SYMMAR-L_120_5.6,Schneider Kreuznach,Analog_Copal_0,120,5.6,123.2,,116.3,42.4,16.5,M52x0.75,54,54,148,62,189,75
+APO-SYMMAR-L_150_5.6,Schneider Kreuznach,Analog_Copal_0,150,5.6,151.5,,142.2,53.1,21.1,M58x0.75,60,60,182,62,233,75
+APO-SYMMAR-L_180_5.6,Schneider Kreuznach,Analog_Copal_1,180,5.6,180.4,,177.7,62.8,28.1,M72x0.75,75,75,217,62,277,75
+APO-SYMMAR-L_210_5.6,Schneider Kreuznach,Analog_Copal_1,210,5.6,209,,208.1,73.5,35.8,M77x0.75,80,80,251,62,321,75
+APO-SYMMAR-L_300_5.6,Schneider Kreuznach,Analog_Copal_3,300,5.6,296.3,,283.1,96.1,35.3,M105x1,110,80,356,62,430,72
+APO-SYMMAR-L_480_8.4,Schneider Kreuznach,Analog_Copal_3,480,8.4,469.4,,454,129.4,55.7,M105x1,110,110,384,44,500,56
+FINE-ART-LENS-XXL_550_11,Schneider Kreuznach,FineArt_Copal_3,550,11,555,,547,116,45.8,M122x1,125,125,630,59.2,900,78
+FINE-ART-LENS-XXL_1100_22,Schneider Kreuznach,FineArt_Copal_3,1100,22,1068,,1056,146,60.8,M105x1,110,110,900,45.7,900,45.7
+FINE-ART-LENS-XXL_1100_14,Schneider Kreuznach,FineArt_Barrel,1100,14,1068,,992,149,0,M105x1,110,110,900,45.7,900,45.7
+TESSAR-DOCTAR_50_4.5,Docter Optic,Research_Copal_0,50,4.5,,,,,,M30.5x0.5,,,,,55,53
+TESSAR-DOCTAR_75_4.5,Docter Optic,Research_Copal_0,75,4.5,,,,,,M30.5x0.5,,,,,85,55
+TESSAR-DOCTAR_105_4.5,Docter Optic,Research_Copal_0,105,4.5,,,,,,M30.5x0.5,,,,,130,55
+TESSAR-DOCTAR_135_4.5,Docter Optic,Research_Copal_1,135,4.5,,,,,,M40.5x0.5,,,,,160,57
+TESSAR-DOCTAR_180_4.5,Docter Optic,Research_Copal_3,180,4.5,,,,,,M49x0.75,,,,,220,55
+TESSAR-DOCTAR_210_4.5,Docter Optic,Research_Copal_3,210,4.5,,,,,,M58x0.75,,,,,250,55
+TESSAR-DOCTAR_250_4.5,Docter Optic,Research_Copal_3,250,4.5,,,,,,M67x0.75,,,,,300,55
+TESSAR-DOCTAR_300_5.6,Docter Optic,Research_Copal_3,300,5.6,,,,,,M77x0.75,,,,,360,55
+TESSAR-DOCTAR_360_6.7,Docter Optic,Research_Copal_3,360,6.7,,,,,,M95x1,,,,,430,45
+APO-GERMINAR_240_9,Docter Optic,Research_Copal_1,240,9,,,,,,M35.5x0.5,,,,,280,60.5
+APO-GERMINAR_300_9,Docter Optic,Research_Copal_1,300,9,,,,,,M40.5x0.5,,,,,355,61
+APO-GERMINAR_360_9,Docter Optic,Research_Copal_3,360,9,,,,,,M49x0.75,,,,,430,61.5
+APO-GERMINAR_450_9,Docter Optic,Research_Copal_3,450,9,,,,,,M58x0.75,,,,,530,61
+APO-GERMINAR_600_11.5,Docter Optic,Research_Copal_3,600,11.5,,,,,,M77x0.75,,,,,650,57
+APO-GERMINAR_750_14.5,Docter Optic,Research_Copal_3,750,14.5,,,,,,M95x1,,,,,795,56
+APO-GERMINAR_1000_19.5,Docter Optic,Research_Copal_3,1000,19.5,,,,,,M95x1,,,,,995,53
+APO-GERMINAR-W_150_8,Docter Optic,Research_Copal_1,150,8,,,,,,M58x0.75,,,,,184,63
+APO-GERMINAR-W_210_8,Docter Optic,Research_Copal_1,210,8,,,,,,M77x0.75,,,,,276,66.5
+APO-GERMINAR-W_240_8,Docter Optic,Research_Copal_3,240,8,,,,,,M110x1,,,,,352,72.5
+GERMINAR-W_150_9,Docter Optic,Research_Barrel_1to1,150,9,,,,,,M35.5x0.5,,,,,420,70
+GERMINAR-W_210_9,Docter Optic,Research_Barrel_1to1,210,9,,,,,,M49x0.75,,,,,588,70
+GERMINAR-W_240_9,Docter Optic,Research_Barrel_1to1,240,9,,,,,,M49x0.75,,,,,672,70
+GERMINAR-W_305_9,Docter Optic,Research_Barrel_1to1,305,9,,,,,,M67x0.75,,,,,886,72
+GERMINAR-W_360_9,Docter Optic,Research_Barrel_1to1,360,9,,,,,,M77x0.75,,,,,1008,70
+GERMINAR-S_270_11,Docter Optic,Research_Barrel_1to1,270,11,,,,,,M77x0.75,,,,,829,75
+GERMINAR-S_600_9,Docter Optic,Research_Barrel_1to1,600,9,,,,,,M77x0.75,,,,,803,37
+DOCTAR-WA_65_4.5,Docter Optic,Research_Copal_1,65,4.5,,,,,,M85x1,,,,,170,105
+TESSAR_100_3.5,Carl Zeiss Oberkochen,Research_Synchro-Compur_0,100,3.5,,,,,,M40.5x0.5,,,,,120,57
+TESSAR_105_3.5,Carl Zeiss Oberkochen,Research_Synchro-Compur_0,105,3.5,,,,,,M40.5x0.5,,,,,120,57
+TESSAR_150_4.5,Carl Zeiss Oberkochen,Research_Synchro-Compur_1,150,4.5,,,,,,M49x0.75,,,,,165,57
+PLANAR_80_2.8,Carl Zeiss Oberkochen,Research_Synchro-Compur_0,80,2.8,,,,,,M49x0.75,,,,,100,64
+PLANAR_100_3.5,Carl Zeiss Oberkochen,Research_Synchro-Compur_0,100,3.5,,,,,,M67x0.75,,,,,120,62
+PLANAR_135_3.5,Carl Zeiss Oberkochen,Research_Synchro-Compur_1_Old,135,3.5,,,,,,M58x0.75,,,,,170,64
+PLANAR_135_3.5,Carl Zeiss Oberkochen,Research_Compur_1_TStar,135,3.5,,,,,,M67x0.75,,,,,180,67
+SONNAR_180_4.8,Carl Zeiss Oberkochen,Research_Synchro-Compur_1_Old,180,4.8,,,138,,,M58x0.75,,,,,140,42
+SONNAR_180_4.8,Carl Zeiss Oberkochen,Research_Compur_0_New,180,4.8,,,138,,,M67x0.75,,,,,140,42
+SONNAR_250_5.6,Carl Zeiss Oberkochen,Research_Synchro-Compur_1,250,5.6,,,183,,,M77x0.75,,,,,185,
+BIOGON_45_4.5,Carl Zeiss Oberkochen,Research_Synchro-Compur_0,45,4.5,,,,,,M67x0.75,,,,,100,95
+BIOGON_53_4.5,Carl Zeiss Oberkochen,Research_Synchro-Compur_0,53,4.5,,,,,,M67x0.75,,,,,115,95
+BIOGON_75_4.5,Carl Zeiss Oberkochen,Research_Synchro-Compur_0,75,4.5,,,,,,M95x1,,,,,165,95
+HELIAR_150_4.5,Voigtlaender,Research_Synchro-Compur_1,150,4.5,,,,,,SlipOn42,,,166,58,,
+HELIAR_180_4.5,Voigtlaender,Research_Compur_2,180,4.5,,,,,,SlipOn47,,,200,58,,
+HELIAR_210_4.5,Voigtlaender,Research_Compound_3,210,4.5,,,,,,SlipOn57,,,233,58,,
+HELIAR_240_4.5,Voigtlaender,Research_Compound_4,240,4.5,,,,,,SlipOn70,,,266,58,,
+HELIAR_300_4.5,Voigtlaender,Research_Compound_5,300,4.5,,,,,,SlipOn85,,,250,45,,
+HELIAR_360_4.5,Voigtlaender,Research_Barrel,360,4.5,,,,,,SlipOn98,,,300,45,,
+HELIAR_420_4.5,Voigtlaender,Research_Barrel,420,4.5,,,,,,SlipOn116,,,350,45,,
+HELIAR_480_4.5,Voigtlaender,Research_Barrel,480,4.5,,,,,,SlipOn128,,,400,45,,
+UNIVERSAL-HELIAR_300_4.5,Voigtlaender,Research_Barrel,300,4.5,,,,,,SlipOn85,,,250,45,,
+UNIVERSAL-HELIAR_360_4.5,Voigtlaender,Research_Barrel,360,4.5,,,,,,SlipOn98,,,300,45,,
+UNIVERSAL-HELIAR_420_4.5,Voigtlaender,Research_Barrel,420,4.5,,,,,,SlipOn116,,,350,45,,
+APO-LANTHAR_105_4.5,Voigtlaender,Research_Synchro-Compur_0,105,4.5,,,,,,SlipOn42,,,116,58,,
+APO-LANTHAR_150_4.5,Voigtlaender,Research_Synchro-Compur_1,150,4.5,,,,,,SlipOn42,,,166,58,,
+APO-LANTHAR_210_4.5,Voigtlaender,Research_Compound_3,210,4.5,,,,,,SlipOn57,,,233,58,,
+APO-LANTHAR_300_4.5,Voigtlaender,Research_Compound_5,300,4.5,,,,,,SlipOn90,,,280,50,,
+APO-SKOPAR_75_8,Voigtlaender,Research_Barrel,75,8,,,,,,SlipOn32,,,,,62,45
+APO-SKOPAR_150_8,Voigtlaender,Research_Synchro-Compur_0,150,8,,,,,,SlipOn32,,,,,124,45
+APO-SKOPAR_210_9,Voigtlaender,Research_Compound_3,210,9,,,,,,SlipOn50,,,,,174,45
+APO-SKOPAR_300_9,Voigtlaender,Research_Compound_3,300,9,,,,,,SlipOn50,,,,,249,45
+APO-SKOPAR_450_9,Voigtlaender,Research_Compound_4,450,9,,,,,,SlipOn68,,,,,373,45
+APO-SKOPAR_600_9,Voigtlaender,Research_Barrel,600,9,,,,,,SlipOn94,,,,,497,45
+APO-SKOPAR_750_9,Voigtlaender,Research_Barrel,750,9,,,,,,,,,,,621,45
+ULTRAGON_115_5.5,Voigtlaender,Research_Compur_2,115,5.5,,,,,,SlipOn60,,,,,230,90
+TELOMAR_180_5.5,Voigtlaender,Research_Synchro-Compur_1,180,5.5,,,,,,SlipOn42,,,,,107,33
+TELOMAR_240_5.5,Voigtlaender,Research_Synchro-Compur_1,240,5.5,,,,,,SlipOn51,,,,,142,33
+TELOMAR_360_5.5,Voigtlaender,Research_Compound_3,360,5.5,,,,,,SlipOn70,,,,,213,33
