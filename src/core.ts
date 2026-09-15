@@ -67,7 +67,7 @@ export function focalLengthFor(lens: Lens): { value: number; source: 'efl' | 'no
 export function formatDistance(valueMetres: number, significantDigits: number, unit: 'm' | 'ft' = 'm'): string {
   const value = unit === 'ft' ? valueMetres * 3.280839895013123 : valueMetres
   if (!Number.isFinite(value)) return 'INF'
-  if (value >= 1000) return `${(value / 1000).toPrecision(Math.max(2, significantDigits - 1))}k`
+  if (value >= 1000) return `${(value / 1000).toPrecision(significantDigits)}k`
   if (value >= 1) return value.toPrecision(significantDigits)
   return value.toPrecision(Math.max(1, significantDigits - 1))
 }
