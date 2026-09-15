@@ -69,7 +69,7 @@ export function formatDistance(valueMetres: number, significantDigits: number, u
   if (!Number.isFinite(value)) return 'INF'
   if (value >= 1000) return `${Number((value / 1000).toPrecision(Math.max(2, significantDigits - 1)))}k`
   if (value >= 1) return Number(value.toPrecision(significantDigits)).toString()
-  return Number(value.toPrecision(significantDigits)).toString()
+  return Number(value.toPrecision(Math.max(1, significantDigits - 1))).toString()
 }
 
 export function distanceAtAngle(focalLengthMm: number, extensionMmPerDeg: number, angleDeg: number): number {

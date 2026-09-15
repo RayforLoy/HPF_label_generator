@@ -35,6 +35,7 @@ describe('scale calculation', () => {
     expect(marks.map((mark) => mark.angleDeg)).toEqual([0, 1, 2, 3, 4, 5, 10, 15, 20])
     expect(marks[0].label).toBe('INF')
     expect(formatDistance(12.3456, 4)).toBe('12.35')
+    expect(formatDistance(0.2545, 4)).toBe('0.255')
   })
 
   it('uses physical circumference and rejects unsafe dimensions', () => {
