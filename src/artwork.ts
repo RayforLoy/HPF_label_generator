@@ -382,6 +382,16 @@ function rotatePoint(point: [number, number], center: [number, number], angleDeg
   return [center[0] + x * Math.cos(radians) - y * Math.sin(radians), center[1] + x * Math.sin(radians) + y * Math.cos(radians)]
 }
 
+function nestedLabelFontSize(configuredSize: number, bandWidth: number, levelCount: number): number {
+  if (levelCount <= 1) return Math.min(configuredSize, bandWidth * 0.42)
+  const levelSpacing = bandWidth * 0.48 / (levelCount - 1)
+  return Math.min(configuredSize, levelSpacing * 0.72)
+}
+
+function angularWidthDeg(widthMm: number, radiusMm: number): number {
+  return widthMm / Math.max(radiusMm, 0.01) * 180 / Math.PI
+}
+
 export function createDofArtwork(config: GeneratorConfig, font: opentype.Font): Artwork {
   if (config.dofShape === 'strip') return createDofStripArtwork(config, font)
   const outerRadius = config.dofOuterDiameterMm / 2
@@ -431,10 +441,14 @@ export function createDofArtwork(config: GeneratorConfig, font: opentype.Font): 
       const sweep = config.scaleDirection === 'clockwise' ? 1 : 0
       nodes.push(`<path d="M ${leftOuter[0].toFixed(4)} ${leftOuter[1].toFixed(4)} L ${leftInner[0].toFixed(4)} ${leftInner[1].toFixed(4)} A ${levelRadius.toFixed(4)} ${levelRadius.toFixed(4)} 0 0 ${sweep} ${rightInner[0].toFixed(4)} ${rightInner[1].toFixed(4)} L ${rightOuter[0].toFixed(4)} ${rightOuter[1].toFixed(4)}" fill="none" stroke="${xml(config.tickColor)}" stroke-width="${config.dofTickWidthMm}"/>`)
       if (config.dofShowLabels) {
-        const labelRadius = Math.min(outerRadius - frameWidthMm - config.dofFontSizeMm * 0.62, levelRadius + config.dofFontSizeMm * 0.9)
-        for (const angle of [leftAngle, rightAngle]) {
-          const labelCenterY = center - labelRadius
-          const path = makeTextPath(font, label, center - labelWidth / 2, labelCenterY + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+        const nestedFontSize = nestedLabelFontSize(config.dofFontSizeMm, ringWidth, stops.length)
+        const nestedLabelWidth = font.getAdvanceWidth(label, nestedFontSize, { kerning: true })
+        const clearanceMm = Math.max(config.dofTickWidthMm * 1.2, 0.18)
+        const labelOffset = offset + angularWidthDeg(nestedLabelWidth / 2 + clearanceMm, levelRadius)
+        for (const rawLabelAngle of [-labelOffset, labelOffset]) {
+          const angle = directedAngle(config, rawLabelAngle)
+          const labelCenterY = center - levelRadius
+          const path = makeTextPath(font, label, center - nestedLabelWidth / 2, labelCenterY + nestedFontSize * 0.34, nestedFontSize, config.letterSpacingMm)
           const labelNode = `<path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/>`
           const oriented = config.dofTextDirection === 'reverse' ? `<g transform="rotate(180 ${center} ${labelCenterY})">${labelNode}</g>` : labelNode
           nodes.push(`<g transform="rotate(${angle.toFixed(4)} ${center} ${center})">${oriented}</g>`)
@@ -479,9 +493,13 @@ function createDofStripArtwork(config: GeneratorConfig, font: opentype.Font): Ar
       const levelY = heightMm * (0.74 - 0.48 * index / Math.max(1, stops.length - 1))
       nodes.push(`<path d="M ${xs[0].toFixed(4)} ${frameWidthMm.toFixed(4)} L ${xs[0].toFixed(4)} ${levelY.toFixed(4)} L ${xs[1].toFixed(4)} ${levelY.toFixed(4)} L ${xs[1].toFixed(4)} ${frameWidthMm.toFixed(4)}" fill="none" stroke="${xml(config.tickColor)}" stroke-width="${config.dofTickWidthMm}"/>`)
       if (config.dofShowLabels) {
-        const labelCenterY = Math.min(heightMm - frameWidthMm - config.dofFontSizeMm * 0.58, levelY + config.dofFontSizeMm * 0.85)
-        xs.forEach((x) => {
-          const path = makeTextPath(font, label, x - labelWidth / 2, labelCenterY + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+        const nestedFontSize = nestedLabelFontSize(config.dofFontSizeMm, heightMm, stops.length)
+        const nestedLabelWidth = font.getAdvanceWidth(label, nestedFontSize, { kerning: true })
+        const clearanceMm = Math.max(config.dofTickWidthMm * 1.2, 0.18)
+        const labelCenterY = levelY
+        const labelXs = [xs[0] - nestedLabelWidth / 2 - clearanceMm, xs[1] + nestedLabelWidth / 2 + clearanceMm]
+        labelXs.forEach((x) => {
+          const path = makeTextPath(font, label, x - nestedLabelWidth / 2, labelCenterY + nestedFontSize * 0.34, nestedFontSize, config.letterSpacingMm)
           const labelNode = `<path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/>`
           nodes.push(config.dofTextDirection === 'reverse' ? `<g transform="rotate(180 ${x} ${labelCenterY})">${labelNode}</g>` : labelNode)
         })
@@ -532,10 +550,14 @@ export function createDofDxf(config: GeneratorConfig, font: opentype.Font): stri
       const points = [polar(center, center, outerRadius, leftAngle), ...dofArcPoints(center, center, levelRadius, leftAngle, rightAngle), polar(center, center, outerRadius, rightAngle)]
       entities.push(polylineDxf(points, 'DOF_MARKS', diameter, false, config.dofTickWidthMm))
       if (config.dofShowLabels) {
-        const labelRadius = Math.min(outerRadius - config.dofFontSizeMm * 0.62, levelRadius + config.dofFontSizeMm * 0.9)
-        for (const angle of [leftAngle, rightAngle]) {
-          const labelCenter: [number, number] = [center, center - labelRadius]
-          const path = makeTextPath(font, label, center - labelWidth / 2, labelCenter[1] + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+        const nestedFontSize = nestedLabelFontSize(config.dofFontSizeMm, ringWidth, stops.length)
+        const nestedLabelWidth = font.getAdvanceWidth(label, nestedFontSize, { kerning: true })
+        const clearanceMm = Math.max(config.dofTickWidthMm * 1.2, 0.18)
+        const labelOffset = offset + angularWidthDeg(nestedLabelWidth / 2 + clearanceMm, levelRadius)
+        for (const rawLabelAngle of [-labelOffset, labelOffset]) {
+          const angle = directedAngle(config, rawLabelAngle)
+          const labelCenter: [number, number] = [center, center - levelRadius]
+          const path = makeTextPath(font, label, center - nestedLabelWidth / 2, labelCenter[1] + nestedFontSize * 0.34, nestedFontSize, config.letterSpacingMm)
           flatten(path.commands as PathCommand[]).forEach((contour) => {
             const oriented = config.dofTextDirection === 'reverse' ? contour.map((point) => rotatePoint(point, labelCenter, 180)) : contour
             entities.push(polylineDxf(oriented.map((point) => rotatePoint(point, [center, center], angle)), 'TEXT_OUTLINES', diameter, true))
@@ -576,9 +598,13 @@ function createDofStripDxf(config: GeneratorConfig, font: opentype.Font): string
       const levelY = heightMm * (0.74 - 0.48 * index / Math.max(1, stops.length - 1))
       entities.push(polylineDxf([[xs[0], 0], [xs[0], levelY], [xs[1], levelY], [xs[1], 0]], 'DOF_MARKS', heightMm, false, config.dofTickWidthMm))
       if (config.dofShowLabels) {
-        const labelCenterY = Math.min(heightMm - config.dofFontSizeMm * 0.58, levelY + config.dofFontSizeMm * 0.85)
-        xs.forEach((x) => {
-          const path = makeTextPath(font, label, x - labelWidth / 2, labelCenterY + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+        const nestedFontSize = nestedLabelFontSize(config.dofFontSizeMm, heightMm, stops.length)
+        const nestedLabelWidth = font.getAdvanceWidth(label, nestedFontSize, { kerning: true })
+        const clearanceMm = Math.max(config.dofTickWidthMm * 1.2, 0.18)
+        const labelCenterY = levelY
+        const labelXs = [xs[0] - nestedLabelWidth / 2 - clearanceMm, xs[1] + nestedLabelWidth / 2 + clearanceMm]
+        labelXs.forEach((x) => {
+          const path = makeTextPath(font, label, x - nestedLabelWidth / 2, labelCenterY + nestedFontSize * 0.34, nestedFontSize, config.letterSpacingMm)
           flatten(path.commands as PathCommand[]).forEach((contour) => {
             const oriented = config.dofTextDirection === 'reverse' ? contour.map((point) => rotatePoint(point, [x, labelCenterY], 180)) : contour
             entities.push(polylineDxf(oriented, 'TEXT_OUTLINES', heightMm, true))
