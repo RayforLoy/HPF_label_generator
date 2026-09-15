@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { DEFAULT_CONFIG, buildScaleMarks, circumferenceMm, distanceAtAngle, focalLengthFor, formatDistance, parseLensCsv, validateConfig } from './core'
-import { contrastColor } from './artwork'
+import { contrastColor, markPositionMm } from './artwork'
 
 describe('lens database', () => {
   it('skips the metadata preamble and parses numeric fields', () => {
@@ -44,5 +44,21 @@ describe('scale calculation', () => {
   it('chooses an inverse frame colour from the background', () => {
     expect(contrastColor('#050505')).toBe('#ffffff')
     expect(contrastColor('#f4f4f4')).toBe('#000000')
+  })
+
+  it('converts distance labels to feet when requested', () => {
+    expect(formatDistance(10, 4, 'ft')).toBe('32.81')
+    const metric = buildScaleMarks({ ...DEFAULT_CONFIG, maxAngleDeg: 5, distanceUnit: 'm' })
+    const imperial = buildScaleMarks({ ...DEFAULT_CONFIG, maxAngleDeg: 5, distanceUnit: 'ft' })
+    expect(imperial[1].distanceM).toBe(metric[1].distanceM)
+    expect(imperial[1].label).not.toBe(metric[1].label)
+  })
+
+  it('keeps the INF-to-first-mark gap equal to every following gap', () => {
+    const positions = [0, 1, 2, 3].map((index) => markPositionMm(index, DEFAULT_CONFIG))
+    const gaps = positions.slice(1).map((position, index) => position - positions[index])
+    expect(gaps[0]).toBeCloseTo(gaps[1], 8)
+    expect(gaps[1]).toBeCloseTo(gaps[2], 8)
+    expect(positions[0]).toBe(DEFAULT_CONFIG.infinityMarginMm)
   })
 })

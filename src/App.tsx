@@ -108,7 +108,7 @@ export default function App() {
     } catch (error) { console.error(error); setFontMessage(t(language, 'invalidFont')) }
   }
 
-  const baseName = `${safeFilename(config.lensName)}_${Number(config.focalLengthMm.toFixed(2))}mm_HPF`
+  const baseName = `${safeFilename(config.lensName)}_${Number(config.focalLengthMm.toFixed(2))}mm_HPF_${config.distanceUnit}`
   const exportSvg = () => artwork && downloadText(artwork.svg, `${baseName}.svg`, 'image/svg+xml')
   const exportDxf = () => font && downloadText(createDxf(config, font), `${baseName}.dxf`, 'application/dxf')
   const exportJson = () => downloadText(JSON.stringify({ format: 'HPF label generator', version: 1, config }, null, 2), `${baseName}.json`, 'application/json')
@@ -156,6 +156,7 @@ export default function App() {
           <div className="section-title"><span>03</span><h2>{t(language, 'appearance')}</h2></div>
           <div className="field-grid">
             <Field label={t(language, 'precision')} help={t(language, 'precisionHelp')} value={config.significantDigits} min={2} max={6} step={1} onChange={(value) => updateNumber('significantDigits', value)} />
+            <label className="field"><span className="field-heading"><span>{t(language, 'distanceUnit')}</span></span><select value={config.distanceUnit} onChange={(event) => update('distanceUnit', event.target.value as GeneratorConfig['distanceUnit'])}><option value="m">{t(language, 'metres')}</option><option value="ft">{t(language, 'feet')}</option></select><small>{t(language, 'distanceUnitHelp')}</small></label>
             <Field label={t(language, 'dpi')} help={t(language, 'dpiHelp')} unit="dpi" value={config.dpi} min={72} max={1200} step={1} onChange={(value) => updateNumber('dpi', value)} />
             <Field label={t(language, 'tickLength')} help={t(language, 'tickLengthHelp')} unit="mm" value={config.tickLengthMm} min={0.1} step={0.1} invalid={errors.includes('tickLengthMm')} onChange={(value) => updateNumber('tickLengthMm', value)} />
             <Field label={t(language, 'tickWidth')} help={t(language, 'tickWidthHelp')} unit="mm" value={config.tickWidthMm} min={0.05} step={0.05} invalid={errors.includes('tickWidthMm')} onChange={(value) => updateNumber('tickWidthMm', value)} />
@@ -179,7 +180,7 @@ export default function App() {
       </aside>
 
       <section className="workspace">
-        <div className="preview-heading"><div><span className="eyebrow">OUTPUT PREVIEW</span><h2>{t(language, 'preview')}</h2></div>{artwork && <div className="metrics"><span>{t(language, 'dimensions')} <strong>{artwork.widthMm.toFixed(1)} × {artwork.heightMm.toFixed(1)} mm</strong></span><span><strong>{artwork.marks.length}</strong> {t(language, 'marks')}</span></div>}</div>
+        <div className="preview-heading"><div><span className="eyebrow">OUTPUT PREVIEW</span><h2>{t(language, 'preview')}</h2></div>{artwork && <div className="metrics"><span>{t(language, 'dimensions')} <strong>{artwork.widthMm.toFixed(1)} × {artwork.heightMm.toFixed(1)} mm</strong></span><span><strong>{config.distanceUnit.toUpperCase()}</strong></span><span><strong>{artwork.marks.length}</strong> {t(language, 'marks')}</span></div>}</div>
         <div className={`preview-stage ${config.transparentBackground ? 'checkerboard' : ''}`}>
           {status === 'loading' && <div className="loading"><span />{t(language, 'loading')}</div>}
           {status === 'error' && <div className="loading error">{t(language, 'error')}</div>}

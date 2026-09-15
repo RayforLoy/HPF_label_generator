@@ -13,10 +13,9 @@ export interface Artwork {
 
 const xml = (value: string) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[char]!)
 
-function presentationAngle(angle: number): number {
-  if (angle === 0) return 1
-  if (angle < 5) return angle * 5
-  return angle + 20
+export function markPositionMm(index: number, config: GeneratorConfig): number {
+  const regularGapMm = circumferenceMm(config.ringDiameterMm) * 5 / 360
+  return config.infinityMarginMm + index * regularGapMm
 }
 
 function makeTextPath(font: opentype.Font, text: string, x: number, baseline: number, size: number, letterSpacingMm = 0): opentype.Path {
@@ -54,8 +53,8 @@ export function createArtwork(config: GeneratorConfig, font: opentype.Font, hori
   if (!config.transparentBackground) nodes.push(`<rect width="${widthMm}" height="${heightMm}" fill="${xml(config.backgroundColor)}"/>`)
   if (frameWidthMm > 0) nodes.push(`<rect x="${frameWidthMm / 2}" y="${frameWidthMm / 2}" width="${Math.max(0, widthMm - frameWidthMm)}" height="${Math.max(0, heightMm - frameWidthMm)}" fill="none" stroke="${frameColor}" stroke-width="${frameWidthMm}"/>`)
 
-  for (const mark of marks) {
-    const baseY = mark.angleDeg === 0 ? config.infinityMarginMm : heightMm * presentationAngle(mark.angleDeg) / 360
+  for (const [index, mark] of marks.entries()) {
+    const baseY = markPositionMm(index, config)
     const y = Math.min(heightMm - frameWidthMm / 2 - 0.1, Math.max(frameWidthMm / 2 + 0.1, baseY))
     const tickLength = Math.min(widthMm * 0.42, config.tickLengthMm * (mark.major ? 1.35 : 1))
     nodes.push(`<line x1="0" y1="${y}" x2="${tickLength}" y2="${y}" stroke="${xml(config.tickColor)}" stroke-width="${config.tickWidthMm}"/>`)
@@ -65,7 +64,7 @@ export function createArtwork(config: GeneratorConfig, font: opentype.Font, hori
 
   if (config.showFocalLength) {
     const infoY = Math.min(heightMm - fontSize * 2.2, heightMm * (config.maxAngleDeg + 32) / 360)
-    const label = `E.F.L. ${Number(config.focalLengthMm.toFixed(2))} mm`
+    const label = `E.F.L. ${Number(config.focalLengthMm.toFixed(2))} mm · DIST. ${config.distanceUnit.toUpperCase()}`
     const path = makeTextPath(font, label, 0.65, infoY + fontSize, fontSize * 0.82, config.letterSpacingMm)
     nodes.push(`<path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/>`)
   }
@@ -133,8 +132,8 @@ export function createDxf(config: GeneratorConfig, font: opentype.Font): string 
   const frameWidthMm = config.frameWidthPx * 25.4 / 96
   const entities: string[] = []
   entities.push(polylineDxf([[0, 0], [config.ringWidthMm, 0], [config.ringWidthMm, heightMm], [0, heightMm]], 'FRAME', heightMm, true, frameWidthMm))
-  for (const mark of buildScaleMarks(config)) {
-    const y = mark.angleDeg === 0 ? config.infinityMarginMm : Math.min(heightMm - 0.5, Math.max(0.5, heightMm * presentationAngle(mark.angleDeg) / 360))
+  for (const [index, mark] of buildScaleMarks(config).entries()) {
+    const y = Math.min(heightMm - 0.5, Math.max(0.5, markPositionMm(index, config)))
     const tickLength = Math.min(config.ringWidthMm * 0.42, config.tickLengthMm * (mark.major ? 1.35 : 1))
     entities.push(polylineDxf([[0, y], [tickLength, y]], 'TICKS', heightMm, false, config.tickWidthMm))
     const path = makeTextPath(font, mark.label, tickLength + 0.42, y + fontSize * 0.34, fontSize, config.letterSpacingMm)
@@ -142,7 +141,7 @@ export function createDxf(config: GeneratorConfig, font: opentype.Font): string 
   }
   if (config.showFocalLength) {
     const infoY = Math.min(heightMm - fontSize * 2.2, heightMm * (config.maxAngleDeg + 32) / 360)
-    const path = makeTextPath(font, `E.F.L. ${Number(config.focalLengthMm.toFixed(2))} mm`, 0.65, infoY + fontSize, fontSize * 0.82, config.letterSpacingMm)
+    const path = makeTextPath(font, `E.F.L. ${Number(config.focalLengthMm.toFixed(2))} mm · DIST. ${config.distanceUnit.toUpperCase()}`, 0.65, infoY + fontSize, fontSize * 0.82, config.letterSpacingMm)
     flatten(path.commands as PathCommand[]).forEach((contour) => entities.push(polylineDxf(contour, 'TEXT_OUTLINES', heightMm, true)))
   }
   return `0\nSECTION\n2\nHEADER\n9\n$INSUNITS\n70\n4\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n${entities.join('')}0\nENDSEC\n0\nEOF\n`

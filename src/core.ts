@@ -3,7 +3,7 @@ import type { GeneratorConfig, Lens, ScaleMark } from './types'
 export const DEFAULT_CONFIG: GeneratorConfig = {
   lensName: 'Makro-Symmar 180 HM', focalLengthMm: 179.9, focalSource: 'manual',
   extensionMmPerDeg: 4 / 45, maxAngleDeg: 165, ringDiameterMm: 86.7, ringWidthMm: 9.5,
-  significantDigits: 4, dpi: 300, tickLengthMm: 1, tickWidthMm: 0.5,
+  significantDigits: 4, distanceUnit: 'm', dpi: 300, tickLengthMm: 1, tickWidthMm: 0.5,
   fontSizeMm: 2.6, letterSpacingMm: 0, frameWidthPx: 2, infinityMarginMm: 2,
   showFocalLength: true, transparentBackground: false, backgroundColor: '#050505',
   tickColor: '#ffffff', textColor: '#ffffff', fontId: 'square721', fontName: 'Square721 Cn BT Bold',
@@ -54,7 +54,8 @@ export function focalLengthFor(lens: Lens): { value: number; source: 'efl' | 'no
   return null
 }
 
-export function formatDistance(value: number, significantDigits: number): string {
+export function formatDistance(valueMetres: number, significantDigits: number, unit: 'm' | 'ft' = 'm'): string {
+  const value = unit === 'ft' ? valueMetres * 3.280839895013123 : valueMetres
   if (!Number.isFinite(value)) return 'INF'
   if (value >= 1000) return `${Number((value / 1000).toPrecision(Math.max(2, significantDigits - 1)))}k`
   if (value >= 1) return Number(value.toPrecision(significantDigits)).toString()
@@ -74,7 +75,7 @@ export function buildScaleMarks(config: GeneratorConfig): ScaleMark[] {
   for (let angle = 5; angle <= config.maxAngleDeg; angle += 5) angles.push(angle)
   return angles.map((angleDeg) => {
     const distanceM = distanceAtAngle(config.focalLengthMm, config.extensionMmPerDeg, angleDeg)
-    return { angleDeg, distanceM, label: formatDistance(distanceM, config.significantDigits), major: angleDeg === 0 || angleDeg % 10 === 0 }
+    return { angleDeg, distanceM, label: formatDistance(distanceM, config.significantDigits, config.distanceUnit), major: angleDeg === 0 || angleDeg % 10 === 0 }
   })
 }
 

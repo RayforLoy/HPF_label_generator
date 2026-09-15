@@ -19,6 +19,7 @@ export interface GeneratorConfig {
   ringDiameterMm: number
   ringWidthMm: number
   significantDigits: number
+  distanceUnit: 'm' | 'ft'
   dpi: number
   tickLengthMm: number
   tickWidthMm: number

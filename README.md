@@ -7,7 +7,7 @@ An entirely browser-based distance-scale generator for high-precision focusing r
 ## Features / 功能
 
 - 391-entry lens database; EFL is preferred and nominal focal length is used as a fallback.
-- Live, physically dimensioned preview using the thin-lens equation.
+- Live, physically dimensioned preview using the thin-lens equation, with selectable metre or foot distance labels.
 - Chinese/English interface that follows the browser language, with manual switching.
 - Dark/light themes, defaulting to dark and using the LensboardGenerator navy/cyan visual palette.
 - Bundled Square721 Cn BT Bold, three web-safe bundled alternatives, and local TTF/OTF upload.

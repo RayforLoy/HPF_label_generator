@@ -2,14 +2,14 @@ import type { Language } from './types'
 
 const messages = {
   zh: {
-    title: '对焦环刻度生成器', subtitle: '为高精度对焦环生成可直接制作的距离标尺',
+    title: '高精度对焦环刻度生成器', subtitle: '为高精度对焦环生成可直接制作的距离标尺',
     lens: '镜头', searchLens: '搜索镜头名称、厂商或版本…', chooseLens: '选择镜头', noLens: '没有匹配的镜头', manualLens: '手动参数', focal: '计算焦距',
     focalHelp: '优先使用镜头数据库中的实际有效焦距 EFL；缺失时自动采用标称焦距。也可手动修改。',
     mechanics: '对焦机构', extension: '每度伸长量', extensionHelp: '对焦环每旋转 1°，镜头板向外移动的距离。可用丝杆导程 ÷ 每圈角度计算。',
     maxAngle: '最大转角', maxAngleHelp: '从无穷远到最近对焦位置可用的总旋转角度。',
     diameter: '对焦环直径', diameterHelp: '贴纸所在圆柱面的外径；决定展开标签的总长度（π × 直径）。',
     width: '标签宽度', widthHelp: '沿镜头光轴方向的标签宽度。',
-    appearance: '外观与输出', precision: '有效数字', precisionHelp: '距离标签保留的有效数字数量。',
+    appearance: '外观与输出', precision: '有效数字', precisionHelp: '距离标签保留的有效数字数量。', distanceUnit: '距离单位', distanceUnitHelp: '选择以米（m）或英尺（ft）显示并导出对焦距离。', metres: '米（m）', feet: '英尺（ft）',
     dpi: 'PNG 分辨率', dpiHelp: '只影响 PNG 像素尺寸；SVG 与 DXF 始终保持毫米尺寸。',
     tickLength: '刻度长度', tickLengthHelp: '从标签左边缘向内延伸的线段长度。',
     tickWidth: '刻度线宽', tickWidthHelp: '打印刻度的物理宽度。', fontSize: '字体大小', fontSizeHelp: '距离数字的实际字高基准，使用毫米以确保打印尺寸一致。', letterSpacing: '字距', letterSpacingHelp: '字符之间额外增加的间距；0 表示使用字体默认字距。',
@@ -26,14 +26,14 @@ const messages = {
     invalidFont: '无法读取该字体，请选择有效的 TTF 或 OTF 文件。', footer: '所有计算均在浏览器本地完成', formula: '薄透镜公式 1/f = 1/u + 1/v',
   },
   en: {
-    title: 'Focusing Ring Scale Generator', subtitle: 'Create production-ready distance scales for high-precision focusing rings',
+    title: 'High Precision Focusing Ring Scale Generator', subtitle: 'Create production-ready distance scales for high-precision focusing rings',
     lens: 'Lens', searchLens: 'Search by lens, maker, or version…', chooseLens: 'Choose a lens', noLens: 'No matching lenses', manualLens: 'Manual parameters', focal: 'Calculation focal length',
     focalHelp: 'Uses the actual effective focal length (EFL) from the database first, then falls back to nominal focal length. You can also edit it manually.',
     mechanics: 'Focusing mechanism', extension: 'Extension per degree', extensionHelp: 'How far the lens board moves for each 1° of ring rotation. Calculate as screw lead ÷ degrees per turn.',
     maxAngle: 'Maximum rotation', maxAngleHelp: 'Usable rotation from infinity to the closest focusing position.',
     diameter: 'Ring diameter', diameterHelp: 'Outside diameter of the surface carrying the label; its circumference sets the unfolded label length.',
     width: 'Label width', widthHelp: 'Label width along the optical axis.',
-    appearance: 'Appearance & output', precision: 'Significant digits', precisionHelp: 'Number of significant digits shown on distance labels.',
+    appearance: 'Appearance & output', precision: 'Significant digits', precisionHelp: 'Number of significant digits shown on distance labels.', distanceUnit: 'Distance unit', distanceUnitHelp: 'Display and export focusing distances in metres (m) or feet (ft).', metres: 'Metres (m)', feet: 'Feet (ft)',
     dpi: 'PNG resolution', dpiHelp: 'Only affects PNG pixel dimensions; SVG and DXF remain physically sized in millimetres.',
     tickLength: 'Tick length', tickLengthHelp: 'Length of each mark measured inward from the label edge.',
     tickWidth: 'Tick width', tickWidthHelp: 'Physical stroke width of printed marks.', fontSize: 'Font size', fontSizeHelp: 'Physical type size for distance labels, in millimetres for consistent printing.', letterSpacing: 'Letter spacing', letterSpacingHelp: 'Extra spacing between characters; 0 uses the typeface’s normal spacing.',
