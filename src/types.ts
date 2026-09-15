@@ -2,6 +2,7 @@ export type Language = 'zh' | 'en'
 export type Theme = 'dark' | 'light'
 export type ScaleDirection = 'clockwise' | 'counterclockwise'
 export type CocMode = 'film135' | 'kodak35' | 'fullFrame24mp' | 'customSensor'
+export type DofStyle = 'nested' | 'compact'
 
 export interface ScaleSegment {
   id: string
@@ -32,6 +33,11 @@ export interface GeneratorConfig {
   ringWidthMm: number
   frontInnerDiameterMm: number
   frontOuterDiameterMm: number
+  frontInnerTickLengthMm: number
+  frontInnerTickWidthMm: number
+  frontOuterTickLengthMm: number
+  frontOuterTickWidthMm: number
+  frontConnectorWidthMm: number
   cocMode: CocMode
   sensorWidthMm: number
   sensorHeightMm: number
@@ -40,6 +46,7 @@ export interface GeneratorConfig {
   dofStops: number
   dofFontSizeMm: number
   dofRingDiameterMm: number
+  dofStyle: DofStyle
   significantDigits: number
   distanceUnit: 'm' | 'ft'
   dpi: number

@@ -1,5 +1,5 @@
 import type opentype from 'opentype.js'
-import { apertureStops, buildScaleMarks, circleOfConfusionMm, circumferenceMm, depthOfFieldAngleDeg, formatFNumber, generatedMaxAngle, layoutStepDeg } from './core'
+import { apertureStops, buildScaleMarks, circleOfConfusionMm, circumferenceMm, depthOfFieldAngleDeg, formatFNumber, generatedMaxAngle, layoutAngleForMark, layoutStepDeg } from './core'
 import type { GeneratorConfig, ScaleMark } from './types'
 
 type PathCommand = { type: string; x?: number; y?: number; x1?: number; y1?: number; x2?: number; y2?: number }
@@ -166,6 +166,10 @@ function svgLineAtAngle(cx: number, cy: number, innerRadius: number, outerRadius
   return `<line x1="${start[0].toFixed(4)}" y1="${start[1].toFixed(4)}" x2="${end[0].toFixed(4)}" y2="${end[1].toFixed(4)}" stroke="${color}" stroke-width="${width}" ${extra}/>`
 }
 
+function svgLineBetween(start: [number, number], end: [number, number], color: string, width: number): string {
+  return `<line x1="${start[0].toFixed(4)}" y1="${start[1].toFixed(4)}" x2="${end[0].toFixed(4)}" y2="${end[1].toFixed(4)}" stroke="${color}" stroke-width="${width}"/>`
+}
+
 function donutPath(cx: number, cy: number, outerRadius: number, innerRadius: number): string {
   return `M ${cx - outerRadius} ${cy} A ${outerRadius} ${outerRadius} 0 1 0 ${cx + outerRadius} ${cy} A ${outerRadius} ${outerRadius} 0 1 0 ${cx - outerRadius} ${cy} Z M ${cx - innerRadius} ${cy} A ${innerRadius} ${innerRadius} 0 1 1 ${cx + innerRadius} ${cy} A ${innerRadius} ${innerRadius} 0 1 1 ${cx - innerRadius} ${cy} Z`
 }
@@ -178,7 +182,6 @@ export function createFrontArtwork(config: GeneratorConfig, includeAlignmentGuid
   const center = canvasDiameter / 2
   const outerRadius = stickerDiameter / 2
   const innerRadius = config.frontInnerDiameterMm / 2
-  const ringWidth = outerRadius - innerRadius
   const frameWidthMm = config.frameWidthPx * 25.4 / 96
   const frameColor = config.transparentBackground ? '#000000' : contrastColor(config.backgroundColor)
   const marks = buildScaleMarks(config)
@@ -192,13 +195,20 @@ export function createFrontArtwork(config: GeneratorConfig, includeAlignmentGuid
     nodes.push(`<circle cx="${center}" cy="${center}" r="${innerRadius + frameWidthMm / 2}" fill="none" stroke="${frameColor}" stroke-width="${frameWidthMm}"/>`)
   }
 
-  for (let angle = 0; angle <= maxGenerated + 1e-8; angle += minorStep) {
-    nodes.push(svgLineAtAngle(center, center, innerRadius + frameWidthMm, innerRadius + Math.max(ringWidth * 0.2, 1), directedAngle(config, angle), xml(config.tickColor), Math.max(config.tickWidthMm * 0.45, 0.12)))
+  const innerRayStart = innerRadius + frameWidthMm
+  const innerRayEnd = Math.min(outerRadius, innerRayStart + config.frontInnerTickLengthMm)
+  const outerRayEnd = outerRadius - frameWidthMm
+  const outerRayStart = Math.max(innerRadius, outerRayEnd - config.frontOuterTickLengthMm)
+  for (const [index, mark] of marks.entries()) {
+    const innerPoint = polar(center, center, innerRayEnd, directedAngle(config, mark.angleDeg))
+    const outerPoint = polar(center, center, outerRayStart, directedAngle(config, layoutAngleForMark(index, config)))
+    nodes.push(svgLineBetween(innerPoint, outerPoint, xml(config.tickColor), config.frontConnectorWidthMm))
   }
-  for (let angle = 0; angle <= maxGenerated + 1e-8; angle += layoutStepDeg(config)) {
-    const inner = innerRadius + frameWidthMm
-    const outer = outerRadius - frameWidthMm
-    nodes.push(svgLineAtAngle(center, center, inner + ringWidth * 0.25, outer, directedAngle(config, angle), xml(config.tickColor), config.tickWidthMm))
+  for (let angle = 0; angle <= maxGenerated + 1e-8; angle += minorStep) {
+    nodes.push(svgLineAtAngle(center, center, innerRayStart, innerRayEnd, directedAngle(config, angle), xml(config.tickColor), config.frontInnerTickWidthMm))
+  }
+  for (const [index] of marks.entries()) {
+    nodes.push(svgLineAtAngle(center, center, outerRayStart, outerRayEnd, directedAngle(config, layoutAngleForMark(index, config)), xml(config.tickColor), config.frontOuterTickWidthMm))
   }
 
   if (includeAlignmentGuide) {
@@ -242,29 +252,48 @@ function dxfLineAtAngle(cx: number, cy: number, innerRadius: number, outerRadius
   return `0\nLWPOLYLINE\n8\n${layer}\n90\n2\n70\n0\n43\n${widthMm.toFixed(4)}\n10\n${start[0].toFixed(4)}\n20\n${(cy * 2 - start[1]).toFixed(4)}\n10\n${end[0].toFixed(4)}\n20\n${(cy * 2 - end[1]).toFixed(4)}\n`
 }
 
+function dxfLineBetween(start: [number, number], end: [number, number], heightMm: number, widthMm: number, layer: string): string {
+  return `0\nLWPOLYLINE\n8\n${layer}\n90\n2\n70\n0\n43\n${widthMm.toFixed(4)}\n10\n${start[0].toFixed(4)}\n20\n${(heightMm - start[1]).toFixed(4)}\n10\n${end[0].toFixed(4)}\n20\n${(heightMm - end[1]).toFixed(4)}\n`
+}
+
 export function createFrontDxf(config: GeneratorConfig): string {
   const diameter = config.frontOuterDiameterMm
   const center = diameter / 2
   const outerRadius = diameter / 2
   const innerRadius = config.frontInnerDiameterMm / 2
-  const ringWidth = outerRadius - innerRadius
   const minorStep = Math.min(...config.scaleSegments.map((segment) => segment.stepDeg))
   const frameWidthMm = config.frameWidthPx * 25.4 / 96
   const entities: string[] = [
     `0\nCIRCLE\n8\nFRAME\n10\n${center}\n20\n${center}\n40\n${outerRadius}\n`,
     `0\nCIRCLE\n8\nFRAME\n10\n${center}\n20\n${center}\n40\n${innerRadius}\n`,
   ]
-  for (let angle = 0; angle <= generatedMaxAngle(config) + 1e-8; angle += minorStep) {
-    entities.push(dxfLineAtAngle(center, center, innerRadius + frameWidthMm, innerRadius + Math.max(ringWidth * 0.2, 1), directedAngle(config, angle), Math.max(config.tickWidthMm * 0.45, 0.12), 'ANGLE_TICKS'))
+  const innerRayStart = innerRadius + frameWidthMm
+  const innerRayEnd = Math.min(outerRadius, innerRayStart + config.frontInnerTickLengthMm)
+  const outerRayEnd = outerRadius - frameWidthMm
+  const outerRayStart = Math.max(innerRadius, outerRayEnd - config.frontOuterTickLengthMm)
+  for (const [index, mark] of buildScaleMarks(config).entries()) {
+    const innerPoint = polar(center, center, innerRayEnd, directedAngle(config, mark.angleDeg))
+    const outerPoint = polar(center, center, outerRayStart, directedAngle(config, layoutAngleForMark(index, config)))
+    entities.push(dxfLineBetween(innerPoint, outerPoint, diameter, config.frontConnectorWidthMm, 'CONNECTORS'))
   }
-  for (let angle = 0; angle <= generatedMaxAngle(config) + 1e-8; angle += layoutStepDeg(config)) {
-    entities.push(dxfLineAtAngle(center, center, innerRadius + frameWidthMm + ringWidth * 0.25, outerRadius - frameWidthMm, directedAngle(config, angle), config.tickWidthMm, 'DISTANCE_TICKS'))
+  for (let angle = 0; angle <= generatedMaxAngle(config) + 1e-8; angle += minorStep) {
+    entities.push(dxfLineAtAngle(center, center, innerRayStart, innerRayEnd, directedAngle(config, angle), config.frontInnerTickWidthMm, 'ANGLE_TICKS'))
+  }
+  for (const [index] of buildScaleMarks(config).entries()) {
+    entities.push(dxfLineAtAngle(center, center, outerRayStart, outerRayEnd, directedAngle(config, layoutAngleForMark(index, config)), config.frontOuterTickWidthMm, 'DISTANCE_TICKS'))
   }
   return `0\nSECTION\n2\nHEADER\n9\n$INSUNITS\n70\n4\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n${entities.join('')}0\nENDSEC\n0\nEOF\n`
 }
 
 function dofArcPoints(cx: number, cy: number, radius: number, startAngle: number, endAngle: number, segments = 18): Array<[number, number]> {
   return Array.from({ length: segments + 1 }, (_, index) => polar(cx, cy, radius, startAngle + (endAngle - startAngle) * index / segments))
+}
+
+function rotatePoint(point: [number, number], center: [number, number], angleDeg: number): [number, number] {
+  const radians = angleDeg * Math.PI / 180
+  const x = point[0] - center[0]
+  const y = point[1] - center[1]
+  return [center[0] + x * Math.cos(radians) - y * Math.sin(radians), center[1] + x * Math.sin(radians) + y * Math.cos(radians)]
 }
 
 export function createDofArtwork(config: GeneratorConfig, font: opentype.Font): Artwork {
@@ -287,19 +316,30 @@ export function createDofArtwork(config: GeneratorConfig, font: opentype.Font): 
 
   stops.forEach((fNumber, index) => {
     const offset = depthOfFieldAngleDeg(fNumber, cocMm, config.extensionMmPerDeg)
-    const levelRadius = innerRadius + config.ringWidthMm * (0.25 + 0.48 * index / Math.max(1, stops.length - 1))
-    const leftAngle = directedAngle(config, -offset)
-    const rightAngle = directedAngle(config, offset)
-    const leftOuter = polar(center, center, outerRadius - frameWidthMm, leftAngle)
-    const leftInner = polar(center, center, levelRadius, leftAngle)
-    const rightInner = polar(center, center, levelRadius, rightAngle)
-    const rightOuter = polar(center, center, outerRadius - frameWidthMm, rightAngle)
-    const sweep = config.scaleDirection === 'clockwise' ? 1 : 0
-    nodes.push(`<path d="M ${leftOuter[0].toFixed(4)} ${leftOuter[1].toFixed(4)} L ${leftInner[0].toFixed(4)} ${leftInner[1].toFixed(4)} A ${levelRadius.toFixed(4)} ${levelRadius.toFixed(4)} 0 0 ${sweep} ${rightInner[0].toFixed(4)} ${rightInner[1].toFixed(4)} L ${rightOuter[0].toFixed(4)} ${rightOuter[1].toFixed(4)}" fill="none" stroke="${xml(config.tickColor)}" stroke-width="${config.tickWidthMm}"/>`)
     const label = formatFNumber(fNumber)
     const labelWidth = font.getAdvanceWidth(label, config.dofFontSizeMm, { kerning: true })
-    const path = makeTextPath(font, label, center - labelWidth / 2, center - levelRadius + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
-    nodes.push(`<path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/>`)
+    if (config.dofStyle === 'compact') {
+      const tickLength = Math.min(1.8, config.ringWidthMm * 0.28)
+      const labelRadius = outerRadius - frameWidthMm - tickLength - config.dofFontSizeMm * 0.72
+      for (const rawAngle of [-offset, offset]) {
+        const angle = directedAngle(config, rawAngle)
+        nodes.push(svgLineAtAngle(center, center, outerRadius - frameWidthMm - tickLength, outerRadius - frameWidthMm, angle, xml(config.tickColor), config.tickWidthMm))
+        const path = makeTextPath(font, label, center - labelWidth / 2, center - labelRadius + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+        nodes.push(`<g transform="rotate(${angle.toFixed(4)} ${center} ${center})"><path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/></g>`)
+      }
+    } else {
+      const levelRadius = innerRadius + config.ringWidthMm * (0.25 + 0.48 * index / Math.max(1, stops.length - 1))
+      const leftAngle = directedAngle(config, -offset)
+      const rightAngle = directedAngle(config, offset)
+      const leftOuter = polar(center, center, outerRadius - frameWidthMm, leftAngle)
+      const leftInner = polar(center, center, levelRadius, leftAngle)
+      const rightInner = polar(center, center, levelRadius, rightAngle)
+      const rightOuter = polar(center, center, outerRadius - frameWidthMm, rightAngle)
+      const sweep = config.scaleDirection === 'clockwise' ? 1 : 0
+      nodes.push(`<path d="M ${leftOuter[0].toFixed(4)} ${leftOuter[1].toFixed(4)} L ${leftInner[0].toFixed(4)} ${leftInner[1].toFixed(4)} A ${levelRadius.toFixed(4)} ${levelRadius.toFixed(4)} 0 0 ${sweep} ${rightInner[0].toFixed(4)} ${rightInner[1].toFixed(4)} L ${rightOuter[0].toFixed(4)} ${rightOuter[1].toFixed(4)}" fill="none" stroke="${xml(config.tickColor)}" stroke-width="${config.tickWidthMm}"/>`)
+      const path = makeTextPath(font, label, center - labelWidth / 2, center - levelRadius + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+      nodes.push(`<path d="${path.toPathData(3)}" fill="${xml(config.textColor)}"/>`)
+    }
   })
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${diameter}mm" height="${diameter}mm" viewBox="0 0 ${diameter} ${diameter}" role="img" aria-label="${xml(config.lensName)} depth of field scale">${nodes.join('')}</svg>`
@@ -320,15 +360,26 @@ export function createDofDxf(config: GeneratorConfig, font: opentype.Font): stri
   ]
   stops.forEach((fNumber, index) => {
     const offset = depthOfFieldAngleDeg(fNumber, cocMm, config.extensionMmPerDeg)
-    const levelRadius = innerRadius + config.ringWidthMm * (0.25 + 0.48 * index / Math.max(1, stops.length - 1))
-    const leftAngle = directedAngle(config, -offset)
-    const rightAngle = directedAngle(config, offset)
-    const points = [polar(center, center, outerRadius, leftAngle), ...dofArcPoints(center, center, levelRadius, leftAngle, rightAngle), polar(center, center, outerRadius, rightAngle)]
-    entities.push(polylineDxf(points, 'DOF_MARKS', diameter, false, config.tickWidthMm))
     const label = formatFNumber(fNumber)
     const labelWidth = font.getAdvanceWidth(label, config.dofFontSizeMm, { kerning: true })
-    const path = makeTextPath(font, label, center - labelWidth / 2, center - levelRadius + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
-    flatten(path.commands as PathCommand[]).forEach((contour) => entities.push(polylineDxf(contour, 'TEXT_OUTLINES', diameter, true)))
+    if (config.dofStyle === 'compact') {
+      const tickLength = Math.min(1.8, config.ringWidthMm * 0.28)
+      const labelRadius = outerRadius - tickLength - config.dofFontSizeMm * 0.72
+      for (const rawAngle of [-offset, offset]) {
+        const angle = directedAngle(config, rawAngle)
+        entities.push(dxfLineAtAngle(center, center, outerRadius - tickLength, outerRadius, angle, config.tickWidthMm, 'DOF_MARKS'))
+        const path = makeTextPath(font, label, center - labelWidth / 2, center - labelRadius + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+        flatten(path.commands as PathCommand[]).forEach((contour) => entities.push(polylineDxf(contour.map((point) => rotatePoint(point, [center, center], angle)), 'TEXT_OUTLINES', diameter, true)))
+      }
+    } else {
+      const levelRadius = innerRadius + config.ringWidthMm * (0.25 + 0.48 * index / Math.max(1, stops.length - 1))
+      const leftAngle = directedAngle(config, -offset)
+      const rightAngle = directedAngle(config, offset)
+      const points = [polar(center, center, outerRadius, leftAngle), ...dofArcPoints(center, center, levelRadius, leftAngle, rightAngle), polar(center, center, outerRadius, rightAngle)]
+      entities.push(polylineDxf(points, 'DOF_MARKS', diameter, false, config.tickWidthMm))
+      const path = makeTextPath(font, label, center - labelWidth / 2, center - levelRadius + config.dofFontSizeMm * 0.34, config.dofFontSizeMm, config.letterSpacingMm)
+      flatten(path.commands as PathCommand[]).forEach((contour) => entities.push(polylineDxf(contour, 'TEXT_OUTLINES', diameter, true)))
+    }
   })
   return `0\nSECTION\n2\nHEADER\n9\n$INSUNITS\n70\n4\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n${entities.join('')}0\nENDSEC\n0\nEOF\n`
 }

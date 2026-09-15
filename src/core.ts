@@ -6,8 +6,10 @@ export const DEFAULT_CONFIG: GeneratorConfig = {
   scaleSegments: [{ id: 'fine', count: 5, stepDeg: 1 }, { id: 'coarse', count: 32, stepDeg: 5 }],
   layoutSegmentId: 'coarse', scaleDirection: 'counterclockwise', ringDiameterMm: 86.7, ringWidthMm: 9.5,
   frontInnerDiameterMm: 75, frontOuterDiameterMm: 100,
+  frontInnerTickLengthMm: 1.5, frontInnerTickWidthMm: 0.25,
+  frontOuterTickLengthMm: 3, frontOuterTickWidthMm: 0.5, frontConnectorWidthMm: 0.3,
   cocMode: 'film135', sensorWidthMm: 36, sensorHeightMm: 24, sensorMegapixels: 24,
-  maxApertureFNumber: 5.6, dofStops: 5, dofFontSizeMm: 1.25, dofRingDiameterMm: 86.7,
+  maxApertureFNumber: 5.6, dofStops: 5, dofFontSizeMm: 1.25, dofRingDiameterMm: 86.7, dofStyle: 'nested',
   significantDigits: 4, distanceUnit: 'm', dpi: 300, tickLengthMm: 1, tickWidthMm: 0.5,
   fontSizeMm: 2.6, letterSpacingMm: 0, frameWidthPx: 2, infinityMarginMm: 2,
   showFocalLength: true, transparentBackground: false, backgroundColor: '#050505',
@@ -103,6 +105,14 @@ export function layoutStepDeg(config: Pick<GeneratorConfig, 'scaleSegments' | 'l
   return config.scaleSegments.find((segment) => segment.id === config.layoutSegmentId)?.stepDeg ?? config.scaleSegments[0]?.stepDeg ?? 5
 }
 
+export function layoutAngleForMark(index: number, config: Pick<GeneratorConfig, 'scaleSegments' | 'layoutSegmentId'>): number {
+  const selectedIndex = Math.max(0, config.scaleSegments.findIndex((segment) => segment.id === config.layoutSegmentId))
+  const before = config.scaleSegments.slice(0, selectedIndex)
+  const anchorIndex = before.reduce((total, segment) => total + segment.count, 0)
+  const anchorAngle = before.reduce((total, segment) => total + segment.count * segment.stepDeg, 0)
+  return anchorAngle + (index - anchorIndex) * layoutStepDeg(config)
+}
+
 export const COC_PRESETS: Record<Exclude<CocMode, 'customSensor'>, number> = {
   film135: Math.hypot(36, 24) / 1500,
   kodak35: 0.0254,
@@ -147,6 +157,12 @@ export function validateConfig(config: GeneratorConfig): string[] {
   if (!(config.ringWidthMm > 0)) errors.push('ringWidthMm')
   if (!(config.frontInnerDiameterMm > 0)) errors.push('frontInnerDiameterMm')
   if (!(config.frontOuterDiameterMm > config.frontInnerDiameterMm)) errors.push('frontOuterDiameterMm')
+  const frontBandWidth = (config.frontOuterDiameterMm - config.frontInnerDiameterMm) / 2
+  if (!(config.frontInnerTickLengthMm > 0 && config.frontInnerTickLengthMm < frontBandWidth)) errors.push('frontInnerTickLengthMm')
+  if (!(config.frontInnerTickWidthMm > 0 && config.frontInnerTickWidthMm <= 3)) errors.push('frontInnerTickWidthMm')
+  if (!(config.frontOuterTickLengthMm > 0 && config.frontOuterTickLengthMm < frontBandWidth)) errors.push('frontOuterTickLengthMm')
+  if (!(config.frontOuterTickWidthMm > 0 && config.frontOuterTickWidthMm <= 3)) errors.push('frontOuterTickWidthMm')
+  if (!(config.frontConnectorWidthMm > 0 && config.frontConnectorWidthMm <= 3)) errors.push('frontConnectorWidthMm')
   if (!(config.sensorWidthMm > 0)) errors.push('sensorWidthMm')
   if (!(config.sensorHeightMm > 0)) errors.push('sensorHeightMm')
   if (!(config.sensorMegapixels > 0)) errors.push('sensorMegapixels')

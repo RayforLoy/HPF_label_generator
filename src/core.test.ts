@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULT_CONFIG, apertureStops, buildScaleMarks, circleOfConfusionMm, circumferenceMm, depthOfFieldAngleDeg, distanceAtAngle, focalLengthFor, formatDistance, generatedMaxAngle, parseLensCsv, validateConfig } from './core'
+import { DEFAULT_CONFIG, apertureStops, buildScaleMarks, circleOfConfusionMm, circumferenceMm, depthOfFieldAngleDeg, distanceAtAngle, focalLengthFor, formatDistance, generatedMaxAngle, layoutAngleForMark, parseLensCsv, validateConfig } from './core'
 import { contrastColor, createFrontArtwork, createFrontDxf, markPositionMm } from './artwork'
 
 describe('lens database', () => {
@@ -82,10 +82,19 @@ describe('scale calculation', () => {
     expect(validateConfig({ ...DEFAULT_CONFIG, scaleSegments: [{ id: 'bad', count: 0, stepDeg: 5 }], layoutSegmentId: 'bad' })).toContain('scaleSegments')
   })
 
-  it('keeps one-degree ticks inside and outer ticks on the selected five-degree interval', () => {
+  it('keeps one-degree ticks inside and connects every evenly spaced outer HPF mark', () => {
     const dxf = createFrontDxf(DEFAULT_CONFIG)
     expect(dxf.match(/8\nANGLE_TICKS\n/g)).toHaveLength(166)
-    expect(dxf.match(/8\nDISTANCE_TICKS\n/g)).toHaveLength(34)
+    expect(dxf.match(/8\nDISTANCE_TICKS\n/g)).toHaveLength(38)
+    expect(dxf.match(/8\nCONNECTORS\n/g)).toHaveLength(38)
+  })
+
+  it('anchors outer spacing at the first mark of the selected main segment', () => {
+    expect(layoutAngleForMark(0, DEFAULT_CONFIG)).toBe(-20)
+    expect(layoutAngleForMark(5, DEFAULT_CONFIG)).toBe(5)
+    expect(layoutAngleForMark(6, DEFAULT_CONFIG)).toBe(10)
+    const actual = buildScaleMarks(DEFAULT_CONFIG).map((mark) => mark.angleDeg)
+    for (let index = 5; index < actual.length; index += 1) expect(layoutAngleForMark(index, DEFAULT_CONFIG)).toBe(actual[index])
   })
 
   it('calculates film and pixel-pitch circles of confusion', () => {

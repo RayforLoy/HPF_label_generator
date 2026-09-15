@@ -9,7 +9,7 @@ import { BUILT_IN_FONTS, loadFont, loadUploadedFont } from './fonts'
 import { t } from './i18n'
 import type { CocMode, FontChoice, GeneratorConfig, Language, Lens, ScaleSegment, Theme } from './types'
 
-type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'frontInnerDiameterMm' | 'frontOuterDiameterMm' | 'sensorWidthMm' | 'sensorHeightMm' | 'sensorMegapixels' | 'maxApertureFNumber' | 'dofStops' | 'dofFontSizeMm' | 'dofRingDiameterMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm' | 'fontSizeMm' | 'letterSpacingMm' | 'frameWidthPx' | 'infinityMarginMm'
+type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'frontInnerDiameterMm' | 'frontOuterDiameterMm' | 'frontInnerTickLengthMm' | 'frontInnerTickWidthMm' | 'frontOuterTickLengthMm' | 'frontOuterTickWidthMm' | 'frontConnectorWidthMm' | 'sensorWidthMm' | 'sensorHeightMm' | 'sensorMegapixels' | 'maxApertureFNumber' | 'dofStops' | 'dofFontSizeMm' | 'dofRingDiameterMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm' | 'fontSizeMm' | 'letterSpacingMm' | 'frameWidthPx' | 'infinityMarginMm'
 
 function Field({ label, help, unit, value, min, max, step, invalid, onChange }: { label: string; help: string; unit?: string; value: number; min?: number; max?: number; step?: number; invalid?: boolean; onChange: (value: number) => void }) {
   return <label className={`field ${invalid ? 'field-invalid' : ''}`}>
@@ -206,6 +206,14 @@ export default function App() {
             <Field label={t(language, 'frontInnerDiameter')} help={t(language, 'frontInnerDiameterHelp')} unit="mm" value={config.frontInnerDiameterMm} min={1} step={0.1} invalid={errors.includes('frontInnerDiameterMm')} onChange={(value) => updateNumber('frontInnerDiameterMm', value)} />
             <Field label={t(language, 'frontOuterDiameter')} help={t(language, 'frontOuterDiameterHelp')} unit="mm" value={config.frontOuterDiameterMm} min={1} step={0.1} invalid={errors.includes('frontOuterDiameterMm')} onChange={(value) => updateNumber('frontOuterDiameterMm', value)} />
           </div>
+          <div className="subsection-label">{t(language, 'frontTickGeometry')}</div>
+          <div className="field-grid">
+            <Field label={t(language, 'innerRayLength')} help={t(language, 'innerRayLengthHelp')} unit="mm" value={config.frontInnerTickLengthMm} min={0.1} step={0.1} invalid={errors.includes('frontInnerTickLengthMm')} onChange={(value) => updateNumber('frontInnerTickLengthMm', value)} />
+            <Field label={t(language, 'innerRayWidth')} help={t(language, 'rayWidthHelp')} unit="mm" value={config.frontInnerTickWidthMm} min={0.05} step={0.05} invalid={errors.includes('frontInnerTickWidthMm')} onChange={(value) => updateNumber('frontInnerTickWidthMm', value)} />
+            <Field label={t(language, 'outerRayLength')} help={t(language, 'outerRayLengthHelp')} unit="mm" value={config.frontOuterTickLengthMm} min={0.1} step={0.1} invalid={errors.includes('frontOuterTickLengthMm')} onChange={(value) => updateNumber('frontOuterTickLengthMm', value)} />
+            <Field label={t(language, 'outerRayWidth')} help={t(language, 'rayWidthHelp')} unit="mm" value={config.frontOuterTickWidthMm} min={0.05} step={0.05} invalid={errors.includes('frontOuterTickWidthMm')} onChange={(value) => updateNumber('frontOuterTickWidthMm', value)} />
+            <Field label={t(language, 'connectorWidth')} help={t(language, 'connectorWidthHelp')} unit="mm" value={config.frontConnectorWidthMm} min={0.05} step={0.05} invalid={errors.includes('frontConnectorWidthMm')} onChange={(value) => updateNumber('frontConnectorWidthMm', value)} />
+          </div>
           <ParameterDiagram language={language} />
         </section>
 
@@ -220,6 +228,11 @@ export default function App() {
               <option value="customSensor">{t(language, 'cocCustom')}</option>
             </select>
             <small>{t(language, 'cocPresetHelp')}</small>
+          </label>
+          <label className="field">
+            <span className="field-heading"><span>{t(language, 'dofStyle')}</span></span>
+            <select value={config.dofStyle} onChange={(event) => update('dofStyle', event.target.value as GeneratorConfig['dofStyle'])}><option value="nested">{t(language, 'dofStyleNested')}</option><option value="compact">{t(language, 'dofStyleCompact')}</option></select>
+            <small>{t(language, 'dofStyleHelp')}</small>
           </label>
           {config.cocMode === 'customSensor' && <div className="field-grid sensor-fields">
             <Field label={t(language, 'sensorWidth')} help={t(language, 'sensorSizeHelp')} unit="mm" value={config.sensorWidthMm} min={1} step={0.1} invalid={errors.includes('sensorWidthMm')} onChange={(value) => updateNumber('sensorWidthMm', value)} />
