@@ -2,14 +2,14 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Check, Download, FileCode2, Languages, Moon, Plus, RotateCcw, Search, Sun, Trash2, Upload, Wrench } from 'lucide-react'
 import csvUrl from '../lensDB.csv?url'
 import type opentype from 'opentype.js'
-import { contrastColor, createArtwork, createDxf, createFrontArtwork, createFrontDxf, safeFilename } from './artwork'
-import { DEFAULT_CONFIG, circumferenceMm, focalLengthFor, generatedMaxAngle, parseLensCsv, validateConfig } from './core'
+import { contrastColor, createArtwork, createDofArtwork, createDofDxf, createDxf, createFrontArtwork, createFrontDxf, safeFilename } from './artwork'
+import { DEFAULT_CONFIG, apertureStops, circleOfConfusionMm, circumferenceMm, focalLengthFor, formatFNumber, generatedMaxAngle, parseLensCsv, validateConfig } from './core'
 import { downloadText, downloadBlob, svgToPng } from './download'
 import { BUILT_IN_FONTS, loadFont, loadUploadedFont } from './fonts'
 import { t } from './i18n'
-import type { FontChoice, GeneratorConfig, Language, Lens, ScaleSegment, Theme } from './types'
+import type { CocMode, FontChoice, GeneratorConfig, Language, Lens, ScaleSegment, Theme } from './types'
 
-type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'frontInnerDiameterMm' | 'frontOuterDiameterMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm' | 'fontSizeMm' | 'letterSpacingMm' | 'frameWidthPx' | 'infinityMarginMm'
+type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'frontInnerDiameterMm' | 'frontOuterDiameterMm' | 'sensorWidthMm' | 'sensorHeightMm' | 'sensorMegapixels' | 'maxApertureFNumber' | 'dofStops' | 'dofFontSizeMm' | 'dofRingDiameterMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm' | 'fontSizeMm' | 'letterSpacingMm' | 'frameWidthPx' | 'infinityMarginMm'
 
 function Field({ label, help, unit, value, min, max, step, invalid, onChange }: { label: string; help: string; unit?: string; value: number; min?: number; max?: number; step?: number; invalid?: boolean; onChange: (value: number) => void }) {
   return <label className={`field ${invalid ? 'field-invalid' : ''}`}>
@@ -71,8 +71,11 @@ export default function App() {
   const preview = useMemo(() => font && errors.length === 0 ? createArtwork(config, font, true) : null, [config, font, errors])
   const frontArtwork = useMemo(() => errors.length === 0 ? createFrontArtwork(config) : null, [config, errors])
   const frontPreview = useMemo(() => errors.length === 0 ? createFrontArtwork(config, true) : null, [config, errors])
+  const dofArtwork = useMemo(() => font && errors.length === 0 ? createDofArtwork(config, font) : null, [config, font, errors])
   const generatedAngle = useMemo(() => generatedMaxAngle(config), [config])
   const rotationUsage = config.maxAngleDeg > 0 ? generatedAngle / config.maxAngleDeg * 100 : 0
+  const cocMm = useMemo(() => circleOfConfusionMm(config), [config])
+  const fStops = useMemo(() => apertureStops(config), [config])
   const selectedLens = useMemo(() => lenses.find((lens) => lens.lensName === config.lensName), [lenses, config.lensName])
   const visibleLenses = useMemo(() => {
     const query = lensQuery.trim().toLocaleLowerCase()
@@ -104,7 +107,7 @@ export default function App() {
     const lens = lenses.find((item) => item.lensName === name)
     if (!lens) { setConfig((current) => ({ ...current, lensName: name, focalSource: 'manual' })); return }
     const focal = focalLengthFor(lens)
-    setConfig((current) => ({ ...current, lensName: name, ...(focal ? { focalLengthMm: focal.value, focalSource: focal.source } : { focalSource: 'manual' as const }) }))
+    setConfig((current) => ({ ...current, lensName: name, ...(focal ? { focalLengthMm: focal.value, focalSource: focal.source } : { focalSource: 'manual' as const }), ...(lens.nominalFNumber ? { maxApertureFNumber: lens.nominalFNumber } : {}) }))
   }
 
   const chooseFont = async (id: string) => {
@@ -137,6 +140,9 @@ export default function App() {
   const exportFrontSvg = () => frontArtwork && downloadText(frontArtwork.svg, `${baseName}_front.svg`, 'image/svg+xml')
   const exportFrontDxf = () => frontArtwork && downloadText(createFrontDxf(config), `${baseName}_front.dxf`, 'application/dxf')
   const exportFrontPng = async () => frontArtwork && downloadBlob(await svgToPng(frontArtwork.svg, config.dpi, frontArtwork.widthMm, frontArtwork.heightMm), `${baseName}_front_${config.dpi}dpi.png`)
+  const exportDofSvg = () => dofArtwork && downloadText(dofArtwork.svg, `${baseName}_dof.svg`, 'image/svg+xml')
+  const exportDofDxf = () => dofArtwork && font && downloadText(createDofDxf(config, font), `${baseName}_dof.dxf`, 'application/dxf')
+  const exportDofPng = async () => dofArtwork && downloadBlob(await svgToPng(dofArtwork.svg, config.dpi, dofArtwork.widthMm, dofArtwork.heightMm), `${baseName}_dof_${config.dpi}dpi.png`)
 
   return <div className="app-shell">
     <header className="topbar">
@@ -189,6 +195,11 @@ export default function App() {
             <select value={config.layoutSegmentId} onChange={(event) => update('layoutSegmentId', event.target.value)}>{config.scaleSegments.map((segment, index) => <option value={segment.id} key={segment.id}>{t(language, 'segment')} {index + 1} · {segment.stepDeg}°</option>)}</select>
             <small>{t(language, 'layoutFollowsHelp')}</small>
           </label>
+          <label className="field">
+            <span className="field-heading"><span>{t(language, 'scaleDirection')}</span></span>
+            <select value={config.scaleDirection} onChange={(event) => update('scaleDirection', event.target.value as GeneratorConfig['scaleDirection'])}><option value="counterclockwise">{t(language, 'counterclockwise')}</option><option value="clockwise">{t(language, 'clockwise')}</option></select>
+            <small>{t(language, 'scaleDirectionHelp')}</small>
+          </label>
           <div className="field-grid">
             <Field label={t(language, 'diameter')} help={t(language, 'diameterHelp')} unit="mm" value={config.ringDiameterMm} min={1} step={0.1} invalid={errors.includes('ringDiameterMm')} onChange={(value) => updateNumber('ringDiameterMm', value)} />
             <Field label={t(language, 'width')} help={t(language, 'widthHelp')} unit="mm" value={config.ringWidthMm} min={2} step={0.1} invalid={errors.includes('ringWidthMm')} onChange={(value) => updateNumber('ringWidthMm', value)} />
@@ -199,7 +210,34 @@ export default function App() {
         </section>
 
         <section>
-          <div className="section-title"><span>03</span><h2>{t(language, 'appearance')}</h2></div>
+          <div className="section-title"><span>03</span><h2>{t(language, 'dofScale')}</h2></div>
+          <label className="field">
+            <span className="field-heading"><span>{t(language, 'cocPreset')}</span></span>
+            <select value={config.cocMode} onChange={(event) => update('cocMode', event.target.value as CocMode)}>
+              <option value="film135">{t(language, 'cocFilm135')}</option>
+              <option value="kodak35">{t(language, 'cocKodak35')}</option>
+              <option value="fullFrame24mp">{t(language, 'cocFullFrame24')}</option>
+              <option value="customSensor">{t(language, 'cocCustom')}</option>
+            </select>
+            <small>{t(language, 'cocPresetHelp')}</small>
+          </label>
+          {config.cocMode === 'customSensor' && <div className="field-grid sensor-fields">
+            <Field label={t(language, 'sensorWidth')} help={t(language, 'sensorSizeHelp')} unit="mm" value={config.sensorWidthMm} min={1} step={0.1} invalid={errors.includes('sensorWidthMm')} onChange={(value) => updateNumber('sensorWidthMm', value)} />
+            <Field label={t(language, 'sensorHeight')} help={t(language, 'sensorSizeHelp')} unit="mm" value={config.sensorHeightMm} min={1} step={0.1} invalid={errors.includes('sensorHeightMm')} onChange={(value) => updateNumber('sensorHeightMm', value)} />
+            <Field label={t(language, 'sensorMegapixels')} help={t(language, 'sensorMegapixelsHelp')} unit="MP" value={config.sensorMegapixels} min={0.1} step={0.1} invalid={errors.includes('sensorMegapixels')} onChange={(value) => updateNumber('sensorMegapixels', value)} />
+          </div>}
+          <div className="coc-result"><span>{t(language, 'calculatedCoc')}</span><strong>{cocMm.toFixed(4)} mm</strong></div>
+          <div className="field-grid">
+            <Field label={t(language, 'maxAperture')} help={t(language, 'maxApertureHelp')} unit="f/" value={config.maxApertureFNumber} min={0.5} max={128} step={0.1} invalid={errors.includes('maxApertureFNumber')} onChange={(value) => updateNumber('maxApertureFNumber', value)} />
+            <Field label={t(language, 'dofStops')} help={t(language, 'dofStopsHelp')} unit={t(language, 'stopsUnit')} value={config.dofStops} min={1} max={10} step={1} invalid={errors.includes('dofStops')} onChange={(value) => updateNumber('dofStops', value)} />
+            <Field label={t(language, 'dofFontSize')} help={t(language, 'dofFontSizeHelp')} unit="mm" value={config.dofFontSizeMm} min={0.3} step={0.05} invalid={errors.includes('dofFontSizeMm')} onChange={(value) => updateNumber('dofFontSizeMm', value)} />
+            <Field label={t(language, 'dofRingDiameter')} help={t(language, 'dofRingDiameterHelp')} unit="mm" value={config.dofRingDiameterMm} min={1} step={0.1} invalid={errors.includes('dofRingDiameterMm')} onChange={(value) => updateNumber('dofRingDiameterMm', value)} />
+          </div>
+          <div className="aperture-summary"><span>{t(language, 'apertureRange')}</span><strong>f/{formatFNumber(fStops[0])} → f/{formatFNumber(fStops[fStops.length - 1])}</strong><small>{fStops.map((value) => `f/${formatFNumber(value)}`).join(' · ')}</small></div>
+        </section>
+
+        <section>
+          <div className="section-title"><span>04</span><h2>{t(language, 'appearance')}</h2></div>
           <div className="field-grid">
             <Field label={t(language, 'precision')} help={t(language, 'precisionHelp')} value={config.significantDigits} min={2} max={6} step={1} onChange={(value) => updateNumber('significantDigits', value)} />
             <label className="field"><span className="field-heading"><span>{t(language, 'distanceUnit')}</span></span><select value={config.distanceUnit} onChange={(event) => update('distanceUnit', event.target.value as GeneratorConfig['distanceUnit'])}><option value="m">{t(language, 'metres')}</option><option value="ft">{t(language, 'feet')}</option></select><small>{t(language, 'distanceUnitHelp')}</small></label>
@@ -253,6 +291,20 @@ export default function App() {
               <button disabled={!frontArtwork} onClick={exportFrontDxf}><Download size={15} />{t(language, 'exportDxf')}</button>
               <button disabled={!frontArtwork} onClick={exportFrontSvg}><Download size={15} />{t(language, 'exportSvg')}</button>
               <button className="primary" disabled={!frontArtwork} onClick={exportFrontPng}><Download size={15} />{t(language, 'exportPng')}</button>
+            </div>
+          </div>
+        </div>
+        <div className="front-preview-block">
+          <div className="preview-heading"><div><span className="eyebrow">DEPTH OF FIELD SCALE</span><h2>{t(language, 'dofPreview')}</h2><p>{t(language, 'dofPreviewHelp')}</p></div>{dofArtwork && <div className="metrics"><span>{t(language, 'dofRingDiameter')} <strong>Ø {config.dofRingDiameterMm.toFixed(1)} mm</strong></span><span>{t(language, 'calculatedCoc')} <strong>{cocMm.toFixed(4)} mm</strong></span><span><strong>f/{formatFNumber(fStops[0])}–f/{formatFNumber(fStops[fStops.length - 1])}</strong></span></div>}</div>
+          <div className={`dof-preview-stage ${config.transparentBackground ? 'checkerboard' : ''}`}>
+            {dofArtwork && <div className="front-scale-preview" dangerouslySetInnerHTML={{ __html: dofArtwork.svg }} />}
+          </div>
+          <div className="export-panel">
+            <div className="export-copy"><FileCode2 size={22} /><div><strong>{t(language, 'dofExport')}</strong><small>{t(language, 'dofExportNote')}</small></div></div>
+            <div className="export-buttons">
+              <button disabled={!dofArtwork || !font} onClick={exportDofDxf}><Download size={15} />{t(language, 'exportDxf')}</button>
+              <button disabled={!dofArtwork} onClick={exportDofSvg}><Download size={15} />{t(language, 'exportSvg')}</button>
+              <button className="primary" disabled={!dofArtwork} onClick={exportDofPng}><Download size={15} />{t(language, 'exportPng')}</button>
             </div>
           </div>
         </div>

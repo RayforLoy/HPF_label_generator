@@ -1,11 +1,13 @@
-import type { GeneratorConfig, Lens, ScaleMark } from './types'
+import type { CocMode, GeneratorConfig, Lens, ScaleMark } from './types'
 
 export const DEFAULT_CONFIG: GeneratorConfig = {
   lensName: 'Makro-Symmar 180 HM', focalLengthMm: 179.9, focalSource: 'manual',
   extensionMmPerDeg: 4 / 45, maxAngleDeg: 165,
   scaleSegments: [{ id: 'fine', count: 5, stepDeg: 1 }, { id: 'coarse', count: 32, stepDeg: 5 }],
-  layoutSegmentId: 'coarse', ringDiameterMm: 86.7, ringWidthMm: 9.5,
+  layoutSegmentId: 'coarse', scaleDirection: 'counterclockwise', ringDiameterMm: 86.7, ringWidthMm: 9.5,
   frontInnerDiameterMm: 75, frontOuterDiameterMm: 100,
+  cocMode: 'film135', sensorWidthMm: 36, sensorHeightMm: 24, sensorMegapixels: 24,
+  maxApertureFNumber: 5.6, dofStops: 5, dofFontSizeMm: 1.25, dofRingDiameterMm: 86.7,
   significantDigits: 4, distanceUnit: 'm', dpi: 300, tickLengthMm: 1, tickWidthMm: 0.5,
   fontSizeMm: 2.6, letterSpacingMm: 0, frameWidthPx: 2, infinityMarginMm: 2,
   showFocalLength: true, transparentBackground: false, backgroundColor: '#050505',
@@ -46,6 +48,7 @@ export function parseLensCsv(csv: string): Lens[] {
       vender: raw.vender,
       version: raw.version,
       nominalFocalLength: numberOrNull(raw.nominalFocalLength),
+      nominalFNumber: numberOrNull(raw.nominalFNumber),
       efl: numberOrNull(raw.efl),
     }
   }) as Lens[]
@@ -100,6 +103,34 @@ export function layoutStepDeg(config: Pick<GeneratorConfig, 'scaleSegments' | 'l
   return config.scaleSegments.find((segment) => segment.id === config.layoutSegmentId)?.stepDeg ?? config.scaleSegments[0]?.stepDeg ?? 5
 }
 
+export const COC_PRESETS: Record<Exclude<CocMode, 'customSensor'>, number> = {
+  film135: Math.hypot(36, 24) / 1500,
+  kodak35: 0.0254,
+  fullFrame24mp: Math.sqrt(36 * 24 / 24_000_000),
+}
+
+export function circleOfConfusionMm(config: Pick<GeneratorConfig, 'cocMode' | 'sensorWidthMm' | 'sensorHeightMm' | 'sensorMegapixels'>): number {
+  if (config.cocMode !== 'customSensor') return COC_PRESETS[config.cocMode]
+  if (!(config.sensorWidthMm > 0 && config.sensorHeightMm > 0 && config.sensorMegapixels > 0)) return Number.NaN
+  return Math.sqrt(config.sensorWidthMm * config.sensorHeightMm / (config.sensorMegapixels * 1_000_000))
+}
+
+export function apertureStops(config: Pick<GeneratorConfig, 'maxApertureFNumber' | 'dofStops'>): number[] {
+  const stopCount = Number.isInteger(config.dofStops) && config.dofStops > 0 ? Math.min(config.dofStops, 10) : 0
+  return Array.from({ length: stopCount + 1 }, (_, stop) => config.maxApertureFNumber * 2 ** (stop / 2))
+}
+
+export function depthOfFieldAngleDeg(fNumber: number, cocMm: number, extensionMmPerDeg: number): number {
+  return fNumber * cocMm / extensionMmPerDeg
+}
+
+export function formatFNumber(value: number): string {
+  if (!Number.isFinite(value)) return '—'
+  const conventional = [0.7, 1, 1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32, 45, 64, 90, 128]
+  const closest = conventional.reduce((best, candidate) => Math.abs(candidate - value) < Math.abs(best - value) ? candidate : best)
+  return Math.abs(closest - value) / value < 0.035 ? String(closest) : Number(value.toPrecision(3)).toString()
+}
+
 export const circumferenceMm = (diameterMm: number) => Math.PI * diameterMm
 
 export function validateConfig(config: GeneratorConfig): string[] {
@@ -116,6 +147,17 @@ export function validateConfig(config: GeneratorConfig): string[] {
   if (!(config.ringWidthMm > 0)) errors.push('ringWidthMm')
   if (!(config.frontInnerDiameterMm > 0)) errors.push('frontInnerDiameterMm')
   if (!(config.frontOuterDiameterMm > config.frontInnerDiameterMm)) errors.push('frontOuterDiameterMm')
+  if (!(config.sensorWidthMm > 0)) errors.push('sensorWidthMm')
+  if (!(config.sensorHeightMm > 0)) errors.push('sensorHeightMm')
+  if (!(config.sensorMegapixels > 0)) errors.push('sensorMegapixels')
+  const cocMm = circleOfConfusionMm(config)
+  if (!(Number.isFinite(cocMm) && cocMm > 0)) errors.push('cocMode')
+  if (!(config.maxApertureFNumber > 0 && config.maxApertureFNumber <= 128)) errors.push('maxApertureFNumber')
+  if (!Number.isInteger(config.dofStops) || config.dofStops < 1 || config.dofStops > 10) errors.push('dofStops')
+  const widestDofAngle = depthOfFieldAngleDeg(apertureStops(config).at(-1) ?? config.maxApertureFNumber, cocMm, config.extensionMmPerDeg)
+  if (!(Number.isFinite(widestDofAngle) && widestDofAngle < 90)) errors.push('dofStops')
+  if (!(config.dofFontSizeMm > 0 && config.dofFontSizeMm < config.ringWidthMm / 2)) errors.push('dofFontSizeMm')
+  if (!(config.dofRingDiameterMm > config.ringWidthMm)) errors.push('dofRingDiameterMm')
   if (!(config.tickLengthMm > 0 && config.tickLengthMm < config.ringWidthMm)) errors.push('tickLengthMm')
   if (!(config.tickWidthMm > 0)) errors.push('tickWidthMm')
   if (!(config.fontSizeMm > 0 && config.fontSizeMm < config.ringWidthMm)) errors.push('fontSizeMm')

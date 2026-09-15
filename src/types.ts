@@ -1,5 +1,7 @@
 export type Language = 'zh' | 'en'
 export type Theme = 'dark' | 'light'
+export type ScaleDirection = 'clockwise' | 'counterclockwise'
+export type CocMode = 'film135' | 'kodak35' | 'fullFrame24mp' | 'customSensor'
 
 export interface ScaleSegment {
   id: string
@@ -12,6 +14,7 @@ export interface Lens {
   vender: string
   version: string
   nominalFocalLength: number | null
+  nominalFNumber: number | null
   efl: number | null
   [key: string]: string | number | null
 }
@@ -24,10 +27,19 @@ export interface GeneratorConfig {
   maxAngleDeg: number
   scaleSegments: ScaleSegment[]
   layoutSegmentId: string
+  scaleDirection: ScaleDirection
   ringDiameterMm: number
   ringWidthMm: number
   frontInnerDiameterMm: number
   frontOuterDiameterMm: number
+  cocMode: CocMode
+  sensorWidthMm: number
+  sensorHeightMm: number
+  sensorMegapixels: number
+  maxApertureFNumber: number
+  dofStops: number
+  dofFontSizeMm: number
+  dofRingDiameterMm: number
   significantDigits: number
   distanceUnit: 'm' | 'ft'
   dpi: number

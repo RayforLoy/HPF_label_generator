@@ -61,6 +61,11 @@ main { display: grid; grid-template-columns: minmax(340px, 510px) minmax(0, 1fr)
 .scale-summary strong { color: var(--text); font-size: 12px; margin-left: auto; }
 .scale-summary > span:last-child { min-width: 56px; padding: 3px 6px; border: 1px solid color-mix(in srgb, var(--accent) 48%, transparent); border-radius: 99px; color: var(--accent); text-align: center; }
 .usage-over { color: var(--danger) !important; }
+.coc-result { min-height: 44px; margin: -3px 0 16px; padding: 0 11px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line)); border-radius: 5px; background: var(--panel-2); color: var(--muted); font-size: 11px; }
+.coc-result strong { color: var(--accent); font: 700 13px/1 ui-monospace, monospace; }
+.aperture-summary { display: grid; grid-template-columns: 1fr auto; gap: 5px 12px; padding: 12px; border: 1px solid var(--line); border-radius: 5px; background: var(--panel-2); color: var(--muted); font-size: 11px; }
+.aperture-summary strong { color: var(--text); }
+.aperture-summary small { grid-column: 1 / -1; color: var(--accent); font: 10px/1.5 ui-monospace, monospace; word-break: break-word; }
 .source-pill { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); font-size: 10px; border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent); border-radius: 99px; padding: 4px 8px; margin-top: -7px; }
 .diagram-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 4px; margin-top: 6px; padding: 12px 14px 8px; }
 .diagram-copy { display: flex; justify-content: space-between; align-items: center; }
@@ -100,6 +105,8 @@ main { display: grid; grid-template-columns: minmax(340px, 510px) minmax(0, 1fr)
 .front-preview-block .preview-heading p { max-width: 580px; margin: 8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .front-preview-stage { height: clamp(440px, 70vw, 720px); background: radial-gradient(circle at 50% 48%, #173957 0, #0a1e32 58%, #06121f 100%); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 18px 46px var(--shadow); display: grid; place-items: center; overflow: hidden; padding: 26px; position: relative; }
 .front-preview-stage::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, transparent 49.9%, rgba(255,255,255,.025) 50%, transparent 50.1%), linear-gradient(0deg, transparent 49.9%, rgba(255,255,255,.025) 50%, transparent 50.1%); background-size: 42px 42px; }
+.dof-preview-stage { height: clamp(440px, 70vw, 720px); background: radial-gradient(circle at 50% 48%, #3d2f25 0, #182231 56%, #06121f 100%); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 18px 46px var(--shadow); display: grid; place-items: center; overflow: hidden; padding: 26px; position: relative; }
+.dof-preview-stage::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, transparent 49.9%, rgba(255,255,255,.025) 50%, transparent 50.1%), linear-gradient(0deg, transparent 49.9%, rgba(255,255,255,.025) 50%, transparent 50.1%); background-size: 42px 42px; }
 .front-scale-preview { width: auto; height: 100%; max-width: 100%; aspect-ratio: 1; display: grid; place-items: center; z-index: 1; filter: drop-shadow(0 8px 22px rgba(0,0,0,.42)); }
 .front-scale-preview svg { display: block; width: 100%; height: 100%; }
 .checkerboard { background-color: #e7e7e7; background-image: linear-gradient(45deg,#cfcfcf 25%,transparent 25%),linear-gradient(-45deg,#cfcfcf 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#cfcfcf 75%),linear-gradient(-45deg,transparent 75%,#cfcfcf 75%); background-size: 20px 20px; background-position: 0 0,0 10px,10px -10px,-10px 0; }
@@ -146,6 +153,7 @@ main { display: grid; grid-template-columns: minmax(340px, 510px) minmax(0, 1fr)
   .export-buttons button { flex: 1 1 42%; justify-content: center; }
   .preview-stage { min-height: 270px; padding-left: 18px; padding-right: 18px; }
   .front-preview-stage { height: clamp(400px, 88vw, 520px); padding: 16px; }
+  .dof-preview-stage { height: clamp(400px, 88vw, 520px); padding: 16px; }
   .segment-editor-heading { flex-direction: column; }
   .segment-row { grid-template-columns: 25px 1fr 1fr 32px; gap: 5px; }
   .dimension-line { left: 18px; right: 18px; }
