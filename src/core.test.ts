@@ -42,8 +42,10 @@ describe('scale calculation', () => {
     expect(formatDistance(12.3, 4)).toBe('12.30')
     expect(formatDistance(2, 4)).toBe('2.000')
     expect(formatDistance(0.25, 4)).toBe('0.250')
-    expect(formatDistance(1200, 4)).toBe('1.200k')
-    expect(formatDistance(12345, 4)).toBe('12.35k')
+    expect(formatDistance(1200, 4)).toBe('1200')
+    expect(formatDistance(9999, 4)).toBe('9999')
+    expect(formatDistance(9999.9, 4)).toBe('10.0k')
+    expect(formatDistance(12345, 4)).toBe('12.4k')
   })
 
   it('uses physical circumference and rejects unsafe dimensions', () => {

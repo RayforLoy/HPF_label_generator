@@ -64,10 +64,28 @@ export function focalLengthFor(lens: Lens): { value: number; source: 'efl' | 'no
   return null
 }
 
+function toPrecisionHalfUp(value: number, precision: number): string {
+  if (value === 0) return (0).toFixed(Math.max(0, precision - 1))
+  const exponent = Math.floor(Math.log10(Math.abs(value)))
+  const decimalPlaces = precision - exponent - 1
+  const factor = 10 ** decimalPlaces
+  if (!Number.isFinite(factor) || factor === 0) return value.toPrecision(precision)
+  const scaled = value * factor
+  const tolerance = Number.EPSILON * Math.max(1, Math.abs(scaled)) * 4
+  const rounded = Math.floor(scaled + 0.5 + tolerance) / factor
+  return rounded.toFixed(Math.max(0, decimalPlaces))
+}
+
 export function formatDistance(valueMetres: number, significantDigits: number, unit: 'm' | 'ft' = 'm'): string {
   const value = unit === 'ft' ? valueMetres * 3.280839895013123 : valueMetres
   if (!Number.isFinite(value)) return 'INF'
-  if (value >= 1000) return `${(value / 1000).toPrecision(significantDigits)}k`
+  if (value >= 1000) {
+    const rounded = value.toPrecision(significantDigits)
+    const integerDigits = rounded.includes('e') ? Number.POSITIVE_INFINITY : rounded.split('.')[0].length
+    if (integerDigits <= significantDigits) return rounded
+    const compactValue = Number(rounded) / 1000
+    return `${toPrecisionHalfUp(compactValue, Math.max(2, significantDigits - 1))}k`
+  }
   if (value >= 1) return value.toPrecision(significantDigits)
   return value.toPrecision(Math.max(1, significantDigits - 1))
 }
