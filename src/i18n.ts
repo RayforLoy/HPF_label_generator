@@ -3,7 +3,7 @@ import type { Language } from './types'
 const messages = {
   zh: {
     title: '对焦环刻度生成器', subtitle: '为高精度对焦环生成可直接制作的距离标尺',
-    lens: '镜头', searchLens: '搜索 391 条镜头记录…', manualLens: '手动参数', focal: '计算焦距',
+    lens: '镜头', searchLens: '搜索镜头名称、厂商或版本…', chooseLens: '选择镜头', noLens: '没有匹配的镜头', manualLens: '手动参数', focal: '计算焦距',
     focalHelp: '优先使用镜头数据库中的实际有效焦距 EFL；缺失时自动采用标称焦距。也可手动修改。',
     mechanics: '对焦机构', extension: '每度伸长量', extensionHelp: '对焦环每旋转 1°，镜头板向外移动的距离。可用丝杆导程 ÷ 每圈角度计算。',
     maxAngle: '最大转角', maxAngleHelp: '从无穷远到最近对焦位置可用的总旋转角度。',
@@ -12,7 +12,8 @@ const messages = {
     appearance: '外观与输出', precision: '有效数字', precisionHelp: '距离标签保留的有效数字数量。',
     dpi: 'PNG 分辨率', dpiHelp: '只影响 PNG 像素尺寸；SVG 与 DXF 始终保持毫米尺寸。',
     tickLength: '刻度长度', tickLengthHelp: '从标签左边缘向内延伸的线段长度。',
-    tickWidth: '刻度线宽', tickWidthHelp: '打印刻度的物理宽度。',
+    tickWidth: '刻度线宽', tickWidthHelp: '打印刻度的物理宽度。', fontSize: '字体大小', fontSizeHelp: '距离数字的实际字高基准，使用毫米以确保打印尺寸一致。', letterSpacing: '字距', letterSpacingHelp: '字符之间额外增加的间距；0 表示使用字体默认字距。',
+    frameWidth: '框线粗细', frameWidthHelp: '外侧裁切框线宽度，以屏幕像素表示；导出时会换算为物理尺寸。', infinityMargin: 'INF 起始边距', infinityMarginHelp: 'INF 刻度与标签顶边之间的距离。', frameAuto: '框线自动反色',
     font: '字体', fontHelp: 'SVG、DXF 中的文字会转换为路径，接收方无需安装字体。',
     uploadFont: '上传 TTF / OTF', uploadHelp: '字体只在当前浏览器中处理，不会上传到服务器。',
     colors: '颜色', background: '背景', ticks: '刻度', text: '文字', transparent: '透明背景',
@@ -26,7 +27,7 @@ const messages = {
   },
   en: {
     title: 'Focusing Ring Scale Generator', subtitle: 'Create production-ready distance scales for high-precision focusing rings',
-    lens: 'Lens', searchLens: 'Search 391 lens records…', manualLens: 'Manual parameters', focal: 'Calculation focal length',
+    lens: 'Lens', searchLens: 'Search by lens, maker, or version…', chooseLens: 'Choose a lens', noLens: 'No matching lenses', manualLens: 'Manual parameters', focal: 'Calculation focal length',
     focalHelp: 'Uses the actual effective focal length (EFL) from the database first, then falls back to nominal focal length. You can also edit it manually.',
     mechanics: 'Focusing mechanism', extension: 'Extension per degree', extensionHelp: 'How far the lens board moves for each 1° of ring rotation. Calculate as screw lead ÷ degrees per turn.',
     maxAngle: 'Maximum rotation', maxAngleHelp: 'Usable rotation from infinity to the closest focusing position.',
@@ -35,7 +36,8 @@ const messages = {
     appearance: 'Appearance & output', precision: 'Significant digits', precisionHelp: 'Number of significant digits shown on distance labels.',
     dpi: 'PNG resolution', dpiHelp: 'Only affects PNG pixel dimensions; SVG and DXF remain physically sized in millimetres.',
     tickLength: 'Tick length', tickLengthHelp: 'Length of each mark measured inward from the label edge.',
-    tickWidth: 'Tick width', tickWidthHelp: 'Physical stroke width of printed marks.',
+    tickWidth: 'Tick width', tickWidthHelp: 'Physical stroke width of printed marks.', fontSize: 'Font size', fontSizeHelp: 'Physical type size for distance labels, in millimetres for consistent printing.', letterSpacing: 'Letter spacing', letterSpacingHelp: 'Extra spacing between characters; 0 uses the typeface’s normal spacing.',
+    frameWidth: 'Frame width', frameWidthHelp: 'Outer cutting-frame width in screen pixels; converted to a physical size on export.', infinityMargin: 'INF top margin', infinityMarginHelp: 'Distance between the INF mark and the top edge of the label.', frameAuto: 'Auto-contrast frame',
     font: 'Typeface', fontHelp: 'Text is converted to paths in SVG and DXF, so recipients do not need the font installed.',
     uploadFont: 'Upload TTF / OTF', uploadHelp: 'The font is processed only in this browser and is never uploaded.',
     colors: 'Colours', background: 'Background', ticks: 'Ticks', text: 'Text', transparent: 'Transparent background',

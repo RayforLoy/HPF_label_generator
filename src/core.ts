@@ -4,6 +4,7 @@ export const DEFAULT_CONFIG: GeneratorConfig = {
   lensName: 'Makro-Symmar 180 HM', focalLengthMm: 179.9, focalSource: 'manual',
   extensionMmPerDeg: 4 / 45, maxAngleDeg: 165, ringDiameterMm: 86.7, ringWidthMm: 9.5,
   significantDigits: 4, dpi: 300, tickLengthMm: 1, tickWidthMm: 0.5,
+  fontSizeMm: 2.6, letterSpacingMm: 0, frameWidthPx: 2, infinityMarginMm: 2,
   showFocalLength: true, transparentBackground: false, backgroundColor: '#050505',
   tickColor: '#ffffff', textColor: '#ffffff', fontId: 'square721', fontName: 'Square721 Cn BT Bold',
 }
@@ -88,5 +89,9 @@ export function validateConfig(config: GeneratorConfig): string[] {
   if (!(config.ringWidthMm > 0)) errors.push('ringWidthMm')
   if (!(config.tickLengthMm > 0 && config.tickLengthMm < config.ringWidthMm)) errors.push('tickLengthMm')
   if (!(config.tickWidthMm > 0)) errors.push('tickWidthMm')
+  if (!(config.fontSizeMm > 0 && config.fontSizeMm < config.ringWidthMm)) errors.push('fontSizeMm')
+  if (!(config.letterSpacingMm >= -0.5 && config.letterSpacingMm <= 3)) errors.push('letterSpacingMm')
+  if (!(config.frameWidthPx >= 0 && config.frameWidthPx <= 20)) errors.push('frameWidthPx')
+  if (!(config.infinityMarginMm >= 0 && config.infinityMarginMm < circumferenceMm(config.ringDiameterMm) / 4)) errors.push('infinityMarginMm')
   return errors
 }

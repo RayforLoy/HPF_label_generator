@@ -22,6 +22,10 @@ export interface GeneratorConfig {
   dpi: number
   tickLengthMm: number
   tickWidthMm: number
+  fontSizeMm: number
+  letterSpacingMm: number
+  frameWidthPx: number
+  infinityMarginMm: number
   showFocalLength: boolean
   transparentBackground: boolean
   backgroundColor: string

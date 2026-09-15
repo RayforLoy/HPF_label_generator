@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { DEFAULT_CONFIG, buildScaleMarks, circumferenceMm, distanceAtAngle, focalLengthFor, formatDistance, parseLensCsv, validateConfig } from './core'
+import { contrastColor } from './artwork'
 
 describe('lens database', () => {
   it('skips the metadata preamble and parses numeric fields', () => {
@@ -34,5 +35,14 @@ describe('scale calculation', () => {
     expect(circumferenceMm(86.7)).toBeCloseTo(272.376, 3)
     expect(validateConfig({ ...DEFAULT_CONFIG, tickLengthMm: 12 })).toContain('tickLengthMm')
     expect(validateConfig(DEFAULT_CONFIG)).toEqual([])
+  })
+
+  it('uses the requested production defaults', () => {
+    expect(DEFAULT_CONFIG).toEqual(expect.objectContaining({ fontSizeMm: 2.6, letterSpacingMm: 0, frameWidthPx: 2, infinityMarginMm: 2 }))
+  })
+
+  it('chooses an inverse frame colour from the background', () => {
+    expect(contrastColor('#050505')).toBe('#ffffff')
+    expect(contrastColor('#f4f4f4')).toBe('#000000')
   })
 })

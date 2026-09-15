@@ -9,9 +9,10 @@ An entirely browser-based distance-scale generator for high-precision focusing r
 - 391-entry lens database; EFL is preferred and nominal focal length is used as a fallback.
 - Live, physically dimensioned preview using the thin-lens equation.
 - Chinese/English interface that follows the browser language, with manual switching.
-- Dark/light themes, defaulting to dark.
+- Dark/light themes, defaulting to dark and using the LensboardGenerator navy/cyan visual palette.
 - Bundled Square721 Cn BT Bold, three web-safe bundled alternatives, and local TTF/OTF upload.
-- Independent background, tick, and text colours. Transparent output retains a black cutting frame.
+- Searchable native lens selector plus adjustable font size, letter spacing, frame width, and INF top margin.
+- Independent background, tick, and text colours. The cutting frame automatically contrasts with the background; transparent output uses a black frame.
 - JSON, outlined SVG, outlined DXF, and DPI-tagged PNG exports. Vector exports contain no live text objects.
 - All processing is local; no lens data, settings, or uploaded fonts leave the browser.
 

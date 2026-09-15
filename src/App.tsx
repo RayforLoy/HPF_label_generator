@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Check, Download, FileCode2, Languages, Moon, RotateCcw, Sun, Upload, Wrench } from 'lucide-react'
+import { Check, Download, FileCode2, Languages, Moon, RotateCcw, Search, Sun, Upload, Wrench } from 'lucide-react'
 import csvUrl from '../lensDB.csv?url'
 import type opentype from 'opentype.js'
-import { createArtwork, createDxf, safeFilename } from './artwork'
+import { contrastColor, createArtwork, createDxf, safeFilename } from './artwork'
 import { DEFAULT_CONFIG, circumferenceMm, focalLengthFor, parseLensCsv, validateConfig } from './core'
 import { downloadText, downloadBlob, svgToPng } from './download'
 import { BUILT_IN_FONTS, loadFont, loadUploadedFont } from './fonts'
 import { t } from './i18n'
 import type { FontChoice, GeneratorConfig, Language, Lens, Theme } from './types'
 
-type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm'
+type NumberKey = 'focalLengthMm' | 'extensionMmPerDeg' | 'maxAngleDeg' | 'ringDiameterMm' | 'ringWidthMm' | 'significantDigits' | 'dpi' | 'tickLengthMm' | 'tickWidthMm' | 'fontSizeMm' | 'letterSpacingMm' | 'frameWidthPx' | 'infinityMarginMm'
 
 function Field({ label, help, unit, value, min, max, step, invalid, onChange }: { label: string; help: string; unit?: string; value: number; min?: number; max?: number; step?: number; invalid?: boolean; onChange: (value: number) => void }) {
   return <label className={`field ${invalid ? 'field-invalid' : ''}`}>
@@ -48,12 +48,17 @@ export default function App() {
   const [config, setConfig] = useState<GeneratorConfig>({ ...DEFAULT_CONFIG, lensName: 'MAKRO-SYMMAR_HM_180_5.6' })
   const [lenses, setLenses] = useState<Lens[]>([])
   const [fontChoices, setFontChoices] = useState<FontChoice[]>(BUILT_IN_FONTS)
+  const [lensQuery, setLensQuery] = useState('')
   const [font, setFont] = useState<opentype.Font | null>(null)
   const [status, setStatus] = useState('loading')
   const [fontMessage, setFontMessage] = useState('')
   const uploadRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => { document.documentElement.dataset.theme = theme; localStorage.setItem('hpf-theme', theme) }, [theme])
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#06121f' : '#f5f6f1')
+    localStorage.setItem('hpf-theme', theme)
+  }, [theme])
   useEffect(() => { document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en'; localStorage.setItem('hpf-language', language) }, [language])
   useEffect(() => {
     Promise.all([fetch(csvUrl).then((response) => response.text()).then(parseLensCsv), loadFont(BUILT_IN_FONTS[0].url)])
@@ -65,6 +70,11 @@ export default function App() {
   const artwork = useMemo(() => font && errors.length === 0 ? createArtwork(config, font) : null, [config, font, errors])
   const preview = useMemo(() => font && errors.length === 0 ? createArtwork(config, font, true) : null, [config, font, errors])
   const selectedLens = useMemo(() => lenses.find((lens) => lens.lensName === config.lensName), [lenses, config.lensName])
+  const visibleLenses = useMemo(() => {
+    const query = lensQuery.trim().toLocaleLowerCase()
+    if (!query) return lenses
+    return lenses.filter((lens) => `${lens.lensName} ${lens.vender} ${lens.version}`.toLocaleLowerCase().includes(query))
+  }, [lenses, lensQuery])
 
   const update = <K extends keyof GeneratorConfig>(key: K, value: GeneratorConfig[K]) => setConfig((current) => ({ ...current, [key]: value }))
   const updateNumber = (key: NumberKey, value: number) => update(key, value)
@@ -118,10 +128,13 @@ export default function App() {
       <aside className="controls">
         <section>
           <div className="section-title"><span>01</span><h2>{t(language, 'lens')}</h2></div>
-          <label className="field">
+          <label className="field lens-picker">
             <span className="field-heading"><span>{t(language, 'lens')}</span><span className="record-count">{lenses.length || '—'}</span></span>
-            <input list="lens-list" value={config.lensName} placeholder={t(language, 'searchLens')} onChange={(event) => chooseLens(event.target.value)} />
-            <datalist id="lens-list">{lenses.map((lens) => <option key={`${lens.lensName}-${lens.version}`} value={lens.lensName}>{lens.vender} · {lens.version}</option>)}</datalist>
+            <span className="search-shell"><Search size={15} /><input type="search" value={lensQuery} placeholder={t(language, 'searchLens')} onChange={(event) => setLensQuery(event.target.value)} /></span>
+            <select aria-label={t(language, 'chooseLens')} value={visibleLenses.some((lens) => lens.lensName === config.lensName) ? config.lensName : ''} onChange={(event) => { chooseLens(event.target.value); setLensQuery('') }}>
+              <option value="" disabled>{visibleLenses.length ? t(language, 'chooseLens') : t(language, 'noLens')}</option>
+              {visibleLenses.map((lens) => <option key={`${lens.lensName}-${lens.version}`} value={lens.lensName}>{lens.lensName} · {lens.vender}</option>)}
+            </select>
             {selectedLens && <small>{selectedLens.vender} · {selectedLens.version}</small>}
           </label>
           <Field label={t(language, 'focal')} help={t(language, 'focalHelp')} unit="mm" value={config.focalLengthMm} min={1} step={0.1} invalid={errors.includes('focalLengthMm')} onChange={(value) => setConfig((current) => ({ ...current, focalLengthMm: value, focalSource: 'manual' }))} />
@@ -146,6 +159,10 @@ export default function App() {
             <Field label={t(language, 'dpi')} help={t(language, 'dpiHelp')} unit="dpi" value={config.dpi} min={72} max={1200} step={1} onChange={(value) => updateNumber('dpi', value)} />
             <Field label={t(language, 'tickLength')} help={t(language, 'tickLengthHelp')} unit="mm" value={config.tickLengthMm} min={0.1} step={0.1} invalid={errors.includes('tickLengthMm')} onChange={(value) => updateNumber('tickLengthMm', value)} />
             <Field label={t(language, 'tickWidth')} help={t(language, 'tickWidthHelp')} unit="mm" value={config.tickWidthMm} min={0.05} step={0.05} invalid={errors.includes('tickWidthMm')} onChange={(value) => updateNumber('tickWidthMm', value)} />
+            <Field label={t(language, 'fontSize')} help={t(language, 'fontSizeHelp')} unit="mm" value={config.fontSizeMm} min={0.5} step={0.1} invalid={errors.includes('fontSizeMm')} onChange={(value) => updateNumber('fontSizeMm', value)} />
+            <Field label={t(language, 'letterSpacing')} help={t(language, 'letterSpacingHelp')} unit="mm" value={config.letterSpacingMm} min={-0.5} max={3} step={0.05} invalid={errors.includes('letterSpacingMm')} onChange={(value) => updateNumber('letterSpacingMm', value)} />
+            <Field label={t(language, 'frameWidth')} help={t(language, 'frameWidthHelp')} unit="px" value={config.frameWidthPx} min={0} max={20} step={0.5} invalid={errors.includes('frameWidthPx')} onChange={(value) => updateNumber('frameWidthPx', value)} />
+            <Field label={t(language, 'infinityMargin')} help={t(language, 'infinityMarginHelp')} unit="mm" value={config.infinityMarginMm} min={0} step={0.1} invalid={errors.includes('infinityMarginMm')} onChange={(value) => updateNumber('infinityMarginMm', value)} />
           </div>
           <label className="field"><span className="field-heading"><span>{t(language, 'font')}</span></span><select value={config.fontId} onChange={(event) => chooseFont(event.target.value)}>{fontChoices.map((choice) => <option value={choice.id} key={choice.id}>{choice.label}</option>)}</select><small>{t(language, 'fontHelp')}</small></label>
           <input ref={uploadRef} className="visually-hidden" type="file" accept=".ttf,.otf,font/ttf,font/otf" onChange={(event) => uploadFont(event.target.files?.[0])} />
@@ -153,6 +170,7 @@ export default function App() {
           <small className="upload-note">{fontMessage || t(language, 'uploadHelp')}</small>
           <div className="color-row">
             {([['backgroundColor', 'background'], ['tickColor', 'ticks'], ['textColor', 'text']] as const).map(([key, label]) => <label key={key}><input type="color" value={config[key]} onChange={(event) => update(key, event.target.value)} /><span>{t(language, label)}</span></label>)}
+            <div className="auto-color"><i style={{ background: config.transparentBackground ? '#000000' : contrastColor(config.backgroundColor) }} /><span>{t(language, 'frameAuto')}</span></div>
           </div>
           <Toggle checked={config.transparentBackground} label={t(language, 'transparent')} help={t(language, 'transparentHelp')} onChange={(value) => update('transparentBackground', value)} />
           <Toggle checked={config.showFocalLength} label={t(language, 'showFocal')} onChange={(value) => update('showFocalLength', value)} />
